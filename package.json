@@ -41,5 +41,8 @@
       "json",
       "node"
     ]
+  },
+  "dependencies": {
+    "ts-json-schema-generator": "^1.2.0"
   }
 }
