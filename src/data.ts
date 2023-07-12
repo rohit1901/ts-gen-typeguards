@@ -1,6 +1,7 @@
 interface Person {
     name: string;
     age: number;
+    p: Point
 }
 
 type Point = {

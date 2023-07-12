@@ -11,6 +11,7 @@ const program = ts.createProgram([sourceFilePath], {});
 const sourceFile = program.getSourceFile(sourceFilePath);
 
 // Generate type guard for an interface
+//TODO: add recursive search and reference
 function generateInterfaceTypeGuard(interfaceNode: ts.InterfaceDeclaration): string {
     const interfaceName = interfaceNode.name.text;
     const properties = interfaceNode.members.filter(ts.isPropertySignature);
@@ -55,6 +56,7 @@ function generateInterfaceTypeGuard(interfaceNode: ts.InterfaceDeclaration): str
 
 
 // Generate type guard for a type
+//TODO: update
 function generateTypeTypeGuard(typeNode: ts.TypeAliasDeclaration): string {
     const typeName = typeNode.name.text;
 
@@ -100,17 +102,17 @@ function generateEnumTypeGuard(enumNode: ts.EnumDeclaration): string {
 function generateTypeGuards(interfaces: ts.InterfaceDeclaration[], types: ts.TypeAliasDeclaration[], enums: ts.EnumDeclaration[]): void {
     for (const interfaceNode of interfaces) {
         const typeGuardCode = generateInterfaceTypeGuard(interfaceNode);
-        fs.writeFileSync(`./out/${interfaceNode.name.text}.ts`, typeGuardCode);
+        fs.writeFileSync(`./out/is${interfaceNode.name.text}.ts`, typeGuardCode);
     }
 
     for (const typeNode of types) {
         const typeGuardCode = generateTypeTypeGuard(typeNode);
-        fs.writeFileSync(`./out/${typeNode.name.text}.ts`, typeGuardCode);
+        fs.writeFileSync(`./out/is${typeNode.name.text}.ts`, typeGuardCode);
     }
 
     for (const enumNode of enums) {
         const typeGuardCode = generateEnumTypeGuard(enumNode);
-        fs.writeFileSync(`./out/${enumNode.name.text}.ts`, typeGuardCode);
+        fs.writeFileSync(`./out/is${enumNode.name.text}.ts`, typeGuardCode);
     }
 }
 
