@@ -78,7 +78,7 @@ The above code generates type guards for the provided interface declaration and 
 
 ## Contributing
 
-Contributions are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a pull request on the [GitHub repository](https://github.com/your-username/type-guard-generator).
+Contributions are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a pull request on the [GitHub repository](https://github.com/rohit1901/type-guard-generator).
 
 ## License
 
