@@ -1,96 +1,85 @@
 # ts-gen-typeguards
-A ts lib to generate typeguards
 
-**1. generateTypeGuardsFromFile(filePath: string): void**
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-This method generates type guards for interfaces and types found in a file specified by the `filePath` parameter. It searches for interface and type declarations in the file content and generates type guards for each one. The generated type guards can be written to files, printed to the console, or further processed as needed.
+> A TypeScript project that provides utility functions to generate type guards for interfaces, type aliases, and enums.
 
-**Usage:**
-```typescript
-generateTypeGuardsFromFile(filePath: string): void
+## Description
+
+The Type Guard Generator is a TypeScript project that provides utility functions to generate type guards for interfaces, type aliases, and enums. It enables runtime type checking for objects based on their defined types.
+
+## Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/rohit1901/type-guard-generator.git
 ```
 
-**Parameters:**
-- `filePath` (string): The path to the file containing interface and type declarations.
+2. Install the dependencies:
 
-**2. extractNestedInterfaces(typeValue: any): { typeName: string; typeValue: any }[]**
-
-This method extracts nested interfaces/types from a given `typeValue`. It recursively traverses the type value and identifies nested interfaces/types with a 'type' property. It returns an array of objects, where each object contains the nested interface/type name (`typeName`) and its value (`typeValue`).
-
-**Usage:**
-```typescript
-extractNestedInterfaces(typeValue: any): { typeName: string; typeValue: any }[]
+```bash
+npm install
 ```
 
-**Parameters:**
-- `typeValue` (any): The value of the interface/type to extract nested interfaces/types from.
+## Usage
 
-**Returns:**
-- An array of objects, where each object represents a nested interface/type with `typeName` and `typeValue`.
+The main functionality of the Type Guard Generator is located in the `readObjects` function, which reads a TypeScript file and extracts interfaces, type aliases, and enums from it.
 
-**3. generateUnionTypeGuards(typeName: string, unionTypeMatches: RegExpMatchArray): string**
-
-This method generates type guards for union types based on the provided `typeName` and `unionTypeMatches`. It iterates over the matches and generates conditional checks to ensure the object satisfies each type in the union.
-
-**Usage:**
 ```typescript
-generateUnionTypeGuards(typeName: string, unionTypeMatches: RegExpMatchArray): string
+import { readObjects } from "./ts-gen-typeguards";
+
+const { interfaces, types, enums } = readObjects("./data.ts");
+
+interfaces.forEach((interfaceNode) => {
+  // Generate type guards for interfaces
+});
+
+types.forEach((typeNode) => {
+  // Generate type guards for type aliases
+});
+
+enums.forEach((enumNode) => {
+  // Generate type guards for enums
+});
 ```
 
-**Parameters:**
-- `typeName` (string): The name of the interface/type that has a union type.
-- `unionTypeMatches` (RegExpMatchArray): An array of matches representing the union types.
+To generate type guards for interfaces, type aliases, and enums, you can utilize the provided functions `generateTypeGuards`, `generateTypeTypeGuards`, and `generateEnumTypeGuard`, respectively.
 
-**Returns:**
-- The generated type guard code as a string.
+## API Reference
 
-**4. generateIntersectionTypeGuards(typeName: string, intersectionTypeMatches: RegExpMatchArray): string**
+### readObjects(path: string): ObjectsType
 
-This method generates type guards for intersection types based on the provided `typeName` and `intersectionTypeMatches`. It iterates over the matches and generates conditional checks using `instanceof` to ensure the object satisfies each type in the intersection.
+This function reads a TypeScript file at the specified path and returns an object containing the extracted interfaces, type aliases, and enums.
 
-**Usage:**
+### generateTypeGuards(interfaceNode: InterfaceDeclaration): string
+
+Generates type guards for the given interface declaration. It returns the generated type guard code as a string.
+
+### generateTypeTypeGuards(typeNode: TypeAliasDeclaration): string
+
+Generates type guards for the given type alias declaration. It returns the generated type guard code as a string.
+
+### generateEnumTypeGuard(typeNode: EnumDeclaration): string
+
+Generates type guards for the given enum declaration. It returns the generated type guard code as a string.
+
+## Examples
+
 ```typescript
-generateIntersectionTypeGuards(typeName: string, intersectionTypeMatches: RegExpMatchArray): string
+import { generateTypeGuards } from "./type-guard-generator";
+
+const interfaceNode = /* interface declaration */;
+const typeGuardCode = generateTypeGuards(interfaceNode);
+console.log(typeGuardCode);
 ```
 
-**Parameters:**
-- `typeName` (string): The name of the interface/type that has an intersection type.
-- `intersectionTypeMatches` (RegExpMatchArray): An array of matches representing the intersection types.
+The above code generates type guards for the provided interface declaration and logs the generated code to the console.
 
-**Returns:**
-- The generated type guard code as a string.
+## Contributing
 
-**5. getTypeValueFromName(typeName: string): any**
+Contributions are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a pull request on the [GitHub repository](https://github.com/your-username/type-guard-generator).
 
-This method retrieves the value associated with a given `typeName`. The implementation may vary depending on your project structure and requirements. It could use a type value mapping or TypeScript compiler API to fetch the type value.
+## License
 
-**Usage:**
-```typescript
-getTypeValueFromName(typeName: string): any
-```
-
-**Parameters:**
-- `typeName` (string): The name of the interface/type to retrieve the value for.
-
-**Returns:**
-- The value associated with the `typeName`.
-
-**6. generateTypeGuardCode(typeName: string, typeValue: any): string**
-
-This method generates the type guard code for a given `typeName` and `typeValue`. It handles different cases based on the type value, such as array types, object types, literal types, and more. You can customize the logic inside this method to meet your project's specific requirements.
-
-**Usage:**
-```typescript
-generateTypeGuardCode(typeName: string, typeValue: any): string
-```
-
-**Parameters:**
-- `typeName` (string): The name of the interface/type to generate the type guard code for.
-- `typeValue` (any): The value of the interface/type to generate the type guard code for.
-
-**Returns:**
-- The generated type guard code as a string.
-
-Please note that the provided usage instructions assume you have the necessary imports and dependencies set up in your project. Adjust the implementation details, function signatures, and usage instructions as needed to align with your project's conventions.
-
-Let me know if there's anything else I can assist you with!
+This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
