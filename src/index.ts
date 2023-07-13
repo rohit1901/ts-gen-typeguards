@@ -105,8 +105,8 @@ types.forEach((typeNode) => {
     const typeGuardCode = generateTypeTypeGuards(typeNode);
     console.log(typeGuardCode)
 });
-enums.forEach((typeNode) => {
-    const typeGuardCode = generateEnumTypeGuard(typeNode);
+enums.forEach((enumNode) => {
+    const typeGuardCode = generateEnumTypeGuard(enumNode);
     console.log(typeGuardCode)
 });
 
