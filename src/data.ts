@@ -4,10 +4,10 @@ export interface Person {
     p: Point;
     e: Color
 }
-//TODO: Add support for extends in interfaces
-/*export interface Person2 extends Person {
+//NOTE: Works for extends in interfaces
+export interface Person2 extends Person {
     address: string;
-}*/
+}
 
 export type Point = {
     x: number;
