@@ -1,15 +1,16 @@
-interface Person {
+export interface Person {
     name: string;
     age: number;
-    p: Point
+    p: Point;
+    e: Color
 }
 
-type Point = {
+export type Point = {
     x: number;
     y: number;
-};
+}
 
-enum Color {
+export enum Color {
     Red = 'red',
     Green = 'green',
     Blue = 'blue',
