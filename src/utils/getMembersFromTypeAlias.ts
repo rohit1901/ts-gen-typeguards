@@ -8,7 +8,6 @@ import * as ts from "typescript";
 export function getMembersFromTypeAlias(alias: ts.TypeAliasDeclaration, typeAliases: ts.TypeAliasDeclaration[]) {
     if (ts.isTypeLiteralNode(alias.type)) return alias.type.members;
     if (ts.isIntersectionTypeNode(alias.type)) return getTypesFromIntersectionTypeNode(alias.type, typeAliases);
-    console.log("")
     return;
 }
 
