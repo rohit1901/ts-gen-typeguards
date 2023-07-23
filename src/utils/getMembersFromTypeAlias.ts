@@ -29,6 +29,7 @@ function getMatchingLiteralForReferences(typeReference: ts.TypeNode, typeAliases
  */
 function getTypesFromIntersectionTypeNode(intersectionTypeNode: ts.IntersectionTypeNode, typeAliases: ts.TypeAliasDeclaration[]) {
     const types: ts.TypeElement[] = [];
+    //TODO: check for LiteralTypeNode here
     intersectionTypeNode.types.forEach((type) => {
         if (ts.isTypeReferenceNode(type)) {
             const typeAlias = getMatchingLiteralForReferences(type, typeAliases);
