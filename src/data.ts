@@ -4,7 +4,6 @@ export interface Person {
     p: Point;
     e: Color
 }
-//NOTE: Works for extends in interfaces
 export interface Person2 extends Person {
     address: string;
 }
@@ -13,10 +12,11 @@ export type Point = {
     x: number;
     y: number;
 }
-//TODO: Add support for & in types
-/*export type Point2 = {
+export type Point2 = {
     z: number;
-} & Point;*/
+    m: Point;
+} & Point;
+export type Point3 = Point & Point2
 export enum Color {
     Red = 'red',
     Green = 'green',

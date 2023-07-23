@@ -37,7 +37,7 @@ export function readObjects(path: string): ObjectsType {
  * @param typeName
  * @param properties
  */
-const buildTypeGuards = (typeName: string, properties: NodeArray<TypeElement> | NodeArray<EnumMember>) => {
+const buildTypeGuards = (typeName: string, properties: NodeArray<TypeElement> | TypeElement[] | NodeArray<EnumMember>) => {
     const typeGuardFunctions: string[] = [];
     typeGuardFunctions.push(`export function is${typeName}(value: any): value is ${typeName} {`);
     typeGuardFunctions.push(`    if (typeof value !== 'object' || value === null) {`);
@@ -77,11 +77,12 @@ function generateTypeGuards(interfaceNode: InterfaceDeclaration): string {
 }
 
 /**
- *
+ * Generates the type guards for the types
  * @param typeNode
+ * @param types
  */
-function generateTypeTypeGuards(typeNode: TypeAliasDeclaration): string {
-    const properties = getMembersFromTypeAlias(typeNode);
+function generateTypeTypeGuards(typeNode: TypeAliasDeclaration, types: TypeAliasDeclaration[]): string {
+    const properties = getMembersFromTypeAlias(typeNode, types);
     const typeName = capitalize(typeNode.name.text);
     return buildTypeGuards(typeName, properties);
 }
@@ -101,9 +102,12 @@ interfaces.forEach((interfaceNode) => {
     const typeGuardCode = generateTypeGuards(interfaceNode);
     console.log(typeGuardCode)
 });
-types.forEach((typeNode) => {
-    const typeGuardCode = generateTypeTypeGuards(typeNode);
-    console.log(typeGuardCode)
+types.forEach((alias) => {
+    const node = getMembersFromTypeAlias(alias, types);
+    if(node) {
+        const typeGuardCode = generateTypeTypeGuards({type: {members: node, ...alias.type}, ...alias}, types);
+        console.log(typeGuardCode)
+    }
 });
 enums.forEach((enumNode) => {
     const typeGuardCode = generateEnumTypeGuard(enumNode);
