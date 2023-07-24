@@ -1,22 +1,30 @@
 import * as fs from "fs";
 import * as ts from "typescript";
+import {uniq} from "lodash";
 import {
     EnumDeclaration,
     EnumMember,
     InterfaceDeclaration,
     isEnumMember,
     isPropertySignature,
+    LiteralType, Node,
     NodeArray,
     TypeAliasDeclaration,
     TypeElement
 } from "typescript";
-import {capitalize, getMembersFromTypeAlias} from "./utils";
+import {
+    capitalize, deleteFileIfExists, generateTypeGuardsFile,
+    getEscapedCapitalizedStringLiteral,
+    getEscapedStringLiteral,
+    getMembersFromTypeAlias
+} from "./utils";
 
 type ObjectsType = {
     interfaces: ts.InterfaceDeclaration[];
     types: ts.TypeAliasDeclaration[];
     enums: ts.EnumDeclaration[];
 }
+
 export function readObjects(path: string): ObjectsType {
     // Read the file
     const fileContent = fs.readFileSync(path, 'utf8');
@@ -37,23 +45,22 @@ export function readObjects(path: string): ObjectsType {
  * @param typeName
  * @param properties
  */
-const buildTypeGuards = (typeName: string, properties: NodeArray<TypeElement> | TypeElement[] | NodeArray<EnumMember>) => {
+const buildTypeGuards = (typeName: string, properties: NodeArray<TypeElement> | TypeElement[] | NodeArray<EnumMember> | LiteralType[]) => {
     const typeGuardFunctions: string[] = [];
     typeGuardFunctions.push(`export function is${typeName}(value: any): value is ${typeName} {`);
     typeGuardFunctions.push(`    if (typeof value !== 'object' || value === null) {`);
     typeGuardFunctions.push(`        return false;`);
     typeGuardFunctions.push(`    }\n`);
-
-    properties.forEach((property) => {
-        const propertyName = property.name.getText();
-        let propertyType = '';
+    const uniqueProperties = uniq(properties, (property) => property.name.escapedText)
+    uniqueProperties.forEach((property) => {
+        const propertyName = property.name.escapedText;
         if (isPropertySignature(property) && property.type) {
-            propertyType = property.type.getText();
-            const typeGuardName = `is${capitalize(propertyType)}`;
-            typeGuardFunctions.push(`    if (!value.hasOwnProperty('${propertyName}') || !${typeGuardName}(value.${propertyName})) {`);
+            const typeGuardName = `is${getEscapedCapitalizedStringLiteral(property.type._typeNodeBrand ?? property.type.getText())}`;
+            typeGuardFunctions.push(`    if (!value.hasOwnProperty('${getEscapedStringLiteral(propertyName)}') || !${typeGuardName}(value.${getEscapedStringLiteral(propertyName)})) {`);
+
         }
         if (isEnumMember(property)) {
-            typeGuardFunctions.push(`    if (!value.hasOwnProperty('${propertyName}') || !value === "${propertyName}") {`);
+            typeGuardFunctions.push(`    if (!value.hasOwnProperty('${getEscapedStringLiteral(propertyName)}') || !value === "${propertyName}") {`);
         }
 
         typeGuardFunctions.push(`        return false;`);
@@ -98,20 +105,18 @@ function generateEnumTypeGuard(typeNode: EnumDeclaration): string {
 }
 
 const {interfaces, types, enums} = readObjects('./data.ts');
+deleteFileIfExists('out/typeguards.ts');
 interfaces.forEach((interfaceNode) => {
     const typeGuardCode = generateTypeGuards(interfaceNode);
-    console.log(typeGuardCode)
+    generateTypeGuardsFile(typeGuardCode)
 });
 types.forEach((alias) => {
-    const node = getMembersFromTypeAlias(alias, types);
-    if(node) {
-        const typeGuardCode = generateTypeTypeGuards({type: {members: node, ...alias.type}, ...alias}, types);
-        console.log(typeGuardCode)
-    }
+    const typeGuardCode = generateTypeTypeGuards(alias, types);
+    generateTypeGuardsFile(typeGuardCode)
 });
 enums.forEach((enumNode) => {
     const typeGuardCode = generateEnumTypeGuard(enumNode);
-    console.log(typeGuardCode)
+    generateTypeGuardsFile(typeGuardCode)
 });
 
 

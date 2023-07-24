@@ -16,11 +16,12 @@ export type Point2 = {
     z: number;
     m: Point;
 } & Point;
-export type Point3 = Point & Point2
+
 export enum Color {
     Red = 'red',
     Green = 'green',
     Blue = 'blue',
 }
 //TODO: add support for | in types
-//export type someType = "a" | "b" | "c";
+export type someType = 'a' | Point | boolean | null | undefined;
+export type Test<T> = T extends string ? string : number;
