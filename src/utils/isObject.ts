@@ -1,4 +1,7 @@
-// Helper function to check if a value is an object
+/**
+ * Check if value is an object
+ * @param value
+ */
 export function isObject(value: any): boolean {
     return typeof value === 'object' && value !== null;
 }

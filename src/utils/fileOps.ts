@@ -2,6 +2,10 @@ import * as fs from "fs";
 
 const filePath = 'out/typeguards.ts';
 //TODO: add imports, utils in generated file
+/**
+ * Generates a file with the given text
+ * @param typeGuardsText
+ */
 export function generateTypeGuardsFile(typeGuardsText: string): void {
     try {
         if (fs.existsSync(filePath)) {
@@ -16,12 +20,21 @@ export function generateTypeGuardsFile(typeGuardsText: string): void {
     }
 }
 
+/**
+ * Deletes the file if it exists
+ * @param filePath
+ */
 export function deleteFileIfExists(filePath: string) {
     if (fs.existsSync(filePath)) {
         fs.unlinkSync(filePath);
         console.log('Existing file deleted successfully.');
     }
 }
+
+/**
+ * Creates a file with the given text
+ * @param typeGuardsText
+ */
 function createFile(typeGuardsText: string) {
     const initialContent = '// Generated using ts-gen-typeguards\n';
     try {
@@ -33,6 +46,10 @@ function createFile(typeGuardsText: string) {
     }
 }
 
+/**
+ * Appends the given text to the file
+ * @param typeGuardsText
+ */
 function appendText(typeGuardsText: string) {
     try {
         fs.appendFileSync(filePath, typeGuardsText);

@@ -24,4 +24,3 @@ export enum Color {
 }
 //TODO: add support for | in types
 export type someType = 'a' | Point | boolean | null | undefined;
-export type Test<T> = T extends string ? string : number;

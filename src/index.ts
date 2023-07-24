@@ -10,7 +10,7 @@ import {
     LiteralType, Node,
     NodeArray,
     TypeAliasDeclaration,
-    TypeElement
+    TypeElement, TypeNode
 } from "typescript";
 import {
     capitalize, deleteFileIfExists, generateTypeGuardsFile,
@@ -41,26 +41,49 @@ export function readObjects(path: string): ObjectsType {
 }
 
 /**
+ * Generates the type guard header for the type guard function
+ * @param typeName
+ */
+function generateTypeGuardHeader(typeName: string): string {
+    return [
+        `export function is${typeName}(value: any): value is ${typeName} {`,
+        `    if (typeof value !== 'object' || value === null) {`,
+        `        return false;`,
+        `    }\n`
+    ].join('\n');
+}
+/**
+ * Create a type guard for a property signature
+ * @param propertyName
+ * @param propertyType
+ */
+function createPropertyTypeGuard(propertyName: string, propertyType: TypeNode): string {
+    const typeGuardName = `is${getEscapedCapitalizedStringLiteral(propertyType._typeNodeBrand ?? propertyType.getText())}`;
+    return `    if (!value.hasOwnProperty('${getEscapedStringLiteral(propertyName)}') || !${typeGuardName}(value.${getEscapedStringLiteral(propertyName)})) {`;
+}
+
+/**
+ * Create a type guard for an enum member
+ * @param propertyName
+ */
+function createEnumTypeGuard(propertyName: string): string {
+    return `    if (!value.hasOwnProperty('${getEscapedStringLiteral(propertyName)}') || !value === "${propertyName}") {`;
+}
+/**
  * Generates the type guards for the interfaces, types, and enums
  * @param typeName
  * @param properties
  */
 const buildTypeGuards = (typeName: string, properties: NodeArray<TypeElement> | TypeElement[] | NodeArray<EnumMember> | LiteralType[]) => {
     const typeGuardFunctions: string[] = [];
-    typeGuardFunctions.push(`export function is${typeName}(value: any): value is ${typeName} {`);
-    typeGuardFunctions.push(`    if (typeof value !== 'object' || value === null) {`);
-    typeGuardFunctions.push(`        return false;`);
-    typeGuardFunctions.push(`    }\n`);
-    const uniqueProperties = uniq(properties, (property) => property.name.escapedText)
-    uniqueProperties.forEach((property) => {
+    typeGuardFunctions.push(generateTypeGuardHeader(typeName));
+
+    properties.forEach((property) => {
         const propertyName = property.name.escapedText;
         if (isPropertySignature(property) && property.type) {
-            const typeGuardName = `is${getEscapedCapitalizedStringLiteral(property.type._typeNodeBrand ?? property.type.getText())}`;
-            typeGuardFunctions.push(`    if (!value.hasOwnProperty('${getEscapedStringLiteral(propertyName)}') || !${typeGuardName}(value.${getEscapedStringLiteral(propertyName)})) {`);
-
-        }
-        if (isEnumMember(property)) {
-            typeGuardFunctions.push(`    if (!value.hasOwnProperty('${getEscapedStringLiteral(propertyName)}') || !value === "${propertyName}") {`);
+            typeGuardFunctions.push(createPropertyTypeGuard(propertyName, property.type));
+        } else if (isEnumMember(property)) {
+            typeGuardFunctions.push(createEnumTypeGuard(propertyName));
         }
 
         typeGuardFunctions.push(`        return false;`);
@@ -72,6 +95,7 @@ const buildTypeGuards = (typeName: string, properties: NodeArray<TypeElement> | 
 
     return typeGuardFunctions.join('\n');
 }
+
 
 /**
  * Generates the type guards for the interfaces
@@ -104,6 +128,7 @@ function generateEnumTypeGuard(typeNode: EnumDeclaration): string {
     return buildTypeGuards(enumName, enumProperties);
 }
 
+//Implementation
 const {interfaces, types, enums} = readObjects('./data.ts');
 deleteFileIfExists('out/typeguards.ts');
 interfaces.forEach((interfaceNode) => {

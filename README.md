@@ -88,6 +88,8 @@ To generate type guards for interfaces, type aliases, and enums, you can utilize
 - Support for generating type guards for Optional Chaining and Nullish Coalescing.
 - Support for generating type guards for Any and Unknown Types.
 - Support for generating type guards for Type Assertions.
+- CLI to generate type guards for a given TypeScript file.
+- Linting and formatting the generated type guards using ESLint and Prettier.
 ## API Reference
 
 ### readObjects(path: string): ObjectsType

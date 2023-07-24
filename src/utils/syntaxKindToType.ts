@@ -1,5 +1,9 @@
 import {SyntaxKind} from "typescript";
 
+/**
+ * Converts a SyntaxKind value to a string type.
+ * @param syntaxKind
+ */
 export function syntaxKindToType(syntaxKind: SyntaxKind): string {
     switch (syntaxKind) {
         case SyntaxKind.StringKeyword:
