@@ -3,13 +3,16 @@ import * as ts from "typescript";
 import {
     EnumDeclaration,
     EnumMember,
+    factory,
     InterfaceDeclaration,
     isEnumMember,
     isPropertySignature, isTypeLiteralNode,
+    isTypeReferenceNode,
     LiteralType,
     NodeArray,
+    SyntaxKind,
     TypeAliasDeclaration,
-    TypeElement,
+    TypeElement, TypeLiteralNode,
     TypeNode
 } from "typescript";
 import {
@@ -20,7 +23,7 @@ import {
     getEscapedStringLiteral,
     getMembersFromTypeAlias
 } from "./utils";
-import {generateOptionalPropertyTypeGuard, generateTypeGuards} from "./generator";
+import {generateTypeGuards, generateUnionTypeGuard} from "./generator";
 
 type ObjectsType = {
     interfaces: ts.InterfaceDeclaration[];
@@ -136,25 +139,7 @@ function generateEnumTypeGuard(typeNode: EnumDeclaration): string {
 //Implementation
 const {interfaces, types, enums} = readObjects('./data.ts');
 deleteFileIfExists('out/typeguards.ts');
-/*interfaces.forEach((interfaceNode) => {
-    const typeGuardCode = generateTypeGuards(interfaceNode);
-    generateTypeGuardsFile(typeGuardCode)
-});*/
 generateTypeGuardsFile(generateTypeGuards(types));
-/*types.forEach((alias) => {
-    /!*if(isTypeLiteralNode(alias.type)) {
-        const typeGuardCode = alias.type.members.map(m => {
-            if (isPropertySignature(m)) return generateOptionalPropertyTypeGuard(m);
-            return m;
-        });
-        console.log(typeGuardCode);
-    }*!/
-    const typeGuardCode = generateTypeTypeGuards(alias, types);
-    generateTypeGuardsFile(typeGuardCode)
-});*/
-enums.forEach((enumNode) => {
-    const typeGuardCode = generateEnumTypeGuard(enumNode);
-    generateTypeGuardsFile(typeGuardCode)
-});
+
 
 
