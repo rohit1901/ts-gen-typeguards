@@ -1,13 +1,27 @@
 // Generate type guards for literal types
-interface LiteralTypeDefinition {
-    kind: 'literal';
-    properties: (string | number | boolean)[];
+import {isTypeReferenceNode, PropertySignature,} from "typescript";
+import {
+    getEscapedCapitalizedStringLiteral,
+    getEscapedStringLiteral,
+    isKeywordSyntaxKind,
+    isPrimitiveSyntaxKind,
+    syntaxKindToType
+} from "../utils";
+
+export function generateLiteralTypeGuard({questionToken, name, type}: PropertySignature): string {
+    const propType = syntaxKindToType(type.kind);
+    const typeGuardCode: string[] = [];
+    if (isTypeReferenceNode(type) && !questionToken) {
+        typeGuardCode.push(`if (!value.hasOwnProperty('${getEscapedStringLiteral(name.getText())}') || !is${getEscapedCapitalizedStringLiteral(type.typeName.getText())}(value.${getEscapedStringLiteral(name.getText())})) {`);
+        typeGuardCode.push(`    return false;\n`);
+
+        typeGuardCode.push(`}\n`);
+    } else if (isPrimitiveSyntaxKind(type.kind) && !questionToken) {
+        typeGuardCode.push(`if (!value.hasOwnProperty('${getEscapedStringLiteral(name.getText())}') || typeof value.${getEscapedStringLiteral(name.getText())} !== '${propType}') {`);
+        typeGuardCode.push(`    return false;\n`);
+
+        typeGuardCode.push(`}\n`);
+    }
+    return typeGuardCode.join("");
 }
-export function generateLiteralTypeGuard(typeName: string, definition: LiteralTypeDefinition): string {
-    const literalValues = definition.properties.map(value => JSON.stringify(value)).join(' | ');
-    const typeGuard = `type ${typeName} = ${literalValues};\n\n` +
-        `function is${typeName}(value: any): value is ${typeName} {\n` +
-        `  return [${literalValues}].includes(value);\n` +
-        `}\n`;
-    return typeGuard
-}
+
