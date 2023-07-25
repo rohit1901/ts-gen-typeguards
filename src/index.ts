@@ -1,23 +1,26 @@
 import * as fs from "fs";
 import * as ts from "typescript";
-import {uniq} from "lodash";
 import {
     EnumDeclaration,
     EnumMember,
     InterfaceDeclaration,
     isEnumMember,
-    isPropertySignature,
-    LiteralType, Node,
+    isPropertySignature, isTypeLiteralNode,
+    LiteralType,
     NodeArray,
     TypeAliasDeclaration,
-    TypeElement, TypeNode
+    TypeElement,
+    TypeNode
 } from "typescript";
 import {
-    capitalize, deleteFileIfExists, generateTypeGuardsFile,
+    capitalize,
+    deleteFileIfExists,
+    generateTypeGuardsFile,
     getEscapedCapitalizedStringLiteral,
     getEscapedStringLiteral,
     getMembersFromTypeAlias
 } from "./utils";
+import {generateOptionalPropertyTypeGuard, generateTypeGuards} from "./generator";
 
 type ObjectsType = {
     interfaces: ts.InterfaceDeclaration[];
@@ -52,6 +55,7 @@ function generateTypeGuardHeader(typeName: string): string {
         `    }\n`
     ].join('\n');
 }
+
 /**
  * Create a type guard for a property signature
  * @param propertyName
@@ -69,6 +73,7 @@ function createPropertyTypeGuard(propertyName: string, propertyType: TypeNode): 
 function createEnumTypeGuard(propertyName: string): string {
     return `    if (!value.hasOwnProperty('${getEscapedStringLiteral(propertyName)}') || !value === "${propertyName}") {`;
 }
+
 /**
  * Generates the type guards for the interfaces, types, and enums
  * @param typeName
@@ -101,7 +106,7 @@ const buildTypeGuards = (typeName: string, properties: NodeArray<TypeElement> | 
  * Generates the type guards for the interfaces
  * @param interfaceNode
  */
-function generateTypeGuards(interfaceNode: InterfaceDeclaration): string {
+function generateTypeGuards2(interfaceNode: InterfaceDeclaration): string {
     const properties = interfaceNode.members;
     const interfaceName = capitalize(interfaceNode.name.text);
     return buildTypeGuards(interfaceName, properties);
@@ -131,14 +136,22 @@ function generateEnumTypeGuard(typeNode: EnumDeclaration): string {
 //Implementation
 const {interfaces, types, enums} = readObjects('./data.ts');
 deleteFileIfExists('out/typeguards.ts');
-interfaces.forEach((interfaceNode) => {
+/*interfaces.forEach((interfaceNode) => {
     const typeGuardCode = generateTypeGuards(interfaceNode);
     generateTypeGuardsFile(typeGuardCode)
-});
-types.forEach((alias) => {
+});*/
+generateTypeGuardsFile(generateTypeGuards(types));
+/*types.forEach((alias) => {
+    /!*if(isTypeLiteralNode(alias.type)) {
+        const typeGuardCode = alias.type.members.map(m => {
+            if (isPropertySignature(m)) return generateOptionalPropertyTypeGuard(m);
+            return m;
+        });
+        console.log(typeGuardCode);
+    }*!/
     const typeGuardCode = generateTypeTypeGuards(alias, types);
     generateTypeGuardsFile(typeGuardCode)
-});
+});*/
 enums.forEach((enumNode) => {
     const typeGuardCode = generateEnumTypeGuard(enumNode);
     generateTypeGuardsFile(typeGuardCode)

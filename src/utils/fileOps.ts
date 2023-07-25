@@ -1,23 +1,38 @@
 import * as fs from "fs";
+import *  as prettier from 'prettier';
 
 const filePath = 'out/typeguards.ts';
-//TODO: add imports, utils in generated file
+
+
+function prettify(input: string): Promise<string> {
+    return prettier.format(input, {
+        singleQuote: true,
+        trailingComma: 'es5',
+        tabWidth: 2,
+        parser: 'typescript',
+    });
+}
 /**
  * Generates a file with the given text
  * @param typeGuardsText
  */
 export function generateTypeGuardsFile(typeGuardsText: string): void {
-    try {
-        if (fs.existsSync(filePath)) {
-            // File exists, updating it by appending text
-            appendText(typeGuardsText);
-        } else {
-            // File doesn't exist, creating it and appending text
-            createFile(typeGuardsText);
+    prettify(typeGuardsText).then((formattedText) => {
+        try {
+            if (fs.existsSync(filePath)) {
+                // File exists, updating it by appending text
+                appendText(formattedText);
+            } else {
+                // File doesn't exist, creating it and appending text
+                createFile(formattedText);
+            }
+        } catch (err) {
+            console.error('Error while processing the file:', err.message);
         }
-    } catch (err) {
-        console.error('Error while processing the file:', err.message);
-    }
+    }).catch((err) => {
+        console.error('Error while formatting the file:', err.message);
+    });
+
 }
 
 /**
@@ -38,7 +53,7 @@ export function deleteFileIfExists(filePath: string) {
 function createFile(typeGuardsText: string) {
     const initialContent = '// Generated using ts-gen-typeguards\n';
     try {
-        fs.writeFileSync(filePath, `${initialContent} \n ${typeGuardsText}`);
+        fs.writeFileSync(filePath, `${initialContent}`);
         console.log('File created and initial content added successfully.');
         appendText(typeGuardsText);
     } catch (err) {

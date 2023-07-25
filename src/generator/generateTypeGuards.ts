@@ -1,31 +1,67 @@
 // Generate type guards for a given interface, type, or enum
-import {
-    generateAnyTypeGuard,
-    generateConditionalTypeGuard,
-    generateEnumTypeGuard,
-    generateFunctionSignatureGuard,
-    generateIndexedAccessTypeGuard,
-    generateInheritedTypeGuard,
-    generateIntersectionTypeGuard,
-    generateLiteralTypeGuard,
-    generateMappedTypeGuard,
-    generateOptionalPropertyTypeGuard,
-    generateReadonlyPropertyTypeGuard,
-    generateRecursiveTypeGuard,
-    generateTypeAliasGuard,
-    generateTypeAssertionGuard,
-    generateTypeGuard,
-    generateUnionTypeGuard,
-    generateUnknownTypeGuard
-} from "./";
+import {generateIntersectionTypeGuard, generateLiteralTypeGuard, generateOptionalPropertyTypeGuard} from "./";
+import {isPropertySignature, isTypeLiteralNode, NodeArray, TypeAliasDeclaration} from "typescript";
+import {getEscapedCapitalizedStringLiteral, syntaxKindToType} from "../utils";
 
-export function generateTypeGuards(input: string): string {
-    const types = JSON.parse(input);
+/**
+ * Generates the type guard header for the type guard function.
+ * The generated type guard function will be in the format:
+ * export function is{typeName}(value: any): value is {typeName} {
+ *     if (typeof value !== 'object' || value === null) { return false; }
+ * }
+ *
+ * @param typeName The name of the type for which the type guard is being generated.
+ * @param shouldBeExported A boolean indicating whether the type guard function should be exported.
+ *                         Set to `true` if the function should be exported, `false` otherwise.
+ * @returns The generated type guard header as a string.
+ */
+function generateTypeGuardHeader(typeName: string, shouldBeExported: boolean): string {
+    const exportKeyword = shouldBeExported ? 'export ' : '';
+    return `\n${exportKeyword}function is${typeName}(value: any): value is ${typeName} {\n    if (typeof value !== 'object' || value === null) { return false; }\n`;
+}
 
-    let typeGuards = '';
 
-    for (const typeName in types) {
-        const definition = types[typeName];
+/**
+ * Function generates type guards for the provided type aliases and interfaces.
+ * These type guards enable runtime type checking for objects based on their defined types.
+ * The function takes an array of type alias declarations or a node array containing interfaces and type aliases
+ * as input and returns the generated type guards code as a string.
+ * The generated code can be used to validate data at runtime and ensure it adheres to the defined TypeScript types.
+ * @param typeAliases
+ * @returns string
+ */
+export function generateTypeGuards(typeAliases: TypeAliasDeclaration[]): string {
+    const typeGuardCode: string[] = [];
+    const set = new Set<string>();
+    for(const typeAlias of typeAliases) {
+        const { modifiers, name, type } = typeAlias;
+        const propSet = new Set<string>();
+        if (set.has(name.getText())) return;
+        set.add(name.getText());
+        const shouldBeExported = modifiers?.some((modifier) => syntaxKindToType(modifier.kind) === 'export');
+        const typeGuardName = getEscapedCapitalizedStringLiteral(name.getText());
+        typeGuardCode.push(generateTypeGuardHeader(typeGuardName, shouldBeExported));
+        //TODO: Intersection type
+        //console.log('generateIntersectionTypeGuard', generateIntersectionTypeGuard(typeAlias, typeAliases))
+        if (isTypeLiteralNode(type)) {
+            const properties = type.members;
+            for(const property of properties) {
+                if (propSet.has(property.name.getText())) return;
+                propSet.add(property.name.getText());
+                if (isPropertySignature(property)) {
+                    typeGuardCode.push(generateOptionalPropertyTypeGuard(property));
+                    typeGuardCode.push(generateLiteralTypeGuard(property));
+                }
+            }
+        }
+        typeGuardCode.push(`\n    return true;\n}\n`);
+    }
+
+    return typeGuardCode.join('\n');
+    /*let typeGuards = '';
+
+    for (const typeName in typeAliases) {
+        const definition = typeAliases[typeName];
 
         if (definition.kind === 'union') {
             typeGuards += generateUnionTypeGuard(typeName, definition);
@@ -48,7 +84,7 @@ export function generateTypeGuards(input: string): string {
         } else if (definition.kind === 'literal') {
             typeGuards += generateLiteralTypeGuard(typeName, definition);
         } else if (definition.kind === 'optionalProperty') {
-            typeGuards += generateOptionalPropertyTypeGuard(typeName, definition);
+            typeGuards += generateOptionalPropertyTypeGuard({} as PropertySignature);
         } else if (definition.kind === 'readonlyProperty') {
             typeGuards += generateReadonlyPropertyTypeGuard(typeName, definition);
         } else if (definition.kind === 'enum') {
@@ -62,7 +98,5 @@ export function generateTypeGuards(input: string): string {
         } else {
             typeGuards += generateTypeGuard(typeName, definition);
         }
-    }
-
-    return typeGuards;
+    }*/
 }
