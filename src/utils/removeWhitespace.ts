@@ -3,6 +3,6 @@
  * @param input
  */
 export function removeWhitespace(input: string): string {
-    // Remove spaces, tabs, and line breaks using regular expressions
-    return input.replace(/\s/g, '');
+  // Remove spaces, tabs, and line breaks using regular expressions
+  return input.replace(/\s/g, "");
 }

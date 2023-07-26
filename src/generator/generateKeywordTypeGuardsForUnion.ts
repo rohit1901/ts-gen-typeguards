@@ -1,52 +1,52 @@
-import {SyntaxKind} from "typescript";
+import { SyntaxKind } from "typescript";
 import {
-    isBigIntKeyword,
-    isBooleanKeyword,
-    isNumberKeyword,
-    isObjectKeyword,
-    isStringKeyword,
-    isSymbolKeyword,
-    isUndefinedKeyword,
-    isVoidKeyword
+  isBigIntKeyword,
+  isBooleanKeyword,
+  isNumberKeyword,
+  isObjectKeyword,
+  isStringKeyword,
+  isSymbolKeyword,
+  isUndefinedKeyword,
+  isVoidKeyword,
 } from "../utils";
 
 export function generateStringKeywordTypeGuard(kind: SyntaxKind): string {
-    if (isStringKeyword(kind)) {
-        return `(typeof value !== 'string')`;
-    }
-    return '';
+  if (isStringKeyword(kind)) {
+    return `(typeof value !== 'string')`;
+  }
+  return "";
 }
 
 export function generateNumberKeywordTypeGuard(kind: SyntaxKind): string {
-    if (isNumberKeyword(kind)) {
-        return `(typeof value !== 'number')`;
-    }
-    return '';
+  if (isNumberKeyword(kind)) {
+    return `(typeof value !== 'number')`;
+  }
+  return "";
 }
 
 export function generateBigIntKeywordTypeGuard(kind: SyntaxKind): string {
-    if (isBigIntKeyword(kind)) {
-        return `(typeof value !== 'bigint')`;
-    }
-    return ''
+  if (isBigIntKeyword(kind)) {
+    return `(typeof value !== 'bigint')`;
+  }
+  return "";
 }
 
 export function generateSymbolKeywordTypeGuard(kind: SyntaxKind): string {
-    if (isSymbolKeyword(kind)) {
-        return `(typeof value !== 'symbol')`;
-    }
-    return '';
+  if (isSymbolKeyword(kind)) {
+    return `(typeof value !== 'symbol')`;
+  }
+  return "";
 }
 
 export function generateObjectKeywordTypeGuard(kind: SyntaxKind): string {
-    if (isObjectKeyword(kind)) {
-        return `(typeof value !== 'object' && value !== null)`;
-    }
+  if (isObjectKeyword(kind)) {
+    return `(typeof value !== 'object' && value !== null)`;
+  }
 }
 
 export function generateAnyKeywordTypeGuard(kind: SyntaxKind) {
-    //NOTE: any keyword is not a type guard and typeguard should not be generated for it
-    return;
+  //NOTE: any keyword is not a type guard and typeguard should not be generated for it
+  return;
 }
 
 /**
@@ -73,39 +73,39 @@ export function generateAnyKeywordTypeGuard(kind: SyntaxKind) {
  * might be needed to use it as a specific type once you are certain about its actual type.
  */
 export function generateUnknownKeywordTypeGuard(kind: SyntaxKind) {
-    return;
+  return;
 }
 
 export function generateNeverKeywordTypeGuard(kind: SyntaxKind) {
-    //NOTE: never keyword is not a type guard and typeguard should not be generated for it
-    return;
+  //NOTE: never keyword is not a type guard and typeguard should not be generated for it
+  return;
 }
 
 export function generateVoidKeywordTypeGuard(kind: SyntaxKind): string {
-    if (isVoidKeyword(kind)) {
-        return `(value !== undefined)`;
-    }
+  if (isVoidKeyword(kind)) {
+    return `(value !== undefined)`;
+  }
 }
 
 export function generateKeyofKeywordTypeGuard(kind: SyntaxKind): string {
-    //TODO: fix this function to generate the correct type guard
-    /*if(isKeyofKeyword(kind)) {
+  //TODO: fix this function to generate the correct type guard
+  /*if(isKeyofKeyword(kind)) {
         return `(typeof value !== keyof)`;
     }
     */
-    return '';
+  return "";
 }
 
 export function generateBooleanKeywordTypeGuard(type: SyntaxKind): string {
-    if (isBooleanKeyword(type)) {
-        return `(typeof value !== 'boolean')`;
-    }
-    return ''
+  if (isBooleanKeyword(type)) {
+    return `(typeof value !== 'boolean')`;
+  }
+  return "";
 }
 
 export function generateUndefinedKeywordTypeGuard(type: SyntaxKind): string {
-    if (isUndefinedKeyword(type)) {
-        return `(value !== undefined)`;
-    }
-    return ''
+  if (isUndefinedKeyword(type)) {
+    return `(value !== undefined)`;
+  }
+  return "";
 }
