@@ -4,7 +4,8 @@
   "description": "A utility to generate typeguards",
   "main": "index.ts",
   "scripts": {
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "prettify": "prettier --write \"src/**/*.ts\""
   },
   "repository": {
     "type": "git",
