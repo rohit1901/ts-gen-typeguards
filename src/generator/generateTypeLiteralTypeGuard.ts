@@ -8,7 +8,7 @@ import {
     syntaxKindToType
 } from "../utils";
 
-export function generateLiteralTypeGuard({questionToken, name, type}: PropertySignature): string {
+export function generateTypeLiteralTypeGuard({questionToken, name, type}: PropertySignature): string {
     const propType = syntaxKindToType(type.kind);
     const typeGuardCode: string[] = [];
     if (isTypeReferenceNode(type) && !questionToken) {

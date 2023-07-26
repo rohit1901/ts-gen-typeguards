@@ -8,7 +8,7 @@ export {generateMappedTypeGuard} from "./generateMappedTypeGuard";
 export {generateRecursiveTypeGuard} from "./generateRecursiveTypeGuard";
 export {generateInheritedTypeGuard} from "./generateInheritedTypeGuard";
 export {generateFunctionSignatureGuard} from "./generateFunctionSignatureGuard";
-export {generateLiteralTypeGuard} from "./generateLiteralTypeGuard";
+export {generateTypeLiteralTypeGuard} from "./generateTypeLiteralTypeGuard";
 export {generateOptionalPropertyTypeGuard} from "./generateOptionalPropertyTypeGuard";
 export {generateReadonlyPropertyTypeGuard} from "./generateReadonlyPropertyTypeGuard";
 export {generateEnumTypeGuard} from "./generateEnumTypeGuard";
