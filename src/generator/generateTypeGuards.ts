@@ -1,12 +1,17 @@
 // Generate type guards for a given interface, type, or enum
 import {
-    generateIntersectionTypeGuard,
-    generateLiteralTypeGuard,
-    generateOptionalPropertyTypeGuard,
-    generateUnionTypeGuard
+  generateIntersectionTypeGuard,
+  generateOptionalPropertyTypeGuard,
+  generateTypeLiteralTypeGuard,
+  generateUnionTypeGuard,
 } from "./";
-import {isPropertySignature, isTypeLiteralNode, NodeArray, TypeAliasDeclaration} from "typescript";
-import {getEscapedCapitalizedStringLiteral, syntaxKindToType} from "../utils";
+import {
+  isPropertySignature,
+  isTypeLiteralNode,
+  NodeArray,
+  TypeAliasDeclaration,
+} from "typescript";
+import { getEscapedCapitalizedStringLiteral, syntaxKindToType } from "../utils";
 
 /**
  * Generates the type guard header for the type guard function.
@@ -20,11 +25,13 @@ import {getEscapedCapitalizedStringLiteral, syntaxKindToType} from "../utils";
  *                         Set to `true` if the function should be exported, `false` otherwise.
  * @returns The generated type guard header as a string.
  */
-function generateTypeGuardHeader(typeName: string, shouldBeExported: boolean): string {
-    const exportKeyword = shouldBeExported ? 'export ' : '';
-    return `\n${exportKeyword}function is${typeName}(value: any): value is ${typeName} {\n    if (typeof value !== 'object' || value === null) { return false; }\n`;
+function generateTypeGuardHeader(
+  typeName: string,
+  shouldBeExported: boolean,
+): string {
+  const exportKeyword = shouldBeExported ? "export " : "";
+  return `\n${exportKeyword}function is${typeName}(value: any): value is ${typeName} {\n    if (typeof value !== 'object' || value === null) { return false; }\n`;
 }
-
 
 /**
  * Function generates type guards for the provided type aliases and interfaces.
@@ -35,34 +42,41 @@ function generateTypeGuardHeader(typeName: string, shouldBeExported: boolean): s
  * @param typeAliases
  * @returns string
  */
-export function generateTypeGuards(typeAliases: TypeAliasDeclaration[]): string {
-    const typeGuardCode: string[] = [];
-    const set = new Set<string>();
-    for(const typeAlias of typeAliases) {
-        const { modifiers, name, type } = typeAlias;
-        const propSet = new Set<string>();
-        if (set.has(name.getText())) return;
-        set.add(name.getText());
-        const shouldBeExported = modifiers?.some((modifier) => syntaxKindToType(modifier.kind) === 'export');
-        const typeGuardName = getEscapedCapitalizedStringLiteral(name.getText());
-        typeGuardCode.push(generateTypeGuardHeader(typeGuardName, shouldBeExported));
-        typeGuardCode.push(generateIntersectionTypeGuard(typeAlias, typeAliases));
-        if (isTypeLiteralNode(type)) {
-            const properties = type.members;
-            for(const property of properties) {
-                if (propSet.has(property.name.getText())) return;
-                propSet.add(property.name.getText());
-                if (isPropertySignature(property)) {
-                    typeGuardCode.push(generateOptionalPropertyTypeGuard(property));
-                    typeGuardCode.push(generateLiteralTypeGuard(property));
-                }
-            }
+export function generateTypeGuards(
+  typeAliases: TypeAliasDeclaration[],
+): string {
+  const typeGuardCode: string[] = [];
+  const set = new Set<string>();
+  for (const typeAlias of typeAliases) {
+    const { modifiers, name, type } = typeAlias;
+    const propSet = new Set<string>();
+    if (set.has(name.getText())) return;
+    set.add(name.getText());
+    const shouldBeExported = modifiers?.some(
+      (modifier) => syntaxKindToType(modifier.kind) === "export",
+    );
+    const typeGuardName = getEscapedCapitalizedStringLiteral(name.getText());
+    typeGuardCode.push(
+      generateTypeGuardHeader(typeGuardName, shouldBeExported),
+    );
+    typeGuardCode.push(generateIntersectionTypeGuard(typeAlias, typeAliases));
+    typeGuardCode.push(generateUnionTypeGuard(typeAlias, typeAliases));
+    if (isTypeLiteralNode(type)) {
+      const properties = type.members;
+      for (const property of properties) {
+        if (propSet.has(property.name.getText())) return;
+        propSet.add(property.name.getText());
+        if (isPropertySignature(property)) {
+          typeGuardCode.push(generateOptionalPropertyTypeGuard(property));
+          typeGuardCode.push(generateTypeLiteralTypeGuard(property));
         }
-        typeGuardCode.push(`\n    return true;\n}\n`);
+      }
     }
+    typeGuardCode.push(`\n    return true;\n}\n`);
+  }
 
-    return typeGuardCode.join('\n');
-    /*let typeGuards = '';
+  return typeGuardCode.join("\n");
+  /*let typeGuards = '';
 
     for (const typeName in typeAliases) {
         const definition = typeAliases[typeName];

@@ -3,5 +3,5 @@
  * @param value
  */
 export function isTypeString(value: any): value is "type" {
-    return typeof value === 'string' && value === "type";
+  return typeof value === "string" && value === "type";
 }
