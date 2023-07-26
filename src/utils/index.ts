@@ -6,3 +6,4 @@ export {isInterfaceString} from "./isInterfaceString";
 export {capitalize, getEscapedCapitalizedStringLiteral, getEscapedStringLiteral} from "./capitalize";
 export {syntaxKindToType, isPrimitiveSyntaxKind, isKeywordSyntaxKind, PrimitiveSyntaxKind} from "./syntaxKindToType";
 export {generateTypeGuardsFile, deleteFileIfExists} from "./fileOps";
+export {removeWhitespace} from "./removeWhitespace";

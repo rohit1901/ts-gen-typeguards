@@ -1,4 +1,4 @@
-import {capitalize, isEnumString, isInterfaceString, isObject, isTypeString} from "../utils";
+import {capitalize, isEnumString, isInterfaceString, isObject, isTypeString, removeWhitespace} from "../utils";
 import {readObjects} from "../index";
 
 describe("capitalize", () => {
@@ -25,5 +25,10 @@ describe("capitalize", () => {
   it("should test Object", () => {
     const result = isObject("hello world");
     expect(result).toEqual(false);
-  })
+  });
+  it("should test removeWhitespace", () => {
+    const result = removeWhitespace("hello world");
+    expect(result).toEqual("helloworld");
+  });
+
 });

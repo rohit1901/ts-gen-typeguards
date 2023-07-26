@@ -47,7 +47,6 @@ export function generateTypeGuards(typeAliases: TypeAliasDeclaration[]): string 
         const typeGuardName = getEscapedCapitalizedStringLiteral(name.getText());
         typeGuardCode.push(generateTypeGuardHeader(typeGuardName, shouldBeExported));
         typeGuardCode.push(generateIntersectionTypeGuard(typeAlias, typeAliases));
-        typeGuardCode.push(generateUnionTypeGuard(typeAlias, typeAliases));
         if (isTypeLiteralNode(type)) {
             const properties = type.members;
             for(const property of properties) {
