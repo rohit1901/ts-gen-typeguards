@@ -32,6 +32,7 @@ export enum Color {
     Red = 'red',
     Green = 'green',
     Blue = 'blue',
-}
+}*/
 //TODO: add support for | in types
-export type someType = 'a' | Point | boolean | null | undefined;*/
+// | Point | boolean | null | undefined
+export type someType = 'a' | null | undefined | Point | boolean | number | string | Address | Point2 | Point3 | Person;

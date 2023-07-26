@@ -17,3 +17,18 @@ export {generateUnknownTypeGuard} from "./generateUnknownTypeGuard";
 export {generateTypeAssertionGuard} from "./generateTypeAssertionGuard";
 export {generateTypeGuard} from "./generateTypeGuard";
 export {generateTypeGuards} from "./generateTypeGuards";
+export {
+    generateUndefinedKeywordTypeGuard,
+    generateBooleanKeywordTypeGuard,
+    generateKeyofKeywordTypeGuard,
+    generateStringKeywordTypeGuard,
+    generateAnyKeywordTypeGuard,
+    generateBigIntKeywordTypeGuard,
+    generateNeverKeywordTypeGuard,
+    generateNumberKeywordTypeGuard,
+    generateObjectKeywordTypeGuard,
+    generateSymbolKeywordTypeGuard,
+    generateUnknownKeywordTypeGuard,
+    generateVoidKeywordTypeGuard
+} from "./generateKeywordTypeGuardsForUnion";
+

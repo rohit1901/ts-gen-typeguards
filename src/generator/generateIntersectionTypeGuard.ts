@@ -6,7 +6,7 @@ import {
     isTypeReferenceNode,
     TypeAliasDeclaration, TypeLiteralNode, TypeReferenceNode
 } from "typescript";
-import {generateLiteralTypeGuard, generateOptionalPropertyTypeGuard} from "./";
+import {generateOptionalPropertyTypeGuard, generateTypeLiteralTypeGuard} from "./";
 /**
  * Generate an intersection type guard for a given TypeScript type alias.
  *
@@ -19,7 +19,7 @@ export function generateIntersectionTypeGuard(
     typeAliases: TypeAliasDeclaration[]
 ): string {
     if (!isIntersectionTypeNode(type)) {
-        return "";
+        return '';
     }
 
     const typeGuardCode: string[] = [];
@@ -82,7 +82,7 @@ function generateTypeLiteralGuards(
                 if (!encounteredPropertyNames.has(propName)) {
                     encounteredPropertyNames.add(propName);
                     typeGuardCode.push(generateOptionalPropertyTypeGuard(member));
-                    typeGuardCode.push(generateLiteralTypeGuard(member));
+                    typeGuardCode.push(generateTypeLiteralTypeGuard(member));
                 }
             }
         }

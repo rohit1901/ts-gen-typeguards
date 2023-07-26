@@ -116,17 +116,6 @@ function generateTypeGuards2(interfaceNode: InterfaceDeclaration): string {
 }
 
 /**
- * Generates the type guards for the types
- * @param typeNode
- * @param types
- */
-function generateTypeTypeGuards(typeNode: TypeAliasDeclaration, types: TypeAliasDeclaration[]): string {
-    const properties = getMembersFromTypeAlias(typeNode, types);
-    const typeName = capitalize(typeNode.name.text);
-    return buildTypeGuards(typeName, properties);
-}
-
-/**
  * Generates the type guards for the enums
  * @param typeNode
  */

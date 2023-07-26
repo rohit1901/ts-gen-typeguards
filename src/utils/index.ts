@@ -7,3 +7,17 @@ export {capitalize, getEscapedCapitalizedStringLiteral, getEscapedStringLiteral}
 export {syntaxKindToType, isPrimitiveSyntaxKind, isKeywordSyntaxKind, PrimitiveSyntaxKind} from "./syntaxKindToType";
 export {generateTypeGuardsFile, deleteFileIfExists} from "./fileOps";
 export {removeWhitespace} from "./removeWhitespace";
+export {
+    isUndefinedKeyword,
+    isBooleanKeyword,
+    isNumberKeyword,
+    isStringKeyword,
+    isAnyKeyword,
+    isKeyofKeyword,
+    isNeverKeyword,
+    isObjectKeyword,
+    isSymbolKeyword,
+    isUnknownKeyword,
+    isVoidKeyword,
+    isBigIntKeyword
+} from "./isKeyword";

@@ -1,8 +1,7 @@
 // Generate type guards for a given interface, type, or enum
 import {
     generateIntersectionTypeGuard,
-    generateLiteralTypeGuard,
-    generateOptionalPropertyTypeGuard,
+    generateOptionalPropertyTypeGuard, generateTypeLiteralTypeGuard,
     generateUnionTypeGuard
 } from "./";
 import {isPropertySignature, isTypeLiteralNode, NodeArray, TypeAliasDeclaration} from "typescript";
@@ -47,6 +46,7 @@ export function generateTypeGuards(typeAliases: TypeAliasDeclaration[]): string 
         const typeGuardName = getEscapedCapitalizedStringLiteral(name.getText());
         typeGuardCode.push(generateTypeGuardHeader(typeGuardName, shouldBeExported));
         typeGuardCode.push(generateIntersectionTypeGuard(typeAlias, typeAliases));
+        typeGuardCode.push(generateUnionTypeGuard(typeAlias, typeAliases));
         if (isTypeLiteralNode(type)) {
             const properties = type.members;
             for(const property of properties) {
@@ -54,7 +54,7 @@ export function generateTypeGuards(typeAliases: TypeAliasDeclaration[]): string 
                 propSet.add(property.name.getText());
                 if (isPropertySignature(property)) {
                     typeGuardCode.push(generateOptionalPropertyTypeGuard(property));
-                    typeGuardCode.push(generateLiteralTypeGuard(property));
+                    typeGuardCode.push(generateTypeLiteralTypeGuard(property));
                 }
             }
         }
