@@ -8,9 +8,8 @@ import {
 } from "../utils";
 
 export function generateLiteralTypeTypeGuard(literalType: Node): string {
-  const typeGuardCondition: string[] = [];
   if (isLiteralTypeNode(literalType)) {
-    if (!!literalType.literal.getText()) {
+    if (!!literalType.literal?.getText()) {
       const value = literalType.literal.getText();
       return `(value !== ${literalType.literal.getText()})`;
     }
