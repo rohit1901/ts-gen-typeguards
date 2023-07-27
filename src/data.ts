@@ -36,8 +36,7 @@ export enum Color {
 }*/
 //TODO: add support for | in types
 // | Point | boolean | null | undefined
-export type someType =
-  | "a"
+export type someType = "a"
   | null
   | undefined
   | Point
