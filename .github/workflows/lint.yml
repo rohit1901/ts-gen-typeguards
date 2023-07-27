@@ -18,10 +18,15 @@ jobs:
         node-version: [16.x, 18.x, 19.x, 20.x]
 
     steps:
-      - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
+      - uses: actions/checkout@v3
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm install
       - run: npm run prettify
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Applying formatting changes
+          branch: ${{ github.short_ref }}
