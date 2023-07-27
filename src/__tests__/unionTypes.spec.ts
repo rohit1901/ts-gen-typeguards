@@ -1,6 +1,6 @@
-import {setupVariables} from "./helpers";
-import {removeWhitespace} from "../utils";
-import {generateTypeGuards} from "../generator";
+import { setupVariables } from "./helpers";
+import { removeWhitespace } from "../utils";
+import { generateTypeGuards } from "../generator";
 
 /*export type someType =
     | "a"
@@ -15,16 +15,16 @@ import {generateTypeGuards} from "../generator";
     | Point3
     | Person;*/
 describe("unionTypes", function () {
-    const {someType} = setupVariables()
-    beforeEach(() => {
-        jest.clearAllMocks();
-    });
-    it("should contain name property in person", function () {
-        expect(someType.name.getText()).toEqual("someType");
-    });
-    it("should generate typeguard for someType", function () {
-        const expectedResult =
-            removeWhitespace(`export function isSomeType(value: any): value is SomeType {
+  const { someType } = setupVariables();
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+  it("should contain name property in person", function () {
+    expect(someType.name.getText()).toEqual("someType");
+  });
+  it("should generate typeguard for someType", function () {
+    const expectedResult =
+      removeWhitespace(`export function isSomeType(value: any): value is SomeType {
               if (typeof value !== 'object' || value === null) {
                 return false;
               }
@@ -46,9 +46,9 @@ describe("unionTypes", function () {
             
               return true;
             }`);
-        const typeGuards = generateTypeGuards([someType]);
-        //expect(removeWhitespace(typeGuards)).toEqual(expectedResult);
-        //TODO: Fix test
-        expect(removeWhitespace(typeGuards)).toBeTruthy();
-    });
+    const typeGuards = generateTypeGuards([someType]);
+    //expect(removeWhitespace(typeGuards)).toEqual(expectedResult);
+    //TODO: Fix test
+    expect(removeWhitespace(typeGuards)).toBeTruthy();
+  });
 });
