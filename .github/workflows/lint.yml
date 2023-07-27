@@ -9,9 +9,13 @@ on:
       - 'feature/**'
 
 jobs:
-  build:
+  format-code:
 
     runs-on: ubuntu-latest
+    permissions:
+      # Give the default GITHUB_TOKEN write permission to commit and push the
+      # added or changed files to the repository.
+      contents: write
 
     strategy:
       matrix:
@@ -19,8 +23,18 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm run prettify
+
+      - name: Commit changes
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Apply formatting changes
+          branch: 'feature/**'
+          # Optional commit user and author settings
+          commit_user_name: rohit1901's GitHub Actions Bot
