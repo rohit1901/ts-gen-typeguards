@@ -1,16 +1,18 @@
-import {generateIntersectionTypeGuard, generateTypeGuards,} from "../generator";
-import {factory, Identifier, SyntaxKind, TypeAliasDeclaration,} from "typescript";
-import {removeWhitespace} from "../utils";
-import {setupVariables} from "./helpers";
+import {
+  generateIntersectionTypeGuard,
+  generateTypeGuards,
+} from "../generator";
+import {
+  factory,
+  Identifier,
+  SyntaxKind,
+  TypeAliasDeclaration,
+} from "typescript";
+import { removeWhitespace } from "../utils";
+import { setupVariables } from "./helpers";
 
 describe("generateIntersectionTypeGuard", () => {
-  const {
-    person,
-    address,
-    point,
-    point2,
-    point3
-  } = setupVariables();
+  const { person, address, point, point2, point3 } = setupVariables();
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -19,7 +21,7 @@ describe("generateIntersectionTypeGuard", () => {
   });
   it("should generate typeguard for person", function () {
     const expectedResult =
-        removeWhitespace(`export function isPerson(value: any): value is Person {
+      removeWhitespace(`export function isPerson(value: any): value is Person {
           if (typeof value !== 'object' || value === null) {
             return false;
           }
@@ -36,7 +38,7 @@ describe("generateIntersectionTypeGuard", () => {
   //create test for address
   it("should generate typeguard for address", function () {
     const expectedResult =
-        removeWhitespace(`export function isAddress(value: any): value is Address {
+      removeWhitespace(`export function isAddress(value: any): value is Address {
             if (typeof value !== 'object' || value === null) {
                 return false;
             }
@@ -54,7 +56,7 @@ describe("generateIntersectionTypeGuard", () => {
   //create test for point
   it("should generate typeguard for point", function () {
     const expectedResult =
-        removeWhitespace(`export function isPoint(value: any): value is Point {
+      removeWhitespace(`export function isPoint(value: any): value is Point {
             if (typeof value !== 'object' || value === null) {
                 return false;
             }
@@ -72,7 +74,7 @@ describe("generateIntersectionTypeGuard", () => {
   //create test for point2
   it("should generate typeguard for point2", function () {
     const expectedResult =
-        removeWhitespace(`export function isPoint2(value: any): value is Point2 {
+      removeWhitespace(`export function isPoint2(value: any): value is Point2 {
             if (typeof value !== 'object' || value === null) {
                 return false;
             }
@@ -93,7 +95,7 @@ describe("generateIntersectionTypeGuard", () => {
   //create test for point3
   it("should generate typeguard for point3", function () {
     const expectedResult =
-        removeWhitespace(`export function isPoint3(value: any): value is Point3 {
+      removeWhitespace(`export function isPoint3(value: any): value is Point3 {
           if (typeof value !== 'object' || value === null) {
             return false;
           }
