@@ -51,7 +51,7 @@ export function deleteFileIfExists(filePath: string) {
  * @param typeGuardsText
  */
 function createFile(typeGuardsText: string) {
-  const initialContent = "// Generated using ts-gen-typeguards\n";
+  const initialContent = "// Generated using ts-gen-typeguards\n // @ts-nocheck\n";
   try {
     fs.writeFileSync(filePath, `${initialContent}`);
     console.log("File created and initial content added successfully.");
