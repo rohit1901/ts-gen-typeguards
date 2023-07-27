@@ -4,7 +4,7 @@ on:
     branches:
       - 'feature/*'
 jobs:
-  format and push:
+  format:
     runs-on: ubuntu-latest
     env:
       CI_COMMIT_MESSAGE: Continuous Integration Format Artifacts
