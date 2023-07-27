@@ -4,7 +4,7 @@ on:
     branches:
       - 'feature/*'
 jobs:
-  build:
+  format:
     runs-on: ubuntu-latest
     env:
       CI_COMMIT_MESSAGE: Continuous Integration Format Artifacts
@@ -25,7 +25,7 @@ jobs:
           prettier_options: --write src/**/*.ts !src/out/**/*
 
       # Commit and push all changed files.
-      - name: GIT Commit Build Artifacts (coverage, dist, devdist, docs)
+      - name: GIT commit and push formatted Artifacts (coverage, dist, devdist, docs)
         # Only run on main branch push (e.g. after pull request merge).
         if: github.event_name == 'push'
         run: |
@@ -33,3 +33,4 @@ jobs:
           git config --global user.email "rohit.khanduri@hotmail.com"
           git commit -a -m "${{ env.CI_COMMIT_MESSAGE }}"
           git push
+        continue-on-error: true
