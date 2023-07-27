@@ -67,8 +67,12 @@ export function generateTypeGuards(
         if (propSet.has(property.name.getText())) return;
         propSet.add(property.name.getText());
         if (isPropertySignature(property)) {
-          typeGuardCode.push(generateOptionalPropertyTypeGuard(property, typeAliases));
-          typeGuardCode.push(generateTypeLiteralTypeGuard(property, typeAliases));
+          typeGuardCode.push(
+            generateOptionalPropertyTypeGuard(property, typeAliases),
+          );
+          typeGuardCode.push(
+            generateTypeLiteralTypeGuard(property, typeAliases),
+          );
         }
       }
     }

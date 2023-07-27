@@ -58,25 +58,69 @@ export function generateUnionTypeGuard(
   const typeGuardCode: string[] = [];
   for (const unionType of type.types) {
     if (isTypeReferenceNode(unionType)) {
-      generateTypeReferenceTypeGuard(unionType, typeAliases, typeGuardCode, name.escapedText.toString());
+      generateTypeReferenceTypeGuard(
+        unionType,
+        typeAliases,
+        typeGuardCode,
+        name.escapedText.toString(),
+      );
     } else if (isTypeLiteralNode(unionType)) {
-      generateTypeLiteralTypeGuard(unionType, typeGuardCode, name.escapedText.toString());
+      generateTypeLiteralTypeGuard(
+        unionType,
+        typeGuardCode,
+        name.escapedText.toString(),
+      );
     } else if (isLiteralTypeNode(unionType)) {
       typeGuardCode.push(generateLiteralTypeTypeGuard(unionType));
     } else if (isUndefinedKeyword(unionType.kind)) {
-      typeGuardCode.push(generateUndefinedKeywordTypeGuard(unionType.kind, name.escapedText.toString()));
+      typeGuardCode.push(
+        generateUndefinedKeywordTypeGuard(
+          unionType.kind,
+          name.escapedText.toString(),
+        ),
+      );
     } else if (isBooleanKeyword(unionType.kind)) {
-      typeGuardCode.push(generateBooleanKeywordTypeGuard(unionType.kind, name.escapedText.toString()));
+      typeGuardCode.push(
+        generateBooleanKeywordTypeGuard(
+          unionType.kind,
+          name.escapedText.toString(),
+        ),
+      );
     } else if (isStringKeyword(unionType.kind)) {
-      typeGuardCode.push(generateStringKeywordTypeGuard(unionType.kind, name.escapedText.toString()));
+      typeGuardCode.push(
+        generateStringKeywordTypeGuard(
+          unionType.kind,
+          name.escapedText.toString(),
+        ),
+      );
     } else if (isNumberKeyword(unionType.kind)) {
-      typeGuardCode.push(generateNumberKeywordTypeGuard(unionType.kind, name.escapedText.toString()));
+      typeGuardCode.push(
+        generateNumberKeywordTypeGuard(
+          unionType.kind,
+          name.escapedText.toString(),
+        ),
+      );
     } else if (isBigIntKeyword(unionType.kind)) {
-      typeGuardCode.push(generateBigIntKeywordTypeGuard(unionType.kind, name.escapedText.toString()));
+      typeGuardCode.push(
+        generateBigIntKeywordTypeGuard(
+          unionType.kind,
+          name.escapedText.toString(),
+        ),
+      );
     } else if (isSymbolKeyword(unionType.kind)) {
-      typeGuardCode.push(generateSymbolKeywordTypeGuard(unionType.kind, name.escapedText.toString()));
+      typeGuardCode.push(
+        generateSymbolKeywordTypeGuard(
+          unionType.kind,
+          name.escapedText.toString(),
+        ),
+      );
     } else if (isObjectKeyword(unionType.kind)) {
-      typeGuardCode.push(generateObjectKeywordTypeGuard(unionType.kind, name.escapedText.toString()));
+      typeGuardCode.push(
+        generateObjectKeywordTypeGuard(
+          unionType.kind,
+          name.escapedText.toString(),
+        ),
+      );
     } else if (isAnyKeyword(unionType.kind)) {
       //skip any keyword
     } else if (isUnknownKeyword(unionType.kind)) {
@@ -84,7 +128,12 @@ export function generateUnionTypeGuard(
     } else if (isNeverKeyword(unionType.kind)) {
       //skip never keyword
     } else if (isVoidKeyword(unionType.kind)) {
-      typeGuardCode.push(generateVoidKeywordTypeGuard(unionType.kind, name.escapedText.toString()));
+      typeGuardCode.push(
+        generateVoidKeywordTypeGuard(
+          unionType.kind,
+          name.escapedText.toString(),
+        ),
+      );
     } else if (isKeyofKeyword(unionType.kind)) {
       //skip keyof keyword for now as it is not supported
     }
@@ -105,7 +154,7 @@ function generateTypeReferenceTypeGuard(
   typeRefNode: TypeReferenceNode,
   typeAliases: TypeAliasDeclaration[],
   typeGuardCode: string[],
-  name: string
+  name: string,
 ): void {
   const typeAlias = typeAliases.find(
     (typeAlias) => typeAlias.name.getText() === typeRefNode.typeName.getText(),
@@ -125,7 +174,7 @@ function generateTypeReferenceTypeGuard(
 function generateTypeLiteralTypeGuard(
   typeLiteral: TypeLiteralNode,
   typeGuardCode: string[],
-  name: string
+  name: string,
 ): void {
   const propertyGuards: string[] = [];
   for (const member of typeLiteral.members) {
@@ -145,7 +194,10 @@ function generateTypeLiteralTypeGuard(
  * @param name
  * @returns The generated type guard code as a string.
  */
-function generateTypeAliasTypeGuard(typeAlias: TypeAliasDeclaration, name: string): string {
+function generateTypeAliasTypeGuard(
+  typeAlias: TypeAliasDeclaration,
+  name: string,
+): string {
   return `!is${capitalize(typeAlias.name.getText())}(value)`;
 }
 
