@@ -1,16 +1,17 @@
 import {
+  factory,
   IntersectionTypeNode,
   isIntersectionTypeNode,
   isPropertySignature,
   isTypeLiteralNode,
-  isTypeReferenceNode,
+  isTypeReferenceNode, isUnionTypeNode,
   TypeAliasDeclaration,
   TypeLiteralNode,
   TypeReferenceNode,
 } from "typescript";
 import {
   generateOptionalPropertyTypeGuard,
-  generateTypeLiteralTypeGuard,
+  generateTypeLiteralTypeGuard, generateUnionTypeGuard,
 } from "./";
 /**
  * Generate an intersection type guard for a given TypeScript type alias.
@@ -103,12 +104,17 @@ function generateTypeLiteralGuards(
           typeGuardCode,
           typeAliases,
         );
+      } else if (isUnionTypeNode(member.type)) {
+        generateUnionTypeGuard(
+            factory.createTypeAliasDeclaration(undefined, factory.createIdentifier(member.name.getText()), undefined, member.type),
+            typeAliases,
+        );
       } else {
         const propName = member.name.getText();
         if (!encounteredPropertyNames.has(propName)) {
           encounteredPropertyNames.add(propName);
-          typeGuardCode.push(generateOptionalPropertyTypeGuard(member));
-          typeGuardCode.push(generateTypeLiteralTypeGuard(member));
+          typeGuardCode.push(generateOptionalPropertyTypeGuard(member, typeAliases));
+          typeGuardCode.push(generateTypeLiteralTypeGuard(member, typeAliases));
         }
       }
     }

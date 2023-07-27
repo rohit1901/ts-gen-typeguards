@@ -9,8 +9,9 @@ export interface Person2 extends Person {
 }*/
 export type Person = {
   name: string;
+  extra: string | number & someType;
 };
-export type Address = {
+/*export type Address = {
   street: string;
 } & Person;
 export type Point = {
@@ -26,25 +27,20 @@ export type Point3 = {
   z: number;
   m: Person & Address;
 } & Point &
-  Point2;
+  Point2;*/
 
 /*
 export enum Color {
     Red = 'red',
     Green = 'green',
     Blue = 'blue',
-}*/
+}
 //TODO: add support for | in types
-// | Point | boolean | null | undefined
+// | Point | boolean | null | undefined*/
 export type someType =
   | "a"
   | null
   | undefined
-  | Point
   | boolean
   | number
   | string
-  | Address
-  | Point2
-  | Point3
-  | Person;

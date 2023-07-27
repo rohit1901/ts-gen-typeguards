@@ -37,6 +37,8 @@ export function getMembersFromTypeAlias(
     return getTypesFromUnionTypeNode(alias.type, typeAliases);
   } else if (isConditionalTypeNode(alias.type)) {
     return getTypesFromConditionalTypeNode(alias.type, typeAliases);
+  } else if (isUnionTypeNode(alias.type)) {
+    return getTypesFromUnionTypeNode(alias.type, typeAliases);
   }
   return [];
 }
@@ -78,6 +80,7 @@ function getTypesFromTypeNode(
     [SyntaxKind.TypeLiteral]: getTypesFromTypeLiteral,
     [SyntaxKind.LiteralType]: getTypesFromLiteralType,
     [SyntaxKind.ConditionalType]: getTypesFromConditionalType,
+    [SyntaxKind.UnionType]: getTypesFromUnionType,
   };
 
   const action = typeCheckActions[typeNode.kind];
@@ -139,6 +142,15 @@ function getTypesFromConditionalType(
     ? getTypesFromConditionalTypeNode(typeNode, typeAliases)
     : [];
 }
+
+function getTypesFromUnionType(
+    typeNode: TypeNode,
+    typeAliases: TypeAliasDeclaration[],
+    ): NodeArray<TypeElement> | TypeElement[] {
+    return isUnionTypeNode(typeNode)
+        ? getTypesFromUnionTypeNode(typeNode, typeAliases)
+        : [];
+    }
 
 /**
  * Gets the types from a type node array

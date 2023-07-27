@@ -20,6 +20,8 @@ export function syntaxKindToType(syntaxKind: SyntaxKind): string {
       return "reference";
     case SyntaxKind.TypeLiteral:
       return "typeLiteral";
+    case SyntaxKind.UnionType:
+      return "unionType";
     case SyntaxKind.ExportKeyword:
       return "export";
     default:
