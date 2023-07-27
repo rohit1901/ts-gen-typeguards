@@ -36,6 +36,8 @@
     "preset": "ts-jest",
     "testEnvironment": "node",
     "testRegex": "(src/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "testPathIgnorePatterns": ["helpers.ts"],
+    "maxWorkers": 1,
     "moduleFileExtensions": [
       "ts",
       "tsx",
