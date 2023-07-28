@@ -173,7 +173,9 @@ export function generateTypeLiteralTypeGuard(
  * @param typeAlias - The TypeAliasDeclaration representing the union member type alias.
  * @returns The generated type guard code as a string.
  */
-export function generateTypeAliasTypeGuard(typeAlias: TypeAliasDeclaration): string {
+export function generateTypeAliasTypeGuard(
+  typeAlias: TypeAliasDeclaration,
+): string {
   return `!is${capitalize(typeAlias.name.getText())}(value)`;
 }
 

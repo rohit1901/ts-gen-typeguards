@@ -1,13 +1,16 @@
 import {
   factory,
   IntersectionTypeNode,
-  isIntersectionTypeNode, isLiteralTypeNode,
+  isIntersectionTypeNode,
+  isLiteralTypeNode,
   isPropertySignature,
   isTypeLiteralNode,
   isTypeReferenceNode,
-  isUnionTypeNode, PropertyName,
+  isUnionTypeNode,
+  PropertyName,
   TypeAliasDeclaration,
-  TypeLiteralNode, TypeNode,
+  TypeLiteralNode,
+  TypeNode,
   TypeReferenceNode,
 } from "typescript";
 import {
@@ -19,20 +22,30 @@ import {
   generateStringKeywordTypeGuard,
   generateNumberKeywordTypeGuard,
   generateBigIntKeywordTypeGuard,
-  generateSymbolKeywordTypeGuard, generateObjectKeywordTypeGuard, generateVoidKeywordTypeGuard,
+  generateSymbolKeywordTypeGuard,
+  generateObjectKeywordTypeGuard,
+  generateVoidKeywordTypeGuard,
 } from "./";
 import { generatePropertyTypeGuard } from "./generateTypeLiteralTypeGuard";
-import {generateLiteralTypeTypeGuard} from "./generateLiteralTypeTypeGuard";
+import { generateLiteralTypeTypeGuard } from "./generateLiteralTypeTypeGuard";
 import {
   isAnyKeyword,
   isBigIntKeyword,
-  isBooleanKeyword, isKeyofKeyword, isNeverKeyword,
-  isNumberKeyword, isObjectKeyword,
+  isBooleanKeyword,
+  isKeyofKeyword,
+  isNeverKeyword,
+  isNumberKeyword,
+  isObjectKeyword,
   isStringKeyword,
   isSymbolKeyword,
-  isUndefinedKeyword, isUnknownKeyword, isVoidKeyword
+  isUndefinedKeyword,
+  isUnknownKeyword,
+  isVoidKeyword,
 } from "../utils";
-import {generateTypeLiteralTypeGuard, generateTypeReferenceTypeGuard} from "./generateUnionTypeGuard";
+import {
+  generateTypeLiteralTypeGuard,
+  generateTypeReferenceTypeGuard,
+} from "./generateUnionTypeGuard";
 /**
  * Generate an intersection type guard for a given TypeScript type alias.
  *
@@ -98,7 +111,7 @@ function generateTypeReferenceTypeGuards(
         encounteredPropertyNames,
         typeGuardCode,
         typeAliases,
-          name
+        name,
       );
     }
   }
@@ -124,7 +137,7 @@ function generateTypeLiteralGuards(
         generateIntersectionTypeGuardForProperty(
           member.type,
           typeAliases,
-          member.name.getText()
+          member.name.getText(),
         );
       } else if (isUnionTypeNode(member.type)) {
         generateUnionTypeGuard(
@@ -162,7 +175,7 @@ function generateIntersectionTypeGuards(
   encounteredPropertyNames: Set<string>,
   typeGuardCode: string[],
   typeAliases: TypeAliasDeclaration[],
-  name?: PropertyName
+  name?: PropertyName,
 ): void {
   for (const intersectionMember of intersectionType.types) {
     if (isTypeReferenceNode(intersectionMember)) {
@@ -171,7 +184,7 @@ function generateIntersectionTypeGuards(
         typeAliases,
         encounteredPropertyNames,
         typeGuardCode,
-        name
+        name,
       );
     } else if (isTypeLiteralNode(intersectionMember)) {
       generateTypeLiteralGuards(
@@ -186,9 +199,9 @@ function generateIntersectionTypeGuards(
   }
 }
 export function generateIntersectionTypeGuardForProperty(
-    type: TypeNode,
-    typeAliases: TypeAliasDeclaration[],
-    name?: string,
+  type: TypeNode,
+  typeAliases: TypeAliasDeclaration[],
+  name?: string,
 ): string {
   const typeGuardCode: string[] = [];
   if (!isIntersectionTypeNode(type)) {
@@ -200,35 +213,45 @@ export function generateIntersectionTypeGuardForProperty(
   for (const intersectionType of type.types) {
     if (isIntersectionTypeNode(intersectionType)) {
       typeGuardCode.push(
-          generateIntersectionTypeGuard(
-              factory.createTypeAliasDeclaration(
-                  undefined,
-                  undefined,
-                  undefined,
-                  intersectionType,
-              ),
-              typeAliases,
+        generateIntersectionTypeGuard(
+          factory.createTypeAliasDeclaration(
+            undefined,
+            undefined,
+            undefined,
+            intersectionType,
           ),
+          typeAliases,
+        ),
       );
     }
-    processIntersectionTypeWithTypeGuards(intersectionType, typeAliases, typeGuardCode);
+    processIntersectionTypeWithTypeGuards(
+      intersectionType,
+      typeAliases,
+      typeGuardCode,
+    );
   }
 
   return `if(${typeGuardCode.join(" || ")}) return false;`;
 }
 function processIntersectionTypeWithTypeGuards(
-    intersectionType: TypeNode,
-    typeAliases: TypeAliasDeclaration[],
-    typeGuardCode: string[],
+  intersectionType: TypeNode,
+  typeAliases: TypeAliasDeclaration[],
+  typeGuardCode: string[],
 ) {
   if (isTypeReferenceNode(intersectionType)) {
-    generateTypeReferenceTypeGuard(intersectionType, typeAliases, typeGuardCode);
+    generateTypeReferenceTypeGuard(
+      intersectionType,
+      typeAliases,
+      typeGuardCode,
+    );
   } else if (isTypeLiteralNode(intersectionType)) {
     generateTypeLiteralTypeGuard(intersectionType, typeGuardCode);
   } else if (isLiteralTypeNode(intersectionType)) {
     typeGuardCode.push(generateLiteralTypeTypeGuard(intersectionType));
   } else if (isUndefinedKeyword(intersectionType.kind)) {
-    typeGuardCode.push(generateUndefinedKeywordTypeGuard(intersectionType.kind));
+    typeGuardCode.push(
+      generateUndefinedKeywordTypeGuard(intersectionType.kind),
+    );
   } else if (isBooleanKeyword(intersectionType.kind)) {
     typeGuardCode.push(generateBooleanKeywordTypeGuard(intersectionType.kind));
   } else if (isStringKeyword(intersectionType.kind)) {

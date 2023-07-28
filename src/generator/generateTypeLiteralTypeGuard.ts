@@ -1,6 +1,7 @@
 // Generate type guards for literal types
 import {
-  factory, isIntersectionTypeNode,
+  factory,
+  isIntersectionTypeNode,
   isPropertySignature,
   isTypeLiteralNode,
   isTypeReferenceNode,
