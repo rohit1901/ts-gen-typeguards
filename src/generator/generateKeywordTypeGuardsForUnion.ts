@@ -10,64 +10,36 @@ import {
   isVoidKeyword,
 } from "../utils";
 
-export function generateStringKeywordTypeGuard(
-  kind: SyntaxKind,
-  name?: string,
-): string {
+export function generateStringKeywordTypeGuard(kind: SyntaxKind): string {
   if (isStringKeyword(kind)) {
-    return name
-      ? `!value.hasOwnProperty('${name}') || (typeof value.${name} !== 'string')`
-      : `(typeof value !== 'string')`;
+    return `(typeof value !== 'string')`;
   }
   return "";
 }
 
-export function generateNumberKeywordTypeGuard(
-  kind: SyntaxKind,
-  name?: string,
-): string {
+export function generateNumberKeywordTypeGuard(kind: SyntaxKind): string {
   if (isNumberKeyword(kind)) {
-    return name
-      ? `!value.hasOwnProperty('${name}') || (typeof value.${name} !== 'number')`
-      : `(typeof value !== 'number')`;
+    return `(typeof value !== 'number')`;
   }
   return "";
 }
 
-export function generateBigIntKeywordTypeGuard(
-  kind: SyntaxKind,
-  name?: string,
-): string {
+export function generateBigIntKeywordTypeGuard(kind: SyntaxKind): string {
   if (isBigIntKeyword(kind)) {
-    return name
-      ? `!value.hasOwnProperty('${name}') || (typeof value.${name} !== 'bigint')`
-      : `(typeof value !== 'bigint')`;
+    return `(typeof value !== 'bigint')`;
   }
   return "";
 }
 
-export function generateSymbolKeywordTypeGuard(
-  kind: SyntaxKind,
-  name?: string,
-): string {
+export function generateSymbolKeywordTypeGuard(kind: SyntaxKind): string {
   if (isSymbolKeyword(kind)) {
-    return name
-      ? `!value.hasOwnProperty('${name}') || (typeof value.${name} !== 'symbol')`
-      : `(typeof value !== 'symbol')`;
+    return `(typeof value !== 'symbol')`;
   }
   return "";
 }
 
-export function generateObjectKeywordTypeGuard(
-  kind: SyntaxKind,
-  name?: string,
-): string {
+export function generateObjectKeywordTypeGuard(kind: SyntaxKind): string {
   if (isObjectKeyword(kind)) {
-    const condition = `(typeof value !== 'object' && value !== null)`;
-    return name
-      ? `!value.hasOwnProperty('${name}') || ${condition}`
-      : condition;
-
     return `(typeof value !== 'object' && value !== null)`;
   }
 }
@@ -109,14 +81,9 @@ export function generateNeverKeywordTypeGuard(kind: SyntaxKind) {
   return;
 }
 
-export function generateVoidKeywordTypeGuard(
-  kind: SyntaxKind,
-  name?: string,
-): string {
+export function generateVoidKeywordTypeGuard(kind: SyntaxKind): string {
   if (isVoidKeyword(kind)) {
-    return name
-      ? `!value.hasOwnProperty('${name}') || (typeof value.${name} !== 'undefined')`
-      : `(typeof value !== 'undefined')`;
+    return `(value !== undefined)`;
   }
 }
 
@@ -129,26 +96,16 @@ export function generateKeyofKeywordTypeGuard(kind: SyntaxKind): string {
   return "";
 }
 
-export function generateBooleanKeywordTypeGuard(
-  type: SyntaxKind,
-  name?: string,
-): string {
+export function generateBooleanKeywordTypeGuard(type: SyntaxKind): string {
   if (isBooleanKeyword(type)) {
-    return name
-      ? `!value.hasOwnProperty('${name}') || (typeof value.${name} !== 'boolean')`
-      : `(typeof value !== 'boolean')`;
+    return `(typeof value !== 'boolean')`;
   }
   return "";
 }
 
-export function generateUndefinedKeywordTypeGuard(
-  type: SyntaxKind,
-  name?: string,
-): string {
+export function generateUndefinedKeywordTypeGuard(type: SyntaxKind): string {
   if (isUndefinedKeyword(type)) {
-    return name
-      ? `!value.hasOwnProperty('${name}') || (typeof value.${name} !== 'undefined')`
-      : `(typeof value !== 'undefined')`;
+    return `(value !== undefined)`;
   }
   return "";
 }

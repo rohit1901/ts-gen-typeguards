@@ -22,6 +22,8 @@ export function syntaxKindToType(syntaxKind: SyntaxKind): string {
       return "typeLiteral";
     case SyntaxKind.UnionType:
       return "unionType";
+    case SyntaxKind.IntersectionType:
+      return "intersectionType";
     case SyntaxKind.ExportKeyword:
       return "export";
     default:

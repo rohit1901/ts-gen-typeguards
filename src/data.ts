@@ -7,11 +7,12 @@
 export interface Person2 extends Person {
     address: string;
 }*/
+//TODO: add checks for Parenthesis types
 export type Person = {
-  name: string;
-  extra: string | (number & someType);
+  name: string & number;
+  extra: string | number;
 };
-/*export type Address = {
+export type Address = {
   street: string;
 } & Person;
 export type Point = {
@@ -25,9 +26,9 @@ export type Point2 = {
 } & Point;
 export type Point3 = {
   z: number;
-  m: Person & Address;
+  m: string & number;
 } & Point &
-  Point2;*/
+  Point2;
 
 /*
 export enum Color {

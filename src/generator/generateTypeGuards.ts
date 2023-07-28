@@ -2,7 +2,7 @@
 import {
   generateIntersectionTypeGuard,
   generateOptionalPropertyTypeGuard,
-  generateTypeLiteralTypeGuard,
+  generateUniqueTypeGuardsFromTypeLiteral,
   generateUnionTypeGuard,
 } from "./";
 import {
@@ -61,21 +61,12 @@ export function generateTypeGuards(
     );
     typeGuardCode.push(generateIntersectionTypeGuard(typeAlias, typeAliases));
     typeGuardCode.push(generateUnionTypeGuard(typeAlias, typeAliases));
-    if (isTypeLiteralNode(type)) {
-      const properties = type.members;
-      for (const property of properties) {
-        if (propSet.has(property.name.getText())) return;
-        propSet.add(property.name.getText());
-        if (isPropertySignature(property)) {
-          typeGuardCode.push(
-            generateOptionalPropertyTypeGuard(property, typeAliases),
-          );
-          typeGuardCode.push(
-            generateTypeLiteralTypeGuard(property, typeAliases),
-          );
-        }
-      }
-    }
+    generateUniqueTypeGuardsFromTypeLiteral(
+      type,
+      propSet,
+      typeGuardCode,
+      typeAliases,
+    );
     typeGuardCode.push(`\n    return true;\n}\n`);
   }
 

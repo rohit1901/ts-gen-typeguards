@@ -1,20 +1,38 @@
 import {
   factory,
   IntersectionTypeNode,
-  isIntersectionTypeNode,
+  isIntersectionTypeNode, isLiteralTypeNode,
   isPropertySignature,
   isTypeLiteralNode,
   isTypeReferenceNode,
-  isUnionTypeNode,
+  isUnionTypeNode, PropertyName,
   TypeAliasDeclaration,
-  TypeLiteralNode,
+  TypeLiteralNode, TypeNode,
   TypeReferenceNode,
 } from "typescript";
 import {
   generateOptionalPropertyTypeGuard,
-  generateTypeLiteralTypeGuard,
+  generateUniqueTypeGuardsFromTypeLiteral,
   generateUnionTypeGuard,
+  generateUndefinedKeywordTypeGuard,
+  generateBooleanKeywordTypeGuard,
+  generateStringKeywordTypeGuard,
+  generateNumberKeywordTypeGuard,
+  generateBigIntKeywordTypeGuard,
+  generateSymbolKeywordTypeGuard, generateObjectKeywordTypeGuard, generateVoidKeywordTypeGuard,
 } from "./";
+import { generatePropertyTypeGuard } from "./generateTypeLiteralTypeGuard";
+import {generateLiteralTypeTypeGuard} from "./generateLiteralTypeTypeGuard";
+import {
+  isAnyKeyword,
+  isBigIntKeyword,
+  isBooleanKeyword, isKeyofKeyword, isNeverKeyword,
+  isNumberKeyword, isObjectKeyword,
+  isStringKeyword,
+  isSymbolKeyword,
+  isUndefinedKeyword, isUnknownKeyword, isVoidKeyword
+} from "../utils";
+import {generateTypeLiteralTypeGuard, generateTypeReferenceTypeGuard} from "./generateUnionTypeGuard";
 /**
  * Generate an intersection type guard for a given TypeScript type alias.
  *
@@ -66,6 +84,7 @@ function generateTypeReferenceTypeGuards(
   typeAliases: TypeAliasDeclaration[],
   encounteredPropertyNames: Set<string>,
   typeGuardCode: string[],
+  name?: PropertyName,
 ): void {
   const typeLiterals = typeAliases.filter(
     (typeAlias) =>
@@ -79,6 +98,7 @@ function generateTypeReferenceTypeGuards(
         encounteredPropertyNames,
         typeGuardCode,
         typeAliases,
+          name
       );
     }
   }
@@ -96,15 +116,15 @@ function generateTypeLiteralGuards(
   encounteredPropertyNames: Set<string>,
   typeGuardCode: string[],
   typeAliases: TypeAliasDeclaration[],
+  name?: PropertyName,
 ): void {
   for (const member of typeLiteral.members) {
     if (isPropertySignature(member)) {
       if (isIntersectionTypeNode(member.type)) {
-        generateIntersectionTypeGuards(
+        generateIntersectionTypeGuardForProperty(
           member.type,
-          encounteredPropertyNames,
-          typeGuardCode,
           typeAliases,
+          member.name.getText()
         );
       } else if (isUnionTypeNode(member.type)) {
         generateUnionTypeGuard(
@@ -123,7 +143,7 @@ function generateTypeLiteralGuards(
           typeGuardCode.push(
             generateOptionalPropertyTypeGuard(member, typeAliases),
           );
-          typeGuardCode.push(generateTypeLiteralTypeGuard(member, typeAliases));
+          typeGuardCode.push(generatePropertyTypeGuard(member, typeAliases));
         }
       }
     }
@@ -142,18 +162,18 @@ function generateIntersectionTypeGuards(
   encounteredPropertyNames: Set<string>,
   typeGuardCode: string[],
   typeAliases: TypeAliasDeclaration[],
+  name?: PropertyName
 ): void {
   for (const intersectionMember of intersectionType.types) {
     if (isTypeReferenceNode(intersectionMember)) {
-      // TODO: handle intersection type reference
       generateTypeReferenceTypeGuards(
         intersectionMember,
         typeAliases,
         encounteredPropertyNames,
         typeGuardCode,
+        name
       );
     } else if (isTypeLiteralNode(intersectionMember)) {
-      // TODO: handle intersection type literal
       generateTypeLiteralGuards(
         intersectionMember,
         encounteredPropertyNames,
@@ -163,5 +183,73 @@ function generateIntersectionTypeGuards(
     } else {
       // TODO: handle other types
     }
+  }
+}
+export function generateIntersectionTypeGuardForProperty(
+    type: TypeNode,
+    typeAliases: TypeAliasDeclaration[],
+    name?: string,
+): string {
+  const typeGuardCode: string[] = [];
+  if (!isIntersectionTypeNode(type)) {
+    return "";
+  }
+  if (name) {
+    typeGuardCode.push(`!value.hasOwnProperty('${name}')`);
+  }
+  for (const intersectionType of type.types) {
+    if (isIntersectionTypeNode(intersectionType)) {
+      typeGuardCode.push(
+          generateIntersectionTypeGuard(
+              factory.createTypeAliasDeclaration(
+                  undefined,
+                  undefined,
+                  undefined,
+                  intersectionType,
+              ),
+              typeAliases,
+          ),
+      );
+    }
+    processIntersectionTypeWithTypeGuards(intersectionType, typeAliases, typeGuardCode);
+  }
+
+  return `if(${typeGuardCode.join(" || ")}) return false;`;
+}
+function processIntersectionTypeWithTypeGuards(
+    intersectionType: TypeNode,
+    typeAliases: TypeAliasDeclaration[],
+    typeGuardCode: string[],
+) {
+  if (isTypeReferenceNode(intersectionType)) {
+    generateTypeReferenceTypeGuard(intersectionType, typeAliases, typeGuardCode);
+  } else if (isTypeLiteralNode(intersectionType)) {
+    generateTypeLiteralTypeGuard(intersectionType, typeGuardCode);
+  } else if (isLiteralTypeNode(intersectionType)) {
+    typeGuardCode.push(generateLiteralTypeTypeGuard(intersectionType));
+  } else if (isUndefinedKeyword(intersectionType.kind)) {
+    typeGuardCode.push(generateUndefinedKeywordTypeGuard(intersectionType.kind));
+  } else if (isBooleanKeyword(intersectionType.kind)) {
+    typeGuardCode.push(generateBooleanKeywordTypeGuard(intersectionType.kind));
+  } else if (isStringKeyword(intersectionType.kind)) {
+    typeGuardCode.push(generateStringKeywordTypeGuard(intersectionType.kind));
+  } else if (isNumberKeyword(intersectionType.kind)) {
+    typeGuardCode.push(generateNumberKeywordTypeGuard(intersectionType.kind));
+  } else if (isBigIntKeyword(intersectionType.kind)) {
+    typeGuardCode.push(generateBigIntKeywordTypeGuard(intersectionType.kind));
+  } else if (isSymbolKeyword(intersectionType.kind)) {
+    typeGuardCode.push(generateSymbolKeywordTypeGuard(intersectionType.kind));
+  } else if (isObjectKeyword(intersectionType.kind)) {
+    typeGuardCode.push(generateObjectKeywordTypeGuard(intersectionType.kind));
+  } else if (isAnyKeyword(intersectionType.kind)) {
+    //skip any keyword
+  } else if (isUnknownKeyword(intersectionType.kind)) {
+    //skip unknown keyword
+  } else if (isNeverKeyword(intersectionType.kind)) {
+    //skip never keyword
+  } else if (isVoidKeyword(intersectionType.kind)) {
+    typeGuardCode.push(generateVoidKeywordTypeGuard(intersectionType.kind));
+  } else if (isKeyofKeyword(intersectionType.kind)) {
+    //skip keyof keyword for now as it is not supported
   }
 }
