@@ -148,8 +148,12 @@ function generateEnumTypeGuard(typeNode: EnumDeclaration): string {
   const enumProperties = typeNode.members;
   return buildTypeGuards(enumName, enumProperties);
 }
-
+function loadConfig() {
+  const fileContent = fs.readFileSync("./config.json", "utf8");
+  const jsonContent = JSON.parse(fileContent);
+  return jsonContent.production.inputFilePath;
+}
 //Implementation
-const { interfaces, types, enums } = readObjects("./data.ts");
+const { interfaces, types, enums } = readObjects(loadConfig());
 deleteFileIfExists("out/typeguards.ts");
 generateTypeGuardsFile(generateTypeGuards(types));

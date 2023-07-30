@@ -3,4 +3,5 @@ node_modules/
 .idea/
 coverage/
 *.js
+*.d.ts
 src/out/**/*
