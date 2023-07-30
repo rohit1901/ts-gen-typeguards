@@ -40,7 +40,8 @@ import {
   isSymbolKeyword,
   isUndefinedKeyword,
   isUnknownKeyword,
-  isVoidKeyword, syntaxKindToType,
+  isVoidKeyword,
+  syntaxKindToType,
 } from "../utils";
 import {
   generateTypeLiteralTypeGuard,
@@ -79,7 +80,7 @@ export function generateIntersectionTypeGuard(
         encounteredPropertyNames,
         typeGuardCode,
         typeAliases,
-          name
+        name,
       );
     }
   }
@@ -138,21 +139,25 @@ function generateTypeLiteralGuards(
   for (const member of typeLiteral.members) {
     if (isPropertySignature(member)) {
       if (isIntersectionTypeNode(member.type)) {
-        typeGuardCode.push(generateIntersectionTypeGuardForProperty(
-          member.type,
-          typeAliases,
-          member.name.getText(),
-        ));
-      } else if (isUnionTypeNode(member.type)) {
-        typeGuardCode.push(generateUnionTypeGuard(
-          factory.createTypeAliasDeclaration(
-            undefined,
-            factory.createIdentifier(member.name.getText()),
-            undefined,
+        typeGuardCode.push(
+          generateIntersectionTypeGuardForProperty(
             member.type,
+            typeAliases,
+            member.name.getText(),
           ),
-          typeAliases,
-        ));
+        );
+      } else if (isUnionTypeNode(member.type)) {
+        typeGuardCode.push(
+          generateUnionTypeGuard(
+            factory.createTypeAliasDeclaration(
+              undefined,
+              factory.createIdentifier(member.name.getText()),
+              undefined,
+              member.type,
+            ),
+            typeAliases,
+          ),
+        );
       } else {
         const propName = member.name.getText();
         if (!encounteredPropertyNames.has(propName)) {

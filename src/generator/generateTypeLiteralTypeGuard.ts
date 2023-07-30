@@ -23,7 +23,7 @@ import {
   generateUnionTypeGuardForProperty,
 } from "./generateUnionTypeGuard";
 import { generateOptionalPropertyTypeGuard } from "./generateOptionalPropertyTypeGuard";
-import {generateIntersectionTypeGuardForProperty} from "./generateIntersectionTypeGuard";
+import { generateIntersectionTypeGuardForProperty } from "./generateIntersectionTypeGuard";
 /**
  * Generates a type guard for a property based on its TypeScript PropertySignature.
  *
@@ -65,7 +65,11 @@ export function generatePropertyTypeGuard(
     );
   } else if (isIntersectionTypeNode(type)) {
     typeGuardCode.push(
-      generateIntersectionTypeGuardForProperty(type, typeAliases, name?.getText()),
+      generateIntersectionTypeGuardForProperty(
+        type,
+        typeAliases,
+        name?.getText(),
+      ),
     );
   }
   return typeGuardCode.join("");
