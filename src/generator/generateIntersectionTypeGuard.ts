@@ -40,7 +40,7 @@ import {
   isSymbolKeyword,
   isUndefinedKeyword,
   isUnknownKeyword,
-  isVoidKeyword,
+  isVoidKeyword, syntaxKindToType,
 } from "../utils";
 import {
   generateTypeLiteralTypeGuard,
@@ -50,11 +50,12 @@ import {
  * Generate an intersection type guard for a given TypeScript type alias.
  *
  * @param type - The TypeAliasDeclaration representing the intersection type.
+ * @param name - The name of the type alias.
  * @param typeAliases - An array of TypeAliasDeclaration containing type aliases used in the intersection.
  * @returns The generated intersection type guard code as a string.
  */
 export function generateIntersectionTypeGuard(
-  { type }: TypeAliasDeclaration,
+  { type, name }: TypeAliasDeclaration,
   typeAliases: TypeAliasDeclaration[],
 ): string {
   if (!isIntersectionTypeNode(type)) {
@@ -78,6 +79,7 @@ export function generateIntersectionTypeGuard(
         encounteredPropertyNames,
         typeGuardCode,
         typeAliases,
+          name
       );
     }
   }
@@ -91,6 +93,7 @@ export function generateIntersectionTypeGuard(
  * @param typeAliases - An array of TypeAliasDeclaration containing type aliases used in the intersection.
  * @param encounteredPropertyNames - A set to track property names already processed.
  * @param typeGuardCode - The array to store the generated type guards as strings.
+ * @param name
  */
 function generateTypeReferenceTypeGuards(
   intersectionType: TypeReferenceNode,
@@ -123,6 +126,7 @@ function generateTypeReferenceTypeGuards(
  * @param encounteredPropertyNames - A set to track property names already processed.
  * @param typeGuardCode - The array to store the generated type guards as strings.
  * @param typeAliases - An array of TypeAliasDeclaration containing type aliases used in the intersection.
+ * @param name
  */
 function generateTypeLiteralGuards(
   typeLiteral: TypeLiteralNode,
@@ -134,13 +138,13 @@ function generateTypeLiteralGuards(
   for (const member of typeLiteral.members) {
     if (isPropertySignature(member)) {
       if (isIntersectionTypeNode(member.type)) {
-        generateIntersectionTypeGuardForProperty(
+        typeGuardCode.push(generateIntersectionTypeGuardForProperty(
           member.type,
           typeAliases,
           member.name.getText(),
-        );
+        ));
       } else if (isUnionTypeNode(member.type)) {
-        generateUnionTypeGuard(
+        typeGuardCode.push(generateUnionTypeGuard(
           factory.createTypeAliasDeclaration(
             undefined,
             factory.createIdentifier(member.name.getText()),
@@ -148,7 +152,7 @@ function generateTypeLiteralGuards(
             member.type,
           ),
           typeAliases,
-        );
+        ));
       } else {
         const propName = member.name.getText();
         if (!encounteredPropertyNames.has(propName)) {
@@ -169,6 +173,7 @@ function generateTypeLiteralGuards(
  * @param encounteredPropertyNames - A set to track property names already processed.
  * @param typeGuardCode - The array to store the generated type guards as strings.
  * @param typeAliases - An array of TypeAliasDeclaration containing type aliases used in the intersection.
+ * @param name
  */
 function generateIntersectionTypeGuards(
   intersectionType: IntersectionTypeNode,

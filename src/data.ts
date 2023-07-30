@@ -12,6 +12,7 @@ export type Person = {
   name: string & number;
   extra: string | number;
 };
+//TODO: fix generator for & in types. Does not generate !value.hasOwnProperty('name') for 'extra' property
 export type Address = {
   street: string;
 } & Person;
@@ -25,8 +26,8 @@ export type Point2 = {
   z?: Point;
 } & Point;
 export type Point3 = {
-  z: number;
-  m: string & number;
+  z?: number;
+  m?: string & Point;
 } & Point &
   Point2;
 
