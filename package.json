@@ -4,7 +4,7 @@
   "description": "A utility to generate typeguards",
   "main": "index.ts",
   "scripts": {
-    "build": "tsc && terser --compress --mangle --output dist/ts-gen-typeguards.min.js -- dist/",
+    "build": "tsc",
     "watch-mode": "tsc -w -p tsconfig.json",
     "start": "cd src && node index.js",
     "start-prod": "node dist/ts-gen-typeguards.min.js",
