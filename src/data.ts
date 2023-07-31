@@ -1,21 +1,21 @@
-/*export interface Person {
+export interface Person {
     name: string;
     age: number;
     p: Point;
-    e: Color
 }
+/*
 export interface Person2 extends Person {
     address: string;
 }*/
 //TODO: add checks for Parenthesis types
-export type Person = {
+export type PersonType = {
   name: string & number;
   extra: string | number;
 };
 //TODO: fix generator for & in types. Does not generate !value.hasOwnProperty('name') for 'extra' property
 export type Address = {
   street: string;
-} & Person;
+} & PersonType;
 export type Point = {
   x: number;
   y: number;

@@ -26,6 +26,7 @@ import {
   getMembersFromTypeAlias,
 } from "./utils";
 import { generateTypeGuards, generateUnionTypeGuard } from "./generator";
+import {generateInterfaceTypeGuard} from "./generator/generateInterfaceTypeGuard";
 
 type ObjectsType = {
   interfaces: ts.InterfaceDeclaration[];
@@ -156,4 +157,4 @@ function loadConfig() {
 //Implementation
 const { interfaces, types, enums } = readObjects(loadConfig());
 deleteFileIfExists("out/typeguards.ts");
-generateTypeGuardsFile(generateTypeGuards(types));
+generateTypeGuardsFile(`${generateTypeGuards(types)}\n${generateInterfaceTypeGuard(interfaces)}`);
