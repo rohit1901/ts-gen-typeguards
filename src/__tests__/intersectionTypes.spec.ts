@@ -1,7 +1,4 @@
-import {
-  generateIntersectionTypeGuard,
-  generateTypeGuards,
-} from "@generator";
+import { generateIntersectionTypeGuard, generateTypeGuards } from "@generator";
 import {
   factory,
   Identifier,
