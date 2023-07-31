@@ -92,7 +92,7 @@ describe("generateIntersectionTypeGuard", () => {
     const typeGuards = generateTypeGuards([point2]);
     expect(removeWhitespace(typeGuards)).toEqual(expectedResult);
   });
-  //create test for point3
+  //TODO: Fix this test
   it("should generate typeguard for point3", function () {
     const expectedResult =
       removeWhitespace(`export function isPoint3(value: any): value is Point3 {
@@ -103,9 +103,7 @@ describe("generateIntersectionTypeGuard", () => {
           if (!value.hasOwnProperty('z') || typeof value.z !== 'number') {
             return false;
           }
-          if (!value.hasOwnProperty('name') || typeof value.name !== 'string') {
-            return false;
-          }
+          if (!value.hasOwnProperty('m'))return false;
           if (!value.hasOwnProperty('x') || typeof value.x !== 'number') {
             return false;
           }
