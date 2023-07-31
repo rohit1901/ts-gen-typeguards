@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as ts from "typescript";
-import * as process from 'process';
+import * as process from "process";
 import {
   EnumDeclaration,
   EnumMember,
@@ -26,7 +26,7 @@ import {
   getEscapedStringLiteral,
   getMembersFromTypeAlias,
 } from "./utils";
-import {generateTypeGuards} from "./generator";
+import { generateTypeGuards } from "./generator";
 
 type ObjectsType = {
   interfaces: ts.InterfaceDeclaration[];
@@ -156,7 +156,7 @@ function loadConfig() {
 }
 function getParams() {
   const commandLineArgs = process.argv;
-  console.log('Command-line arguments:', commandLineArgs);
+  console.log("Command-line arguments:", commandLineArgs);
 }
 //Implementation
 getParams();
