@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import * as ts from "typescript";
+import * as process from 'process';
 import {
   EnumDeclaration,
   EnumMember,
@@ -24,8 +25,8 @@ import {
   getEscapedCapitalizedStringLiteral,
   getEscapedStringLiteral,
   getMembersFromTypeAlias,
-} from "@utils";
-import { generateTypeGuards } from "@generator";
+} from "./utils";
+import {generateTypeGuards} from "./generator";
 
 type ObjectsType = {
   interfaces: ts.InterfaceDeclaration[];
@@ -153,7 +154,12 @@ function loadConfig() {
   const jsonContent = JSON.parse(fileContent);
   return jsonContent.production.inputFilePath;
 }
+function getParams() {
+  const commandLineArgs = process.argv;
+  console.log('Command-line arguments:', commandLineArgs);
+}
 //Implementation
+getParams();
 const { interfaces, types, enums } = readObjects(loadConfig());
 deleteFileIfExists("out/typeguards.ts");
 generateTypeGuardsFile(generateTypeGuards(types));

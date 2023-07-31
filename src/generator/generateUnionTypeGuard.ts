@@ -29,7 +29,7 @@ import {
   isUnknownKeyword,
   isVoidKeyword,
   syntaxKindToType,
-} from "@utils";
+} from "../utils";
 import {
   generateBigIntKeywordTypeGuard,
   generateBooleanKeywordTypeGuard,

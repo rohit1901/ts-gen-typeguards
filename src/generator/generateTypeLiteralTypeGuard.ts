@@ -17,7 +17,7 @@ import {
   isKeywordSyntaxKind,
   isPrimitiveSyntaxKind,
   syntaxKindToType,
-} from "@utils";
+} from "../utils";
 import {
   generateUnionTypeGuard,
   generateUnionTypeGuardForProperty,

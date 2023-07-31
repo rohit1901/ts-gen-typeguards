@@ -1,7 +1,7 @@
 // Generate a type guard for a given interface or type
 import { generateInterfaceTypeGuard } from "./generateInterfaceTypeGuard";
 import { generateEnumTypeGuard } from "./generateEnumTypeGuard";
-import { isObject } from "@utils";
+import { isObject } from "../utils";
 
 export function generateTypeGuard(typeName: string, definition: any): string {
   let typeGuard = `function is${typeName}(value: any): value is ${typeName} {\n`;

@@ -11,7 +11,7 @@ import {
   NodeArray,
   TypeAliasDeclaration,
 } from "typescript";
-import { getEscapedCapitalizedStringLiteral, syntaxKindToType } from "@utils";
+import { getEscapedCapitalizedStringLiteral, syntaxKindToType } from "../utils";
 
 /**
  * Generates the type guard header for the type guard function.

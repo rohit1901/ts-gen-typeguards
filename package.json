@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A utility to generate typeguards",
   "main": "index.ts",
+  "type": "module",
   "scripts": {
     "build": "tsc && rollup -c",
     "watch-mode": "tsc -w -p tsconfig.json",

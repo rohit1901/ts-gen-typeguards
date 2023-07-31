@@ -3,22 +3,21 @@
     "target": "es6",
     "module": "ESNext",
     "declaration": true,
-    "outDir": "dist",
-    "moduleResolution": "NodeNext",
+    "moduleResolution": "Node",
+    "outDir": "dist/",
     "baseUrl": "./src",
     "paths": {
-      "@utils": ["utils/index"],
       "@utils/*": ["utils/*"],
-      "@generator": ["generator/index"],
-      "@generator/*": ["generator/*"],
+      "@generator/*": ["generator/*"]
     }
   },
   "include": [
     "src/**/*.ts",
+    "src/**/*.json",
   ],
-  "start": "node src/index.js",
   "exclude": [
     "node_modules",
-    "src/out/"
+    "src/out/",
+    "src/**/*.spec.ts"
   ]
 }
