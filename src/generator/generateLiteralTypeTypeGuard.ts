@@ -5,7 +5,7 @@ import {
   getEscapedCapitalizedStringLiteral,
   getEscapedStringLiteral,
   syntaxKindToType,
-} from "../utils";
+} from "@utils";
 
 export function generateLiteralTypeTypeGuard(literalType: Node): string {
   if (isLiteralTypeNode(literalType)) {

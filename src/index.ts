@@ -24,8 +24,8 @@ import {
   getEscapedCapitalizedStringLiteral,
   getEscapedStringLiteral,
   getMembersFromTypeAlias,
-} from "./utils";
-import { generateTypeGuards, generateUnionTypeGuard } from "./generator";
+} from "@utils";
+import {generateTypeGuards} from "@generator";
 
 type ObjectsType = {
   interfaces: ts.InterfaceDeclaration[];

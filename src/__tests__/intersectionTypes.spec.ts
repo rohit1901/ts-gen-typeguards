@@ -1,14 +1,14 @@
 import {
   generateIntersectionTypeGuard,
   generateTypeGuards,
-} from "../generator";
+} from "@generator";
 import {
   factory,
   Identifier,
   SyntaxKind,
   TypeAliasDeclaration,
 } from "typescript";
-import { removeWhitespace } from "../utils";
+import { removeWhitespace } from "@utils";
 import { setupVariables } from "./helpers";
 
 describe("generateIntersectionTypeGuard", () => {

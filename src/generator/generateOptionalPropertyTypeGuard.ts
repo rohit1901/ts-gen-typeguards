@@ -11,7 +11,7 @@ import {
   getEscapedStringLiteral,
   isPrimitiveSyntaxKind,
   syntaxKindToType,
-} from "../utils";
+} from "@utils";
 import { generateUnionTypeGuard } from "./generateUnionTypeGuard";
 
 export function generateOptionalPropertyTypeGuard(

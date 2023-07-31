@@ -1,19 +1,24 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "module": "commonjs",
+    "module": "ESNext",
     "declaration": true,
-    "rootDir": "src",
-    // NOTE: add to produce production build
-    //"outDir": "dist",
+    "outDir": "dist",
+    "moduleResolution": "NodeNext",
+    "baseUrl": "./src",
+    "paths": {
+      "@utils": ["utils/index"],
+      "@utils/*": ["utils/*"],
+      "@generator": ["generator/index"],
+      "@generator/*": ["generator/*"],
+    }
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",
   ],
   "start": "node src/index.js",
   "exclude": [
     "node_modules",
-    "src/out/",
-    "src/**/*.spec.ts"
+    "src/out/"
   ]
 }

@@ -8,7 +8,7 @@ import {
   isSymbolKeyword,
   isUndefinedKeyword,
   isVoidKeyword,
-} from "../utils";
+} from "@utils";
 
 export function generateStringKeywordTypeGuard(kind: SyntaxKind): string {
   if (isStringKeyword(kind)) {

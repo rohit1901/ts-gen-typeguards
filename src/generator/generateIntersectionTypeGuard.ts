@@ -25,7 +25,7 @@ import {
   generateSymbolKeywordTypeGuard,
   generateObjectKeywordTypeGuard,
   generateVoidKeywordTypeGuard,
-} from "./";
+} from "@generator";
 import { generatePropertyTypeGuard } from "./generateTypeLiteralTypeGuard";
 import { generateLiteralTypeTypeGuard } from "./generateLiteralTypeTypeGuard";
 import {
@@ -42,7 +42,7 @@ import {
   isUnknownKeyword,
   isVoidKeyword,
   syntaxKindToType,
-} from "../utils";
+} from "@utils";
 import {
   generateTypeLiteralTypeGuard,
   generateTypeReferenceTypeGuard,

@@ -5,7 +5,7 @@ import {
   isObject,
   isTypeString,
   removeWhitespace,
-} from "../utils";
+} from "@utils";
 import { readObjects } from "../index";
 
 describe("capitalize", () => {

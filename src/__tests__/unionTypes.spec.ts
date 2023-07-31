@@ -1,6 +1,6 @@
 import { setupVariables } from "./helpers";
-import { removeWhitespace } from "../utils";
-import { generateTypeGuards } from "../generator";
+import { removeWhitespace } from "@utils";
+import { generateTypeGuards } from "@generator";
 
 /*export type someType =
     | "a"
