@@ -1,17 +1,17 @@
 import {
-  factory,
-  InterfaceDeclaration,
-  IntersectionType,
-  isIntersectionTypeNode,
-  isPropertySignature,
-  isTypeLiteralNode,
-  isTypeReferenceNode,
-  NodeArray,
-  PropertySignature,
-  SyntaxKind,
-  TypeAliasDeclaration,
-  TypeLiteralNode,
-  TypeNode,
+    factory,
+    InterfaceDeclaration,
+    IntersectionType,
+    isIntersectionTypeNode,
+    isPropertySignature,
+    isTypeLiteralNode,
+    isTypeReferenceNode, isUnionTypeNode,
+    NodeArray,
+    PropertySignature,
+    SyntaxKind,
+    TypeAliasDeclaration, TypeElement,
+    TypeLiteralNode,
+    TypeNode,
 } from "typescript";
 import {
   generateIntersectionTypeGuard,
@@ -61,4 +61,30 @@ function generateTypeLiteralTypeGuard(definition: TypeAliasDeclaration) {
     typeGuardStrings.push(...generatePropertyGuard(property, typeName));
   }
   return typeGuardStrings;
+}
+function handleIntersectionTypes(definition: TypeAliasDeclaration, definitions: TypeAliasDeclaration[]): TypeAliasDeclaration {
+    const { name, type } = definition;
+    const members: TypeElement[] = [];
+    if (!isIntersectionTypeNode(type)){
+        return definition;
+    }
+    for(const typeNode of type.types){
+        if (isTypeReferenceNode(typeNode)){
+            const foundMember = definitions.find(d => d.name.getText() === typeNode.typeName.getText());
+            if(isTypeLiteralNode(foundMember.type)) {
+                members.push(...foundMember.type.members);
+            } else {
+                handleIntersectionTypes(foundMember, definitions);
+            }
+        }
+        else if(isUnionTypeNode(typeNode)){
+        }
+        else if(isTypeLiteralNode(typeNode)){
+        }
+        else if(isKeyword(typeNode.kind)){
+        }
+        else{
+            throw new Error(`Unhandled typeNode kind: ${typeNode.kind}`);
+        }
+    }
 }

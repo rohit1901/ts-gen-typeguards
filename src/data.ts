@@ -24,15 +24,19 @@ export type Point = {
   y: number;
 };
 export type someType = "a" | null | undefined | boolean | number | string;
+export type simple = {
+  a: string
+} | PersonType
 export type PersonType = {
   name: string & number;
   extra: string | number;
 };
 //TODO
 //Intersection types
+//Keyword types
 //conditional types
 //Parenthesis types
-
+export type Person4 = number;
 export type AddressType = {
   street: string;
 } & PersonType;
