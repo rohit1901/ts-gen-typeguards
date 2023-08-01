@@ -2,10 +2,7 @@
 
 import {generateInterfaceTypeGuard} from "../api/generateInterfaceTypeGuard";
 
-export function generateTypeAssertionGuard(
-  typeName: string,
-  definition: any,
-) {
+export function generateTypeAssertionGuard(typeName: string, definition: any) {
   /*const typeGuard = generateInterfaceTypeGuard(typeName, definition);
 
   return typeGuard.replace(

@@ -2,10 +2,7 @@
 
 import {generateInterfaceTypeGuard} from "../api/generateInterfaceTypeGuard";
 
-export function generateRecursiveTypeGuard(
-  typeName: string,
-  definition: any,
-) {
+export function generateRecursiveTypeGuard(typeName: string, definition: any) {
   /*const typeGuard = generateInterfaceTypeGuard(typeName, definition);
 
   return typeGuard.replace(
