@@ -83,3 +83,160 @@ export function isKeyofKeyword(
 ): kind is SyntaxKind.KeyOfKeyword {
   return kind === 143 /* KeyOfKeyword */;
 }
+/**
+ * Function checks if the provided SyntaxKind is a NullKeyword.
+ * @param kind
+ */
+export function isNullKeyword(
+  kind: SyntaxKind,
+): kind is SyntaxKind.NullKeyword {
+  return kind === 106 /* NullKeyword */;
+}
+
+/**
+ * Function checks if the provided SyntaxKind is an EnumKeyword.
+ * @param kind
+ */
+export function isEnumKeyword(
+  kind: SyntaxKind,
+): kind is SyntaxKind.EnumKeyword {
+  return kind === 94 /* EnumKeyword */;
+}
+
+/**
+ * Function checks if the provided SyntaxKind is a ThisKeyword.
+ * @param kind
+ */
+export function isThisKeyword(
+  kind: SyntaxKind,
+): kind is SyntaxKind.ThisKeyword {
+  return kind === 110 /* ThisKeyword */;
+}
+
+/**
+ * Function checks if the provided SyntaxKind is a SuperKeyword.
+ * @param kind
+ */
+export function isSuperKeyword(
+  kind: SyntaxKind,
+): kind is SyntaxKind.SuperKeyword {
+  return kind === 108 /* SuperKeyword */;
+}
+
+/**
+ * Function checks if the provided SyntaxKind is a TrueKeyword.
+ * @param kind
+ */
+export function isTrueKeyword(
+  kind: SyntaxKind,
+): kind is SyntaxKind.TrueKeyword {
+  return kind === 112 /* TrueKeyword */;
+}
+
+/**
+ * Function checks if the provided SyntaxKind is a FalseKeyword.
+ * @param kind
+ */
+export function isFalseKeyword(
+  kind: SyntaxKind,
+): kind is SyntaxKind.FalseKeyword {
+  return kind === 97 /* FalseKeyword */;
+}
+
+/**
+ * Function checks if the provided SyntaxKind is a IntrinsicKeyword.
+ * @param kind
+ */
+export function isIntrinsicKeyword(
+  kind: SyntaxKind,
+): kind is SyntaxKind.IntrinsicKeyword {
+  return kind === 141 /* IntrinsicKeyword */;
+}
+
+/**
+ * Function checks if the provided SyntaxKind is a ReadonlyKeyword.
+ * @param kind
+ */
+export function isReadonlyKeyword(
+  kind: SyntaxKind,
+): kind is SyntaxKind.ReadonlyKeyword {
+  return kind === 148 /* ReadonlyKeyword */;
+}
+
+/**
+ * Function checks if the provided SyntaxKind is a LiteralType.
+ * @param kind
+ */
+export function isLiteralType(
+  kind: SyntaxKind,
+): kind is SyntaxKind.LiteralType {
+  return kind === 200 /* LiteralType */;
+}
+
+/**
+ * Function checks if the provided SyntaxKind is an IndexedAccessType.
+ * @param kind
+ */
+export function isIndexedAccessType(
+  kind: SyntaxKind,
+): kind is SyntaxKind.IndexedAccessType {
+  return kind === 198 /* IndexedAccessType */;
+}
+export type KeywordType =
+  | SyntaxKind.BooleanKeyword
+  | SyntaxKind.UndefinedKeyword
+  | SyntaxKind.StringKeyword
+  | SyntaxKind.NumberKeyword
+  | SyntaxKind.BigIntKeyword
+  | SyntaxKind.SymbolKeyword
+  | SyntaxKind.ObjectKeyword
+  | SyntaxKind.AnyKeyword
+  | SyntaxKind.UnknownKeyword
+  | SyntaxKind.NeverKeyword
+  | SyntaxKind.VoidKeyword
+  | SyntaxKind.KeyOfKeyword
+  | SyntaxKind.NullKeyword
+  | SyntaxKind.EnumKeyword
+  | SyntaxKind.ThisKeyword
+  | SyntaxKind.SuperKeyword
+  | SyntaxKind.TrueKeyword
+  | SyntaxKind.FalseKeyword
+  | SyntaxKind.IntrinsicKeyword
+  | SyntaxKind.ReadonlyKeyword
+  | SyntaxKind.LiteralType
+  | SyntaxKind.IndexedAccessType;
+
+/**
+ * Function checks if the provided SyntaxKind matches any keyword type.
+ * @param kind
+ */
+export function isKeyword(kind: SyntaxKind): kind is KeywordType {
+  /**
+   * Define an array of all keyword types.
+   */
+  const keywordTypes: SyntaxKind[] = [
+    SyntaxKind.BooleanKeyword,
+    SyntaxKind.UndefinedKeyword,
+    SyntaxKind.StringKeyword,
+    SyntaxKind.NumberKeyword,
+    SyntaxKind.BigIntKeyword,
+    SyntaxKind.SymbolKeyword,
+    SyntaxKind.ObjectKeyword,
+    SyntaxKind.AnyKeyword,
+    SyntaxKind.UnknownKeyword,
+    SyntaxKind.NeverKeyword,
+    SyntaxKind.VoidKeyword,
+    SyntaxKind.KeyOfKeyword,
+    SyntaxKind.NullKeyword,
+    SyntaxKind.EnumKeyword,
+    SyntaxKind.ThisKeyword,
+    SyntaxKind.SuperKeyword,
+    SyntaxKind.TrueKeyword,
+    SyntaxKind.FalseKeyword,
+    SyntaxKind.IntrinsicKeyword,
+    SyntaxKind.ReadonlyKeyword,
+    SyntaxKind.LiteralType,
+    SyntaxKind.IndexedAccessType,
+  ];
+  return keywordTypes.includes(kind);
+}
