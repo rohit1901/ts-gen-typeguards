@@ -1,11 +1,11 @@
 export interface Person {
-    intersectionLiteralType?: string & bigint;
-    unionLiteralType?: string | number;
-    intersectionReferenceType?: string & Point;
-    unionReferenceType?: string | Point;
-    literalType: number;
-    referenceType: Point;
-    anyType?: any;
+  intersectionLiteralType?: string & bigint;
+  unionLiteralType?: string | number;
+  intersectionReferenceType?: string & Point;
+  unionReferenceType?: string | Point;
+  literalType: number;
+  referenceType: Point;
+  anyType?: any;
 }
 
 export interface Person2 extends Person {
