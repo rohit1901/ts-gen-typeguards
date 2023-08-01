@@ -88,7 +88,7 @@ export function isKeyofKeyword(
  * @param kind
  */
 export function isNullKeyword(
-    kind: SyntaxKind,
+  kind: SyntaxKind,
 ): kind is SyntaxKind.NullKeyword {
   return kind === 106 /* NullKeyword */;
 }
@@ -98,7 +98,7 @@ export function isNullKeyword(
  * @param kind
  */
 export function isEnumKeyword(
-    kind: SyntaxKind,
+  kind: SyntaxKind,
 ): kind is SyntaxKind.EnumKeyword {
   return kind === 94 /* EnumKeyword */;
 }
@@ -108,7 +108,7 @@ export function isEnumKeyword(
  * @param kind
  */
 export function isThisKeyword(
-    kind: SyntaxKind,
+  kind: SyntaxKind,
 ): kind is SyntaxKind.ThisKeyword {
   return kind === 110 /* ThisKeyword */;
 }
@@ -118,7 +118,7 @@ export function isThisKeyword(
  * @param kind
  */
 export function isSuperKeyword(
-    kind: SyntaxKind,
+  kind: SyntaxKind,
 ): kind is SyntaxKind.SuperKeyword {
   return kind === 108 /* SuperKeyword */;
 }
@@ -128,7 +128,7 @@ export function isSuperKeyword(
  * @param kind
  */
 export function isTrueKeyword(
-    kind: SyntaxKind,
+  kind: SyntaxKind,
 ): kind is SyntaxKind.TrueKeyword {
   return kind === 112 /* TrueKeyword */;
 }
@@ -138,7 +138,7 @@ export function isTrueKeyword(
  * @param kind
  */
 export function isFalseKeyword(
-    kind: SyntaxKind,
+  kind: SyntaxKind,
 ): kind is SyntaxKind.FalseKeyword {
   return kind === 97 /* FalseKeyword */;
 }
@@ -148,7 +148,7 @@ export function isFalseKeyword(
  * @param kind
  */
 export function isIntrinsicKeyword(
-    kind: SyntaxKind,
+  kind: SyntaxKind,
 ): kind is SyntaxKind.IntrinsicKeyword {
   return kind === 141 /* IntrinsicKeyword */;
 }
@@ -158,7 +158,7 @@ export function isIntrinsicKeyword(
  * @param kind
  */
 export function isReadonlyKeyword(
-    kind: SyntaxKind,
+  kind: SyntaxKind,
 ): kind is SyntaxKind.ReadonlyKeyword {
   return kind === 148 /* ReadonlyKeyword */;
 }
@@ -168,7 +168,7 @@ export function isReadonlyKeyword(
  * @param kind
  */
 export function isLiteralType(
-    kind: SyntaxKind,
+  kind: SyntaxKind,
 ): kind is SyntaxKind.LiteralType {
   return kind === 200 /* LiteralType */;
 }
@@ -178,33 +178,33 @@ export function isLiteralType(
  * @param kind
  */
 export function isIndexedAccessType(
-    kind: SyntaxKind,
+  kind: SyntaxKind,
 ): kind is SyntaxKind.IndexedAccessType {
   return kind === 198 /* IndexedAccessType */;
 }
 export type KeywordType =
-    | SyntaxKind.BooleanKeyword
-    | SyntaxKind.UndefinedKeyword
-    | SyntaxKind.StringKeyword
-    | SyntaxKind.NumberKeyword
-    | SyntaxKind.BigIntKeyword
-    | SyntaxKind.SymbolKeyword
-    | SyntaxKind.ObjectKeyword
-    | SyntaxKind.AnyKeyword
-    | SyntaxKind.UnknownKeyword
-    | SyntaxKind.NeverKeyword
-    | SyntaxKind.VoidKeyword
-    | SyntaxKind.KeyOfKeyword
-    | SyntaxKind.NullKeyword
-    | SyntaxKind.EnumKeyword
-    | SyntaxKind.ThisKeyword
-    | SyntaxKind.SuperKeyword
-    | SyntaxKind.TrueKeyword
-    | SyntaxKind.FalseKeyword
-    | SyntaxKind.IntrinsicKeyword
-    | SyntaxKind.ReadonlyKeyword
-    | SyntaxKind.LiteralType
-    | SyntaxKind.IndexedAccessType;
+  | SyntaxKind.BooleanKeyword
+  | SyntaxKind.UndefinedKeyword
+  | SyntaxKind.StringKeyword
+  | SyntaxKind.NumberKeyword
+  | SyntaxKind.BigIntKeyword
+  | SyntaxKind.SymbolKeyword
+  | SyntaxKind.ObjectKeyword
+  | SyntaxKind.AnyKeyword
+  | SyntaxKind.UnknownKeyword
+  | SyntaxKind.NeverKeyword
+  | SyntaxKind.VoidKeyword
+  | SyntaxKind.KeyOfKeyword
+  | SyntaxKind.NullKeyword
+  | SyntaxKind.EnumKeyword
+  | SyntaxKind.ThisKeyword
+  | SyntaxKind.SuperKeyword
+  | SyntaxKind.TrueKeyword
+  | SyntaxKind.FalseKeyword
+  | SyntaxKind.IntrinsicKeyword
+  | SyntaxKind.ReadonlyKeyword
+  | SyntaxKind.LiteralType
+  | SyntaxKind.IndexedAccessType;
 
 /**
  * Function checks if the provided SyntaxKind matches any keyword type.
@@ -240,5 +240,3 @@ export function isKeyword(kind: SyntaxKind): kind is KeywordType {
   ];
   return keywordTypes.includes(kind);
 }
-
-

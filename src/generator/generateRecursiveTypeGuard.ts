@@ -1,10 +1,7 @@
 // Generate type guards for recursive types
 import { generateInterfaceTypeGuard } from "./generateInterfaceTypeGuard";
 
-export function generateRecursiveTypeGuard(
-  typeName: string,
-  definition: any,
-) {
+export function generateRecursiveTypeGuard(typeName: string, definition: any) {
   /*const typeGuard = generateInterfaceTypeGuard(typeName, definition);
 
   return typeGuard.replace(

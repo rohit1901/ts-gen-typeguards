@@ -1,10 +1,7 @@
 // Generate type guards for mapped types
 import { generateInterfaceTypeGuard } from "./generateInterfaceTypeGuard";
 
-export function generateMappedTypeGuard(
-  typeName: string,
-  definition: any,
-) {
+export function generateMappedTypeGuard(typeName: string, definition: any) {
   /*const typeGuard = generateInterfaceTypeGuard(typeName, definition);
 
   return typeGuard.replace(

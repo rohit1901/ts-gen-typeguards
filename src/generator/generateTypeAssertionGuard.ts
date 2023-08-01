@@ -1,10 +1,7 @@
 // Generate type guards for type assertions
 import { generateInterfaceTypeGuard } from "./generateInterfaceTypeGuard";
 
-export function generateTypeAssertionGuard(
-  typeName: string,
-  definition: any,
-) {
+export function generateTypeAssertionGuard(typeName: string, definition: any) {
   /*const typeGuard = generateInterfaceTypeGuard(typeName, definition);
 
   return typeGuard.replace(

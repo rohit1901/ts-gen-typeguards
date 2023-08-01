@@ -1,10 +1,7 @@
 // Generate type guards for type aliases
 import { generateInterfaceTypeGuard } from "./generateInterfaceTypeGuard";
 
-export function generateTypeAliasGuard(
-  typeName: string,
-  definition: any,
-) {
+export function generateTypeAliasGuard(typeName: string, definition: any) {
   /*const typeGuard = generateInterfaceTypeGuard(typeName, definition);
 
   return typeGuard.replace(
