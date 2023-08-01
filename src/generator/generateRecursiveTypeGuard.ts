@@ -1,5 +1,6 @@
 // Generate type guards for recursive types
-import { generateInterfaceTypeGuard } from "./generateInterfaceTypeGuard";
+
+import {generateInterfaceTypeGuard} from "../api/generateInterfaceTypeGuard";
 
 export function generateRecursiveTypeGuard(
   typeName: string,

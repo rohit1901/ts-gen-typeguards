@@ -1,5 +1,6 @@
 // Generate type guards for mapped types
-import { generateInterfaceTypeGuard } from "./generateInterfaceTypeGuard";
+
+import {generateInterfaceTypeGuard} from "../api/generateInterfaceTypeGuard";
 
 export function generateMappedTypeGuard(
   typeName: string,

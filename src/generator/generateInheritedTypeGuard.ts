@@ -1,5 +1,6 @@
 // Generate type guards for inherited types
-import { generateInterfaceTypeGuard } from "./generateInterfaceTypeGuard";
+
+import {generateInterfaceTypeGuard} from "../api/generateInterfaceTypeGuard";
 
 export function generateInheritedTypeGuard(
   typeName: string,

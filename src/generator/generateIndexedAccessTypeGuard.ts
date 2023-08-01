@@ -1,5 +1,6 @@
 // Generate type guards for indexed access types
-import { generateInterfaceTypeGuard } from "./generateInterfaceTypeGuard";
+
+import {generateInterfaceTypeGuard} from "../api/generateInterfaceTypeGuard";
 
 export function generateIndexedAccessTypeGuard(
   typeName: string,

@@ -1,5 +1,6 @@
 // Generate type guards for type assertions
-import { generateInterfaceTypeGuard } from "./generateInterfaceTypeGuard";
+
+import {generateInterfaceTypeGuard} from "../api/generateInterfaceTypeGuard";
 
 export function generateTypeAssertionGuard(
   typeName: string,

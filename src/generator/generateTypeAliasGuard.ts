@@ -1,5 +1,6 @@
 // Generate type guards for type aliases
-import { generateInterfaceTypeGuard } from "./generateInterfaceTypeGuard";
+
+import {generateInterfaceTypeGuard} from "../api/generateInterfaceTypeGuard";
 
 export function generateTypeAliasGuard(
   typeName: string,
