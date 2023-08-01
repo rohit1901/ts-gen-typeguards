@@ -30,6 +30,7 @@ export type PersonType = {
 };
 //TODO
 //Intersection types
+//conditional types
 //Parenthesis types
 
 export type AddressType = {
