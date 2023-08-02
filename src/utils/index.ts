@@ -16,5 +16,6 @@ export {
 } from "./syntaxKindToType";
 export { generateTypeGuardsFile, deleteFileIfExists } from "./fileOps";
 export { removeWhitespace } from "./removeWhitespace";
+export {removeDuplicateTypeElements} from "./typeElementUtils";
 export * from "./isKeyword";
 export * from "./isLiteral";

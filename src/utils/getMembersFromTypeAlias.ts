@@ -18,6 +18,7 @@ import {
   UnionTypeNode,
 } from "typescript";
 import { syntaxKindToType } from "./syntaxKindToType";
+import {isKeyword} from "./isKeyword";
 
 /**
  * Gets the members from a type alias

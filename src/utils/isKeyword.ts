@@ -1,4 +1,4 @@
-import { SyntaxKind } from "typescript";
+import {KeywordSyntaxKind, KeywordTypeSyntaxKind, SyntaxKind} from "typescript";
 
 /**
  * Function checks if the provided SyntaxKind is a BooleanKeyword.
@@ -181,6 +181,27 @@ export function isIndexedAccessType(
   kind: SyntaxKind,
 ): kind is SyntaxKind.IndexedAccessType {
   return kind === 198 /* IndexedAccessType */;
+}
+/**
+ * Type guard for the KeywordTypeSyntaxKind type.
+ * @param kind The SyntaxKind value to be checked.
+ * @returns True if the provided SyntaxKind is one of the keyword types in KeywordTypeSyntaxKind, false otherwise.
+ */
+export function isKeywordTypeSyntaxKind(kind: SyntaxKind): kind is KeywordTypeSyntaxKind {
+  return [
+    SyntaxKind.AnyKeyword,
+    SyntaxKind.BigIntKeyword,
+    SyntaxKind.BooleanKeyword,
+    SyntaxKind.IntrinsicKeyword,
+    SyntaxKind.NeverKeyword,
+    SyntaxKind.NumberKeyword,
+    SyntaxKind.ObjectKeyword,
+    SyntaxKind.StringKeyword,
+    SyntaxKind.SymbolKeyword,
+    SyntaxKind.UndefinedKeyword,
+    SyntaxKind.UnknownKeyword,
+    SyntaxKind.VoidKeyword,
+  ].includes(kind);
 }
 export type KeywordType =
   | SyntaxKind.BooleanKeyword
