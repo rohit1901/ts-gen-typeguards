@@ -12,7 +12,7 @@ import {
   TypeLiteralNode,
   TypeNode,
   TypeReferenceNode,
-} from "typescript";
+} from 'typescript';
 import {
   generateOptionalPropertyTypeGuard,
   generateUniqueTypeGuardsFromTypeLiteral,
@@ -25,9 +25,9 @@ import {
   generateSymbolKeywordTypeGuard,
   generateObjectKeywordTypeGuard,
   generateVoidKeywordTypeGuard,
-} from "./";
-import { generatePropertyTypeGuard } from "./generateTypeLiteralTypeGuard";
-import { generateLiteralTypeTypeGuard } from "./generateLiteralTypeTypeGuard";
+} from './';
+import { generatePropertyTypeGuard } from './generateTypeLiteralTypeGuard';
+import { generateLiteralTypeTypeGuard } from './generateLiteralTypeTypeGuard';
 import {
   isAnyKeyword,
   isBigIntKeyword,
@@ -42,11 +42,11 @@ import {
   isUnknownKeyword,
   isVoidKeyword,
   syntaxKindToType,
-} from "../utils";
+} from '../utils';
 import {
   generateTypeLiteralTypeGuard,
   generateTypeReferenceTypeGuard,
-} from "./generateUnionTypeGuard";
+} from './generateUnionTypeGuard';
 /**
  * Generate an intersection type guard for a given TypeScript type alias.
  *
@@ -60,7 +60,7 @@ export function generateIntersectionTypeGuard(
   typeAliases: TypeAliasDeclaration[],
 ): string {
   if (!isIntersectionTypeNode(type)) {
-    return "";
+    return '';
   }
 
   const typeGuardCode: string[] = [];
@@ -85,7 +85,7 @@ export function generateIntersectionTypeGuard(
     }
   }
 
-  return typeGuardCode.join("");
+  return typeGuardCode.join('');
 }
 /**
  * Generate type guards for a TypeReferenceNode within an intersection type.
@@ -104,7 +104,7 @@ function generateTypeReferenceTypeGuards(
   name?: PropertyName,
 ): void {
   const typeLiterals = typeAliases.filter(
-    (typeAlias) =>
+    typeAlias =>
       typeAlias.name.getText() === intersectionType.typeName.getText(),
   );
 
@@ -215,7 +215,7 @@ export function generateIntersectionTypeGuardForProperty(
 ): string {
   const typeGuardCode: string[] = [];
   if (!isIntersectionTypeNode(type)) {
-    return "";
+    return '';
   }
   if (name) {
     typeGuardCode.push(`!value.hasOwnProperty('${name}')`);
@@ -241,7 +241,7 @@ export function generateIntersectionTypeGuardForProperty(
     );
   }
 
-  return `if(${typeGuardCode.join(" || ")}) return false;`;
+  return `if(${typeGuardCode.join(' || ')}) return false;`;
 }
 function processIntersectionTypeWithTypeGuards(
   intersectionType: TypeNode,

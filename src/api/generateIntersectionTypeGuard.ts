@@ -1,6 +1,6 @@
-import { isIntersectionTypeNode, TypeNode } from "typescript";
-import { generateKeywordGuard } from "../api";
-import { generateTypeReferenceGuard } from "../api";
+import { isIntersectionTypeNode, TypeNode } from 'typescript';
+import { generateKeywordGuard } from '../api';
+import { generateTypeReferenceGuard } from '../api';
 
 export function generateIntersectionTypeGuard(
   type: TypeNode,

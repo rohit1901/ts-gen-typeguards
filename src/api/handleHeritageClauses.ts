@@ -1,4 +1,4 @@
-import { factory, InterfaceDeclaration, SyntaxKind } from "typescript";
+import { factory, InterfaceDeclaration, SyntaxKind } from 'typescript';
 
 export function handleHeritageClauses(
   definition: InterfaceDeclaration,
@@ -13,7 +13,7 @@ export function handleHeritageClauses(
       for (const typeRef of clause.types) {
         // Find the interface definition in the 'definitions' array with the same name as the type reference
         const interfaceDef = definitions.find(
-          (def) => def.name.text === typeRef.expression.getText(),
+          def => def.name.text === typeRef.expression.getText(),
         );
         if (interfaceDef) {
           // Call the function recursively to handle the newly found interface and update its properties

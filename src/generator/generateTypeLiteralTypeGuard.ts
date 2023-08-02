@@ -9,7 +9,7 @@ import {
   PropertySignature,
   TypeAliasDeclaration,
   TypeNode,
-} from "typescript";
+} from 'typescript';
 import {
   getEscapedCapitalizedStringLiteral,
   getEscapedStringLiteral,
@@ -17,13 +17,13 @@ import {
   isKeywordSyntaxKind,
   isPrimitiveSyntaxKind,
   syntaxKindToType,
-} from "../utils";
+} from '../utils';
 import {
   generateUnionTypeGuard,
   generateUnionTypeGuardForProperty,
-} from "./generateUnionTypeGuard";
-import { generateOptionalPropertyTypeGuard } from "./generateOptionalPropertyTypeGuard";
-import { generateIntersectionTypeGuardForProperty } from "./generateIntersectionTypeGuard";
+} from './generateUnionTypeGuard';
+import { generateOptionalPropertyTypeGuard } from './generateOptionalPropertyTypeGuard';
+import { generateIntersectionTypeGuardForProperty } from './generateIntersectionTypeGuard';
 /**
  * Generates a type guard for a property based on its TypeScript PropertySignature.
  *
@@ -72,7 +72,7 @@ export function generatePropertyTypeGuard(
       ),
     );
   }
-  return typeGuardCode.join("");
+  return typeGuardCode.join('');
 }
 /**
  * Generates unique type guards for a given TypeLiteral node by iterating through its properties.

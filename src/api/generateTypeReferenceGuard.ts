@@ -1,5 +1,5 @@
-import { isTypeReferenceNode, TypeNode } from "typescript";
-import { getEscapedCapitalizedStringLiteral } from "../utils";
+import { isTypeReferenceNode, TypeNode } from 'typescript';
+import { getEscapedCapitalizedStringLiteral } from '../utils';
 
 export function generateTypeReferenceGuard(
   type: TypeNode,

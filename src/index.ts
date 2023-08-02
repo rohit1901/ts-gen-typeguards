@@ -1,5 +1,5 @@
-import * as fs from "fs";
-import * as ts from "typescript";
+import * as fs from 'fs';
+import * as ts from 'typescript';
 import {
   EnumDeclaration,
   EnumMember,
@@ -16,7 +16,7 @@ import {
   TypeElement,
   TypeLiteralNode,
   TypeNode,
-} from "typescript";
+} from 'typescript';
 import {
   capitalize,
   deleteFileIfExists,
@@ -24,11 +24,11 @@ import {
   getEscapedCapitalizedStringLiteral,
   getEscapedStringLiteral,
   getMembersFromTypeAlias,
-} from "./utils";
-import { generateTypeGuards, generateUnionTypeGuard } from "./generator";
+} from './utils';
+import { generateTypeGuards, generateUnionTypeGuard } from './generator';
 
-import { generateInterfaceTypeGuard } from "./api";
-import { generateTypeTypeGuard } from "./api/generateTypeTypeGuard";
+import { generateInterfaceTypeGuard } from './api';
+import { generateTypeTypeGuard } from './api/generateTypeTypeGuard';
 
 type ObjectsType = {
   interfaces: ts.InterfaceDeclaration[];
@@ -38,7 +38,7 @@ type ObjectsType = {
 
 export function readObjects(path: string): ObjectsType {
   // Read the file
-  const fileContent = fs.readFileSync(path, "utf8");
+  const fileContent = fs.readFileSync(path, 'utf8');
   // Parse the file
   const parsedFile = ts.createSourceFile(
     path,
@@ -66,7 +66,7 @@ function generateTypeGuardHeader(typeName: string): string {
     `    if (typeof value !== 'object' || value === null) {`,
     `        return false;`,
     `    }\n`,
-  ].join("\n");
+  ].join('\n');
 }
 
 /**
@@ -112,7 +112,7 @@ const buildTypeGuards = (
   const typeGuardFunctions: string[] = [];
   typeGuardFunctions.push(generateTypeGuardHeader(typeName));
 
-  properties.forEach((property) => {
+  properties.forEach(property => {
     const propertyName = property.name.escapedText;
     if (isPropertySignature(property) && property.type) {
       typeGuardFunctions.push(
@@ -129,7 +129,7 @@ const buildTypeGuards = (
   typeGuardFunctions.push(`\n    return true;`);
   typeGuardFunctions.push(`}\n`);
 
-  return typeGuardFunctions.join("\n");
+  return typeGuardFunctions.join('\n');
 };
 
 /**
@@ -152,13 +152,13 @@ function generateEnumTypeGuard(typeNode: EnumDeclaration): string {
   return buildTypeGuards(enumName, enumProperties);
 }
 function loadConfig() {
-  const fileContent = fs.readFileSync("./config.json", "utf8");
+  const fileContent = fs.readFileSync('./config.json', 'utf8');
   const jsonContent = JSON.parse(fileContent);
   return jsonContent.production.inputFilePath;
 }
 //Implementation
 const { interfaces, types, enums } = readObjects(loadConfig());
-deleteFileIfExists("out/typeguards.ts");
+deleteFileIfExists('out/typeguards.ts');
 generateTypeGuardsFile(
   `${generateTypeTypeGuard(types)}\n${generateInterfaceTypeGuard(interfaces)}`,
 );

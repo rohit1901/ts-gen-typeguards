@@ -1,7 +1,7 @@
-import { isPropertySignature, TypeElement } from "typescript";
-import { generateKeywordGuard } from "../api";
-import { generateTypeReferenceGuard } from "../api";
-import { generateIntersectionTypeGuard, generateUnionTypeGuard } from "../api";
+import { isPropertySignature, TypeElement } from 'typescript';
+import { generateKeywordGuard } from '../api';
+import { generateTypeReferenceGuard } from '../api';
+import { generateIntersectionTypeGuard, generateUnionTypeGuard } from '../api';
 
 export function generatePropertyGuard(
   property: TypeElement,

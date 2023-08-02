@@ -11,7 +11,7 @@ export function capitalize(str: string): string {
  * @param str
  */
 export function getEscapedStringLiteral(str: string): string {
-  return str.replace(/['"]/g, "");
+  return str.replace(/['"]/g, '');
 }
 
 /**

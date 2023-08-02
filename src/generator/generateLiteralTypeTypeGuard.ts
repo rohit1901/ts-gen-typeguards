@@ -1,11 +1,11 @@
 // Generate type guards for any types
-import { isLiteralTypeNode, Node } from "typescript";
+import { isLiteralTypeNode, Node } from 'typescript';
 import {
   capitalize,
   getEscapedCapitalizedStringLiteral,
   getEscapedStringLiteral,
   syntaxKindToType,
-} from "../utils";
+} from '../utils';
 
 export function generateLiteralTypeTypeGuard(literalType: Node): string {
   if (isLiteralTypeNode(literalType)) {
@@ -15,5 +15,5 @@ export function generateLiteralTypeTypeGuard(literalType: Node): string {
     }
     return `(value !== ${syntaxKindToType(literalType.literal.kind)})`;
   }
-  return "";
+  return '';
 }

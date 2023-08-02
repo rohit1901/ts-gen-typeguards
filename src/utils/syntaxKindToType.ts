@@ -1,72 +1,84 @@
-import { KeywordSyntaxKind, SyntaxKind } from "typescript";
+import { KeywordSyntaxKind, SyntaxKind } from 'typescript';
 
 /**
  * Converts a SyntaxKind value to a string type.
- * @param syntaxKind
+ * @param {SyntaxKind} syntaxKind - The SyntaxKind value to be converted.
+ * @returns {string} - The string representation of the SyntaxKind.
  */
 export function syntaxKindToType(syntaxKind: SyntaxKind): string {
   switch (syntaxKind) {
     case SyntaxKind.BooleanKeyword:
-      return "boolean";
+      return 'boolean';
     case SyntaxKind.UndefinedKeyword:
-      return "undefined";
+      return 'undefined';
     case SyntaxKind.StringKeyword:
-      return "string";
+      return 'string';
     case SyntaxKind.NumberKeyword:
-      return "number";
+      return 'number';
     case SyntaxKind.BigIntKeyword:
-      return "bigint";
+      return 'bigint';
     case SyntaxKind.SymbolKeyword:
-      return "symbol";
+      return 'symbol';
     case SyntaxKind.ObjectKeyword:
-      return "object";
+      return 'object';
     case SyntaxKind.AnyKeyword:
-      return "any";
+      return 'any';
     case SyntaxKind.UnknownKeyword:
-      return "unknown";
+      return 'unknown';
     case SyntaxKind.NeverKeyword:
-      return "never";
+      return 'never';
     case SyntaxKind.VoidKeyword:
-      return "void";
+      return 'void';
     case SyntaxKind.KeyOfKeyword:
-      return "keyof";
+      return 'keyof';
     case SyntaxKind.NullKeyword:
-      return "null";
+      return 'null';
     case SyntaxKind.EnumKeyword:
-      return "enum";
+      return 'enum';
     case SyntaxKind.ThisKeyword:
-      return "this";
+      return 'this';
     case SyntaxKind.SuperKeyword:
-      return "super";
+      return 'super';
     case SyntaxKind.TrueKeyword:
-      return "true";
+      return 'true';
     case SyntaxKind.FalseKeyword:
-      return "false";
+      return 'false';
     case SyntaxKind.IntrinsicKeyword:
-      return "intrinsic";
+      return 'intrinsic';
     case SyntaxKind.ReadonlyKeyword:
-      return "readonly";
+      return 'readonly';
     case SyntaxKind.LiteralType:
-      return "literal";
+      return 'literal';
     case SyntaxKind.IndexedAccessType:
-      return "indexedAccess";
+      return 'indexedAccess';
     default:
       // Return an empty string for unknown SyntaxKind values
-      return "";
+      return '';
   }
 }
-
+/**
+ * Type guard to check if the provided value is a valid enum member of KeywordSyntaxKind.
+ * @param {*} value - The value to be checked.
+ * @returns {boolean} - True if the value is a valid enum member of KeywordSyntaxKind, false otherwise.
+ */
 export function isKeywordSyntaxKind(value: any): value is KeywordSyntaxKind {
   // Check if the value is a valid enum member of KeywordSyntaxKind
   return Object.values(SyntaxKind).includes(value);
 }
+/**
+ * Type alias for a union of SyntaxKind values representing primitive types.
+ */
 export type PrimitiveSyntaxKind =
   | SyntaxKind.NumberKeyword
   | SyntaxKind.StringKeyword
   | SyntaxKind.BooleanKeyword
   | SyntaxKind.NullKeyword
   | SyntaxKind.UndefinedKeyword;
-
+/**
+ * Type guard to check if the provided value is a valid primitive SyntaxKind.
+ * @param {*} value - The value to be checked.
+ * @returns {boolean} - True if the value is a valid primitive SyntaxKind, false otherwise.
+ */
 export function isPrimitiveSyntaxKind(
   value: any,
 ): value is PrimitiveSyntaxKind {
