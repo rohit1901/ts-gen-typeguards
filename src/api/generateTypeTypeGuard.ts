@@ -1,5 +1,6 @@
 import {
-  factory,
+  EnumDeclaration,
+  factory, isEnumDeclaration,
   isIntersectionTypeNode,
   isLiteralTypeNode,
   isTypeLiteralNode,
@@ -14,7 +15,7 @@ import {
   generateKeywordGuard,
   generateKeywordGuardForType,
   generatePropertyGuard,
-  generateUnionTypeGuard,
+  generateUnionTypeGuard, handleEnumIntersection,
 } from '../api';
 import {
   getEscapedCapitalizedStringLiteral,
@@ -28,13 +29,15 @@ import {
 /**
  * Generate a set of type guard functions based on provided TypeAliasDeclarations.
  * @param definitions - An array of TypeAliasDeclarations.
+ * @param enums - An array of EnumDeclarations
  * @returns A string containing the generated type guard functions.
  */
 export function generateTypeTypeGuard(
   definitions: TypeAliasDeclaration[],
+  enums: EnumDeclaration[]
 ): string {
   const typeGuard: string[] = [];
-  for (let definition of definitions) {
+  for (const definition of definitions) {
     const typeGuardStrings: string[] = [];
     const newDefinition = handleIntersectionTypes(definition, definitions);
     const { name, type } = newDefinition;
@@ -48,6 +51,7 @@ export function generateTypeTypeGuard(
     typeGuardStrings.push(...generateUnionTypeGuard(type, typeName));
     typeGuardStrings.push(...generateKeywordGuard(type));
     typeGuardStrings.push(...generateFakeTypeElement(newDefinition));
+    typeGuardStrings.push(...handleEnumIntersection(definition, enums));
     typeGuard.push(typeGuardStrings.join('&&') + `)}`);
   }
   return typeGuard.join('\n');
@@ -105,13 +109,15 @@ function handleIntersectionTypes(
       const foundMember = definitions.find(
         d => d.name.getText() === typeNode.typeName.getText(),
       );
-
-      if (isTypeLiteralNode(foundMember.type)) {
-        // If the related type is a TypeLiteralNode, merge its members into the current members array.
-        members.push(...foundMember.type.members);
-      } else {
-        // If the related type is not a TypeLiteralNode, recursively process it.
-        members.push(...getMembersFromTypeAlias(foundMember, definitions));
+      if(foundMember) {
+        if (isTypeLiteralNode(foundMember.type)) {
+          // If the related type is a TypeLiteralNode, merge its members into the current members array.
+          members.push(...foundMember.type.members);
+        }
+        else {
+          // If the related type is not a TypeLiteralNode, recursively process it.
+          members.push(...getMembersFromTypeAlias(foundMember, definitions));
+        }
       }
     } else if (isUnionTypeNode(typeNode)) {
       // TODO: Handle UnionTypeNode, if needed.

@@ -27,7 +27,7 @@ import {
 } from './utils';
 import { generateTypeGuards, generateUnionTypeGuard } from './generator';
 
-import { generateInterfaceTypeGuard } from './api';
+import {generateEnumTypeGuards, generateInterfaceTypeGuard} from './api';
 import { generateTypeTypeGuard } from './api/generateTypeTypeGuard';
 
 type ObjectsType = {
@@ -141,16 +141,6 @@ function generateTypeGuards2(interfaceNode: InterfaceDeclaration): string {
   const interfaceName = capitalize(interfaceNode.name.text);
   return buildTypeGuards(interfaceName, properties);
 }
-
-/**
- * Generates the type guards for the enums
- * @param typeNode
- */
-function generateEnumTypeGuard(typeNode: EnumDeclaration): string {
-  const enumName = typeNode.name.text;
-  const enumProperties = typeNode.members;
-  return buildTypeGuards(enumName, enumProperties);
-}
 function loadConfig() {
   const fileContent = fs.readFileSync('./config.json', 'utf8');
   const jsonContent = JSON.parse(fileContent);
@@ -160,5 +150,5 @@ function loadConfig() {
 const { interfaces, types, enums } = readObjects(loadConfig());
 deleteFileIfExists('out/typeguards.ts');
 generateTypeGuardsFile(
-  `${generateTypeTypeGuard(types)}\n${generateInterfaceTypeGuard(interfaces)}`,
+  `${generateTypeTypeGuard(types, enums)}\n${generateInterfaceTypeGuard(interfaces)}\n${generateEnumTypeGuards(enums)}`,
 );
