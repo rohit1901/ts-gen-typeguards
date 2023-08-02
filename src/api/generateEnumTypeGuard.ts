@@ -2,7 +2,7 @@ import {
     EnumDeclaration,
     isEnumMember,
     isIntersectionTypeNode,
-    isTypeReferenceNode,
+    isTypeReferenceNode, isUnionTypeNode,
     TypeAliasDeclaration
 } from "typescript";
 import {getEscapedCapitalizedStringLiteral} from "../utils";
@@ -28,16 +28,14 @@ export function generateEnumTypeGuard(enumDefinition: EnumDeclaration) {
         }`
 }
 export function handleEnumIntersection(definition: TypeAliasDeclaration, enums: EnumDeclaration[]) {
-    const enumGuardsString = `export function is${getEscapedCapitalizedStringLiteral(definition.name.getText())}(value: any): value is ${getEscapedCapitalizedStringLiteral(definition.name.getText())} { return `;
     const enumGuards: string[] = [];
-    if(!isIntersectionTypeNode(definition.type)) return [];
+    if(!isIntersectionTypeNode(definition.type)) return enumGuards;
     for(const refType of definition.type.types) {
         if(isTypeReferenceNode(refType)) {
             const enumDefinition = enums.find(d => d.name.getText() === refType.typeName.getText());
             if(enumDefinition) enumGuards.push(`is${getEscapedCapitalizedStringLiteral(enumDefinition.name.getText())}(value)`);
         }
     }
-    if(enumGuards.length === 0) return [];
-    //return enumGuardsString + (enumGuards.join('&&')) + '}';
+    if(enumGuards.length === 0) return enumGuards;
     return enumGuards
 }

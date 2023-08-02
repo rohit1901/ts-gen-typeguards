@@ -68,3 +68,4 @@ export enum Animal {
   Lion = "LION",
 }
 export type enumIntersection = Color & Fruit & Animal
+export type enumUnion = Color | Fruit | Animal
