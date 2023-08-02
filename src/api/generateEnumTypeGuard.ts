@@ -1,11 +1,12 @@
 import {
-    EnumDeclaration,
-    isEnumMember,
-    isIntersectionTypeNode,
-    isTypeReferenceNode, isUnionTypeNode,
-    TypeAliasDeclaration
-} from "typescript";
-import {getEscapedCapitalizedStringLiteral} from "../utils";
+  EnumDeclaration,
+  isEnumMember,
+  isIntersectionTypeNode,
+  isTypeReferenceNode,
+  isUnionTypeNode,
+  TypeAliasDeclaration,
+} from 'typescript';
+import { getEscapedCapitalizedStringLiteral } from '../utils';
 
 /**
  * ```
@@ -33,15 +34,25 @@ export function generateEnumTypeGuard(enumDefinition: EnumDeclaration) {
         )}).includes(value);
         }`;
 }
-export function handleEnumIntersection(definition: TypeAliasDeclaration, enums: EnumDeclaration[]) {
-    const enumGuards: string[] = [];
-    if(!isIntersectionTypeNode(definition.type)) return enumGuards;
-    for(const refType of definition.type.types) {
-        if(isTypeReferenceNode(refType)) {
-            const enumDefinition = enums.find(d => d.name.getText() === refType.typeName.getText());
-            if(enumDefinition) enumGuards.push(`is${getEscapedCapitalizedStringLiteral(enumDefinition.name.getText())}(value)`);
-        }
+export function handleEnumIntersection(
+  definition: TypeAliasDeclaration,
+  enums: EnumDeclaration[],
+) {
+  const enumGuards: string[] = [];
+  if (!isIntersectionTypeNode(definition.type)) return enumGuards;
+  for (const refType of definition.type.types) {
+    if (isTypeReferenceNode(refType)) {
+      const enumDefinition = enums.find(
+        d => d.name.getText() === refType.typeName.getText(),
+      );
+      if (enumDefinition)
+        enumGuards.push(
+          `is${getEscapedCapitalizedStringLiteral(
+            enumDefinition.name.getText(),
+          )}(value)`,
+        );
     }
-    if(enumGuards.length === 0) return enumGuards;
-    return enumGuards
+  }
+  if (enumGuards.length === 0) return enumGuards;
+  return enumGuards;
 }
