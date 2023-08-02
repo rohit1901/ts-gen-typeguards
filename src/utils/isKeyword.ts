@@ -1,4 +1,8 @@
-import {KeywordSyntaxKind, KeywordTypeSyntaxKind, SyntaxKind} from "typescript";
+import {
+  KeywordSyntaxKind,
+  KeywordTypeSyntaxKind,
+  SyntaxKind,
+} from "typescript";
 
 /**
  * Function checks if the provided SyntaxKind is a BooleanKeyword.
@@ -187,7 +191,9 @@ export function isIndexedAccessType(
  * @param kind The SyntaxKind value to be checked.
  * @returns True if the provided SyntaxKind is one of the keyword types in KeywordTypeSyntaxKind, false otherwise.
  */
-export function isKeywordTypeSyntaxKind(kind: SyntaxKind): kind is KeywordTypeSyntaxKind {
+export function isKeywordTypeSyntaxKind(
+  kind: SyntaxKind,
+): kind is KeywordTypeSyntaxKind {
   return [
     SyntaxKind.AnyKeyword,
     SyntaxKind.BigIntKeyword,

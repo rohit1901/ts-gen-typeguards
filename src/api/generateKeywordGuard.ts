@@ -1,4 +1,9 @@
-import {isLiteralTypeNode, LiteralType, SyntaxKind, TypeNode} from "typescript";
+import {
+  isLiteralTypeNode,
+  LiteralType,
+  SyntaxKind,
+  TypeNode,
+} from "typescript";
 import { getLiteralType, isKeyword, syntaxKindToType } from "../utils";
 
 /**
@@ -11,7 +16,10 @@ import { getLiteralType, isKeyword, syntaxKindToType } from "../utils";
  * @param {string} [propertyName] - Optional property name used in the type guard condition.
  * @returns {string[]} An array of strings representing the generated type guards.
  */
-export function generateKeywordGuard(type: TypeNode, propertyName?: string): string[] {
+export function generateKeywordGuard(
+  type: TypeNode,
+  propertyName?: string,
+): string[] {
   const typeGuard: string[] = [];
   if (!isKeywordType(type.kind)) {
     return typeGuard;
@@ -28,7 +36,6 @@ export function generateKeywordGuard(type: TypeNode, propertyName?: string): str
   return typeGuard;
 }
 
-
 /**
  * Checks if the provided TypeScript TypeNode is a keyword type or a literal type.
  * A keyword type refers to built-in TypeScript types like string, number, boolean, etc.
@@ -41,14 +48,16 @@ function isKeywordType(kind: any): boolean {
   return isKeyword(kind) || isLiteralTypeNode(kind);
 }
 
-
 /**
  * Generates a type guard condition for a literal type node.
  * @param {string} propertyName - The name of the property being type checked.
  * @param {SyntaxKind} literalKind - The kind of the literal type node.
  * @returns {string} The type guard condition as a string.
  */
-function generateLiteralTypeGuard(propertyName: string, literalKind: SyntaxKind): string {
+function generateLiteralTypeGuard(
+  propertyName: string,
+  literalKind: SyntaxKind,
+): string {
   return `typeof value.${propertyName} === '${getLiteralType(literalKind)}'`;
 }
 
@@ -58,7 +67,10 @@ function generateLiteralTypeGuard(propertyName: string, literalKind: SyntaxKind)
  * @param {SyntaxKind} keywordKind - The kind of the keyword type node.
  * @returns {string} The type guard condition as a string.
  */
-function generateKeywordTypeGuard(propertyName: string, keywordKind: SyntaxKind): string {
+function generateKeywordTypeGuard(
+  propertyName: string,
+  keywordKind: SyntaxKind,
+): string {
   return `typeof value.${propertyName} === '${syntaxKindToType(keywordKind)}'`;
 }
 
@@ -74,6 +86,3 @@ function generateKeywordTypeGuard(propertyName: string, keywordKind: SyntaxKind)
 function generateKeywordGuardForType(keywordKind: SyntaxKind): string {
   return `typeof value === '${syntaxKindToType(keywordKind)}'`;
 }
-
-
-
