@@ -1,6 +1,7 @@
 import {
   EnumDeclaration,
-  factory, isEnumDeclaration,
+  factory,
+  isEnumDeclaration,
   isIntersectionTypeNode,
   isLiteralTypeNode,
   isTypeLiteralNode,
@@ -15,7 +16,8 @@ import {
   generateKeywordGuard,
   generateKeywordGuardForType,
   generatePropertyGuard,
-  generateUnionTypeGuard, handleEnumIntersection,
+  generateUnionTypeGuard,
+  handleEnumIntersection,
 } from '../api';
 import {
   getEscapedCapitalizedStringLiteral,
@@ -34,7 +36,7 @@ import {
  */
 export function generateTypeTypeGuard(
   definitions: TypeAliasDeclaration[],
-  enums: EnumDeclaration[]
+  enums: EnumDeclaration[],
 ): string {
   const typeGuard: string[] = [];
   for (const definition of definitions) {
@@ -109,12 +111,11 @@ function handleIntersectionTypes(
       const foundMember = definitions.find(
         d => d.name.getText() === typeNode.typeName.getText(),
       );
-      if(foundMember) {
+      if (foundMember) {
         if (isTypeLiteralNode(foundMember.type)) {
           // If the related type is a TypeLiteralNode, merge its members into the current members array.
           members.push(...foundMember.type.members);
-        }
-        else {
+        } else {
           // If the related type is not a TypeLiteralNode, recursively process it.
           members.push(...getMembersFromTypeAlias(foundMember, definitions));
         }

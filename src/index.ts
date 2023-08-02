@@ -27,7 +27,7 @@ import {
 } from './utils';
 import { generateTypeGuards, generateUnionTypeGuard } from './generator';
 
-import {generateEnumTypeGuards, generateInterfaceTypeGuard} from './api';
+import { generateEnumTypeGuards, generateInterfaceTypeGuard } from './api';
 import { generateTypeTypeGuard } from './api/generateTypeTypeGuard';
 
 type ObjectsType = {
@@ -150,5 +150,7 @@ function loadConfig() {
 const { interfaces, types, enums } = readObjects(loadConfig());
 deleteFileIfExists('out/typeguards.ts');
 generateTypeGuardsFile(
-  `${generateTypeTypeGuard(types, enums)}\n${generateInterfaceTypeGuard(interfaces)}\n${generateEnumTypeGuards(enums)}`,
+  `${generateTypeTypeGuard(types, enums)}\n${generateInterfaceTypeGuard(
+    interfaces,
+  )}\n${generateEnumTypeGuards(enums)}`,
 );
