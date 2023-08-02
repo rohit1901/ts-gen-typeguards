@@ -38,7 +38,7 @@ export type PersonType = {
 //Keyword types
 //conditional types
 //Parenthesis types
-export type Person4 = number;
+/*export type Person4 = number;
 export type AddressType = {
   street: string;
 } & PersonType;
@@ -46,11 +46,11 @@ export type Point2Type = {
   x: number;
   y: number;
   z?: Point;
-} & Point;
+} & Point;*/
 export type Point3Type = {
   z?: number;
   m?: string & Point;
-} & number;
+} & PersonType;
 
 /*export enum Color {
     Red = 'red',

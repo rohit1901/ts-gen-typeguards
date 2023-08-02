@@ -37,8 +37,6 @@ export function getMembersFromTypeAlias(
     return getTypesFromUnionTypeNode(alias.type, typeAliases);
   } else if (isConditionalTypeNode(alias.type)) {
     return getTypesFromConditionalTypeNode(alias.type, typeAliases);
-  } else if (isUnionTypeNode(alias.type)) {
-    return getTypesFromUnionTypeNode(alias.type, typeAliases);
   }
   return [];
 }

@@ -20,7 +20,7 @@ import {
   generatePropertyGuard,
   generateUnionTypeGuard,
 } from "../api";
-import { getEscapedCapitalizedStringLiteral, isKeyword } from "../utils";
+import {getEscapedCapitalizedStringLiteral, getMembersFromTypeAlias, isKeyword, syntaxKindToType} from "../utils";
 
 export function generateTypeTypeGuard(
   definitions: TypeAliasDeclaration[],
@@ -39,6 +39,7 @@ export function generateTypeTypeGuard(
     typeGuardStrings.push(
       ...generateUnionTypeGuard(definition.type, definition.name.getText()),
     );
+    handleIntersectionTypes(definition, definitions);
     /*TODO:
            Handle intersection types. Intersections types are TypeAliasDeclarations with an IntersectionTypeNode as their type.
            If this type is an intersection type, it will have a types property which is a NodeArray<TypeNode>.
@@ -89,5 +90,32 @@ function handleIntersectionTypes(
     } else {
       throw new Error(`Unhandled typeNode kind: ${typeNode.kind}`);
     }
-  }
+    for(const typeNode of type.types){
+        if (isTypeReferenceNode(typeNode)){
+            const foundMember = definitions.find(d => d.name.getText() === typeNode.typeName.getText());
+            if(isTypeLiteralNode(foundMember.type)) {
+                members.push(...foundMember.type.members);
+            } else {
+                handleIntersectionTypes(foundMember, definitions);
+            }
+        }
+        else if(isUnionTypeNode(typeNode)){
+            //members.push(...typeNode.types)
+        }
+        else if(isTypeLiteralNode(typeNode)){
+            members.push(...typeNode.members)
+        }
+        else if(isKeyword(typeNode.kind)){
+            //members.push(...typeNode.members)
+        }
+        else{
+            throw new Error(`Unhandled typeNode kind: ${typeNode.kind}`);
+        }
+    }
+    const newTypeAlias = factory.createTypeLiteralNode()
+    console.log(members.map(m => {
+        if (isPropertySignature(m)) {
+            return syntaxKindToType(m.type.kind)
+        }
+    }))
 }
