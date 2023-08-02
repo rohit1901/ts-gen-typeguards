@@ -67,5 +67,7 @@ export enum Animal {
   Cat = 'CAT',
   Lion = 'LION',
 }
-export type enumIntersection = Color & Fruit & Animal;
-export type enumUnion = Color | Fruit | Animal;
+export type enumIntersection = Color & Fruit & Animal
+//TODO: Enum Union
+export type enumUnion = Color | Fruit | Animal
+//TODO: Imports
