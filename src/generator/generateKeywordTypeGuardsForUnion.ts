@@ -1,4 +1,4 @@
-import { SyntaxKind } from "typescript";
+import { SyntaxKind } from 'typescript';
 import {
   isBigIntKeyword,
   isBooleanKeyword,
@@ -8,34 +8,34 @@ import {
   isSymbolKeyword,
   isUndefinedKeyword,
   isVoidKeyword,
-} from "../utils";
+} from '../utils';
 
 export function generateStringKeywordTypeGuard(kind: SyntaxKind): string {
   if (isStringKeyword(kind)) {
     return `(typeof value !== 'string')`;
   }
-  return "";
+  return '';
 }
 
 export function generateNumberKeywordTypeGuard(kind: SyntaxKind): string {
   if (isNumberKeyword(kind)) {
     return `(typeof value !== 'number')`;
   }
-  return "";
+  return '';
 }
 
 export function generateBigIntKeywordTypeGuard(kind: SyntaxKind): string {
   if (isBigIntKeyword(kind)) {
     return `(typeof value !== 'bigint')`;
   }
-  return "";
+  return '';
 }
 
 export function generateSymbolKeywordTypeGuard(kind: SyntaxKind): string {
   if (isSymbolKeyword(kind)) {
     return `(typeof value !== 'symbol')`;
   }
-  return "";
+  return '';
 }
 
 export function generateObjectKeywordTypeGuard(kind: SyntaxKind): string {
@@ -93,19 +93,19 @@ export function generateKeyofKeywordTypeGuard(kind: SyntaxKind): string {
         return `(typeof value !== keyof)`;
     }
     */
-  return "";
+  return '';
 }
 
 export function generateBooleanKeywordTypeGuard(type: SyntaxKind): string {
   if (isBooleanKeyword(type)) {
     return `(typeof value !== 'boolean')`;
   }
-  return "";
+  return '';
 }
 
 export function generateUndefinedKeywordTypeGuard(type: SyntaxKind): string {
   if (isUndefinedKeyword(type)) {
     return `(value !== undefined)`;
   }
-  return "";
+  return '';
 }

@@ -12,8 +12,8 @@ import {
   TypeLiteralNode,
   TypeNode,
   TypeReferenceNode,
-} from "typescript";
-import { generateLiteralTypeTypeGuard } from "./generateLiteralTypeTypeGuard";
+} from 'typescript';
+import { generateLiteralTypeTypeGuard } from './generateLiteralTypeTypeGuard';
 import {
   capitalize,
   isAnyKeyword,
@@ -29,7 +29,7 @@ import {
   isUnknownKeyword,
   isVoidKeyword,
   syntaxKindToType,
-} from "../utils";
+} from '../utils';
 import {
   generateBigIntKeywordTypeGuard,
   generateBooleanKeywordTypeGuard,
@@ -39,8 +39,8 @@ import {
   generateSymbolKeywordTypeGuard,
   generateUndefinedKeywordTypeGuard,
   generateVoidKeywordTypeGuard,
-} from "./generateKeywordTypeGuardsForUnion";
-import { generateIntersectionTypeGuard } from "./generateIntersectionTypeGuard";
+} from './generateKeywordTypeGuardsForUnion';
+import { generateIntersectionTypeGuard } from './generateIntersectionTypeGuard';
 
 /**
  * Processes the given union type node and generates type guards based on its individual members.
@@ -116,14 +116,14 @@ export function generateUnionTypeGuard(
   name?: PropertyName,
 ): string {
   if (!isUnionTypeNode(type)) {
-    return "";
+    return '';
   }
   const typeGuardCode: string[] = [];
   for (const unionType of type.types) {
     processUnionTypeWithTypeGuards(unionType, typeAliases, typeGuardCode);
   }
 
-  return `if(${typeGuardCode.join(" || ")}) return false;`;
+  return `if(${typeGuardCode.join(' || ')}) return false;`;
 }
 
 /**
@@ -139,7 +139,7 @@ export function generateTypeReferenceTypeGuard(
   typeGuardCode: string[],
 ): void {
   const typeAlias = typeAliases.find(
-    (typeAlias) => typeAlias.name.getText() === typeRefNode.typeName.getText(),
+    typeAlias => typeAlias.name.getText() === typeRefNode.typeName.getText(),
   );
   if (typeAlias) {
     typeGuardCode.push(generateTypeAliasTypeGuard(typeAlias));
@@ -163,7 +163,7 @@ export function generateTypeLiteralTypeGuard(
     }
   }
   if (propertyGuards.length > 0) {
-    typeGuardCode.push(`(${propertyGuards.join(" && ")})`);
+    typeGuardCode.push(`(${propertyGuards.join(' && ')})`);
   }
 }
 
@@ -193,7 +193,7 @@ export function generateUnionTypeGuardForProperty(
 ): string {
   const typeGuardCode: string[] = [];
   if (!isUnionTypeNode(type)) {
-    return "";
+    return '';
   }
   if (name) {
     typeGuardCode.push(`!value.hasOwnProperty('${name}')`);
@@ -215,5 +215,5 @@ export function generateUnionTypeGuardForProperty(
     processUnionTypeWithTypeGuards(unionType, typeAliases, typeGuardCode);
   }
 
-  return `if(${typeGuardCode.join(" || ")}) return false;`;
+  return `if(${typeGuardCode.join(' || ')}) return false;`;
 }

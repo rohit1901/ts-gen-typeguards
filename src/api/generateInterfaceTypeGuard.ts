@@ -1,5 +1,5 @@
-import { InterfaceDeclaration } from "typescript";
-import { generateSingleInterfaceTypeGuard } from "../api";
+import { InterfaceDeclaration } from 'typescript';
+import { generateSingleInterfaceTypeGuard } from '../api';
 
 export function generateInterfaceTypeGuard(
   definitions: InterfaceDeclaration[],
@@ -10,5 +10,5 @@ export function generateInterfaceTypeGuard(
       generateSingleInterfaceTypeGuard(definition, definitions),
     );
   }
-  return typeGuardStrings.join("\n");
+  return typeGuardStrings.join('\n');
 }

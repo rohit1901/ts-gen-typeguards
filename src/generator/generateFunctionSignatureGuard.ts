@@ -3,7 +3,7 @@ export function generateFunctionSignatureGuard(
   typeName: string,
   definition: any,
 ): string {
-  let typeGuard = "";
+  let typeGuard = '';
 
   if (definition.parameters) {
     for (const parameter of definition.parameters) {
@@ -14,7 +14,7 @@ export function generateFunctionSignatureGuard(
   if (definition.returnType) {
     typeGuard += `  return is${definition.returnType}(value());\n`;
   } else {
-    typeGuard += "  return true;\n";
+    typeGuard += '  return true;\n';
   }
 
   return typeGuard;

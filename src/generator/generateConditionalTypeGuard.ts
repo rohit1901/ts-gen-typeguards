@@ -1,6 +1,6 @@
 // Generate type guards for conditional types
 
-import { generateInterfaceTypeGuard } from "../api/generateInterfaceTypeGuard";
+import { generateInterfaceTypeGuard } from '../api/generateInterfaceTypeGuard';
 
 export function generateConditionalTypeGuard(
   typeName: string,

@@ -23,7 +23,7 @@ export type Point = {
   x: number;
   y: number;
 };
-export type someType = "a" | null | undefined | boolean | number | string;
+export type someType = 'a' | null | undefined | boolean | number | string;
 export type simple =
   | {
       a: string;

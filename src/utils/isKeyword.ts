@@ -2,7 +2,7 @@ import {
   KeywordSyntaxKind,
   KeywordTypeSyntaxKind,
   SyntaxKind,
-} from "typescript";
+} from 'typescript';
 
 /**
  * Function checks if the provided SyntaxKind is a BooleanKeyword.

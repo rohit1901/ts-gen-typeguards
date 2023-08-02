@@ -1,6 +1,6 @@
-import { InterfaceDeclaration, isInterfaceDeclaration } from "typescript";
-import { generatePropertyGuard, handleHeritageClauses } from "../api";
-import { getEscapedCapitalizedStringLiteral } from "../utils";
+import { InterfaceDeclaration, isInterfaceDeclaration } from 'typescript';
+import { generatePropertyGuard, handleHeritageClauses } from '../api';
+import { getEscapedCapitalizedStringLiteral } from '../utils';
 
 export function generateSingleInterfaceTypeGuard(
   definition: InterfaceDeclaration,
@@ -10,7 +10,7 @@ export function generateSingleInterfaceTypeGuard(
   const interfaceName: string = definition.name.escapedText.toString();
   //NOTE: Return empty string if the definition is not an interface
   if (!isInterfaceDeclaration(definition)) {
-    return "";
+    return '';
   }
   const updatedDefinition = handleHeritageClauses(definition, definitions);
   typeGuardStrings.push(`export function is${getEscapedCapitalizedStringLiteral(
@@ -20,5 +20,5 @@ export function generateSingleInterfaceTypeGuard(
   for (const property of updatedDefinition.members) {
     typeGuardStrings.push(...generatePropertyGuard(property, interfaceName));
   }
-  return typeGuardStrings.join("&&") + `)}`;
+  return typeGuardStrings.join('&&') + `)}`;
 }

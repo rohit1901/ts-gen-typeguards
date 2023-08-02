@@ -6,63 +6,63 @@ import {
   LiteralTypeNode,
   SyntaxKind,
   TypeAliasDeclaration,
-} from "typescript";
+} from 'typescript';
 
 /**
  * Setup variables for testing
  */
 export const setupVariables = () => {
   const personIdentifier: Identifier = {
-    ...factory.createIdentifier("Person"),
-    getText: jest.fn().mockReturnValue("Person"),
+    ...factory.createIdentifier('Person'),
+    getText: jest.fn().mockReturnValue('Person'),
   };
   const nameIdentifier: Identifier = {
-    ...factory.createIdentifier("Person"),
-    getText: jest.fn().mockReturnValue("name"),
+    ...factory.createIdentifier('Person'),
+    getText: jest.fn().mockReturnValue('name'),
   };
   const aLiteralType: LiteralTypeNode = factory.createLiteralTypeNode({
-    ...factory.createStringLiteral("a"),
-    getText: jest.fn().mockReturnValue("a"),
+    ...factory.createStringLiteral('a'),
+    getText: jest.fn().mockReturnValue('a'),
   });
   const addressIdentifier: Identifier = {
-    ...factory.createIdentifier("Address"),
-    getText: jest.fn().mockReturnValue("Address"),
+    ...factory.createIdentifier('Address'),
+    getText: jest.fn().mockReturnValue('Address'),
   };
   const streetIdentifier: Identifier = {
-    ...factory.createIdentifier("street"),
-    getText: jest.fn().mockReturnValue("street"),
+    ...factory.createIdentifier('street'),
+    getText: jest.fn().mockReturnValue('street'),
   };
   const pointIdentifier: Identifier = {
-    ...factory.createIdentifier("Point"),
-    getText: jest.fn().mockReturnValue("Point"),
+    ...factory.createIdentifier('Point'),
+    getText: jest.fn().mockReturnValue('Point'),
   };
   const xIdentifier: Identifier = {
-    ...factory.createIdentifier("x"),
-    getText: jest.fn().mockReturnValue("x"),
+    ...factory.createIdentifier('x'),
+    getText: jest.fn().mockReturnValue('x'),
   };
   const yIdentifier: Identifier = {
-    ...factory.createIdentifier("y"),
-    getText: jest.fn().mockReturnValue("y"),
+    ...factory.createIdentifier('y'),
+    getText: jest.fn().mockReturnValue('y'),
   };
   const point2Identifier: Identifier = {
-    ...factory.createIdentifier("Point2"),
-    getText: jest.fn().mockReturnValue("Point2"),
+    ...factory.createIdentifier('Point2'),
+    getText: jest.fn().mockReturnValue('Point2'),
   };
   const point3Identifier: Identifier = {
-    ...factory.createIdentifier("Point3"),
-    getText: jest.fn().mockReturnValue("Point3"),
+    ...factory.createIdentifier('Point3'),
+    getText: jest.fn().mockReturnValue('Point3'),
   };
   const someTypeIdentifier: Identifier = {
-    ...factory.createIdentifier("someType"),
-    getText: jest.fn().mockReturnValue("someType"),
+    ...factory.createIdentifier('someType'),
+    getText: jest.fn().mockReturnValue('someType'),
   };
   const zIdentifier: Identifier = {
-    ...factory.createIdentifier("z"),
-    getText: jest.fn().mockReturnValue("z"),
+    ...factory.createIdentifier('z'),
+    getText: jest.fn().mockReturnValue('z'),
   };
   const mIdentifier: Identifier = {
-    ...factory.createIdentifier("m"),
-    getText: jest.fn().mockReturnValue("m"),
+    ...factory.createIdentifier('m'),
+    getText: jest.fn().mockReturnValue('m'),
   };
   const person = factory.createTypeAliasDeclaration(
     [factory.createToken(SyntaxKind.ExportKeyword)],

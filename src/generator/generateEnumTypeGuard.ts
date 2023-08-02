@@ -5,7 +5,7 @@ export function generateEnumTypeGuard(
 ): string {
   const enumValues = definition.values
     .map((value: any) => `'${value}'`)
-    .join(" | ");
+    .join(' | ');
 
   return `  return ${enumValues}.includes(value);\n`;
 }

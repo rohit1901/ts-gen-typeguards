@@ -4,14 +4,14 @@ import {
   generateOptionalPropertyTypeGuard,
   generateUniqueTypeGuardsFromTypeLiteral,
   generateUnionTypeGuard,
-} from "./";
+} from './';
 import {
   isPropertySignature,
   isTypeLiteralNode,
   NodeArray,
   TypeAliasDeclaration,
-} from "typescript";
-import { getEscapedCapitalizedStringLiteral, syntaxKindToType } from "../utils";
+} from 'typescript';
+import { getEscapedCapitalizedStringLiteral, syntaxKindToType } from '../utils';
 
 /**
  * Generates the type guard header for the type guard function.
@@ -29,7 +29,7 @@ function generateTypeGuardHeader(
   typeName: string,
   shouldBeExported: boolean,
 ): string {
-  const exportKeyword = shouldBeExported ? "export " : "";
+  const exportKeyword = shouldBeExported ? 'export ' : '';
   return `\n${exportKeyword}function is${typeName}(value: any): value is ${typeName} {\n    if (typeof value !== 'object' || value === null) { return false; }\n`;
 }
 
@@ -53,7 +53,7 @@ export function generateTypeGuards(
     if (set.has(name.getText())) return;
     set.add(name.getText());
     const shouldBeExported = modifiers?.some(
-      (modifier) => syntaxKindToType(modifier.kind) === "export",
+      modifier => syntaxKindToType(modifier.kind) === 'export',
     );
     const typeGuardName = getEscapedCapitalizedStringLiteral(name.getText());
     typeGuardCode.push(
@@ -70,5 +70,5 @@ export function generateTypeGuards(
     typeGuardCode.push(`\n    return true;\n}\n`);
   }
 
-  return typeGuardCode.join("\n");
+  return typeGuardCode.join('\n');
 }

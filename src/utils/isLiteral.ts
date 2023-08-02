@@ -1,4 +1,4 @@
-import { SyntaxKind } from "typescript";
+import { SyntaxKind } from 'typescript';
 
 /**
  * Define an array of all literal types.
@@ -38,14 +38,14 @@ enum LiteralSyntaxKind {
  * Define a map that maps SyntaxKind to their corresponding literal types.
  */
 const literalTypeMap: { [key in LiteralSyntaxKind]: string } = {
-  [SyntaxKind.StringLiteral]: "string",
-  [SyntaxKind.NumericLiteral]: "number",
-  [SyntaxKind.BigIntLiteral]: "bigint",
-  [SyntaxKind.TrueKeyword]: "boolean",
-  [SyntaxKind.FalseKeyword]: "boolean",
-  [SyntaxKind.NullKeyword]: "null",
-  [SyntaxKind.RegularExpressionLiteral]: "regexp",
-  [SyntaxKind.NoSubstitutionTemplateLiteral]: "string",
+  [SyntaxKind.StringLiteral]: 'string',
+  [SyntaxKind.NumericLiteral]: 'number',
+  [SyntaxKind.BigIntLiteral]: 'bigint',
+  [SyntaxKind.TrueKeyword]: 'boolean',
+  [SyntaxKind.FalseKeyword]: 'boolean',
+  [SyntaxKind.NullKeyword]: 'null',
+  [SyntaxKind.RegularExpressionLiteral]: 'regexp',
+  [SyntaxKind.NoSubstitutionTemplateLiteral]: 'string',
 };
 /**
  * Getter function that returns the type of a literal based on its SyntaxKind.

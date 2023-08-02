@@ -5,14 +5,14 @@ import {
   isUnionTypeNode,
   PropertySignature,
   TypeAliasDeclaration,
-} from "typescript";
+} from 'typescript';
 import {
   getEscapedCapitalizedStringLiteral,
   getEscapedStringLiteral,
   isPrimitiveSyntaxKind,
   syntaxKindToType,
-} from "../utils";
-import { generateUnionTypeGuard } from "./generateUnionTypeGuard";
+} from '../utils';
+import { generateUnionTypeGuard } from './generateUnionTypeGuard';
 
 export function generateOptionalPropertyTypeGuard(
   { questionToken, name, type }: PropertySignature,
@@ -59,5 +59,5 @@ export function generateOptionalPropertyTypeGuard(
       );
     }
   }
-  return typeGuardCode.join("");
+  return typeGuardCode.join('');
 }

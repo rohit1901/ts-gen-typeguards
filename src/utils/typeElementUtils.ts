@@ -1,16 +1,56 @@
-import { TypeElement } from "typescript";
-
+import { KeywordTypeSyntaxKind, SourceFile, TypeElement } from 'typescript';
+/**
+ * Creates a fake TypeElement with the given `brand` representing a KeywordTypeSyntaxKind property.
+ * The `_typeElementBrand` property is set to 'fake' to indicate it is a KeywordTypeSyntaxKind.
+ * @param {KeywordTypeSyntaxKind} brand - The brand representing a KeywordTypeSyntaxKind property.
+ * @returns {TypeElement} - A fake TypeElement with the `_typeElementBrand` set to 'fake'.
+ */ export function createFakeTypeElement(
+  brand: KeywordTypeSyntaxKind,
+): TypeElement {
+  return {
+    _declarationBrand: brand,
+    end: 0,
+    flags: undefined,
+    kind: undefined,
+    parent: undefined,
+    pos: 0,
+    forEachChild: undefined,
+    getChildAt: undefined,
+    getChildCount: undefined,
+    getChildren: undefined,
+    getEnd: undefined,
+    getFirstToken: undefined,
+    getFullStart: undefined,
+    getFullText: undefined,
+    getFullWidth: undefined,
+    getLastToken: undefined,
+    getLeadingTriviaWidth: undefined,
+    getSourceFile: undefined,
+    getStart: undefined,
+    getText: (sourceFile?: SourceFile): string => '',
+    getWidth: undefined,
+    _typeElementBrand: 'fake',
+  };
+}
+/**
+ * Removes duplicate TypeElements from the input array and returns a new array containing unique TypeElements.
+ * If a TypeElement has the property '_typeElementBrand' set to 'fake', it represents a KeywordTypeSyntaxKind property
+ * added to the TypeElement as a member.
+ * @param {TypeElement[]} members - An array of TypeElements to remove duplicates from.
+ * @returns {TypeElement[]} - An array containing unique TypeElements, including those with '_typeElementBrand' === 'fake'.
+ */
 export function removeDuplicateTypeElements(
   members: TypeElement[],
 ): TypeElement[] {
   const uniqueMembers: TypeElement[] = [];
-
-  members.forEach((member) => {
-    if (!uniqueMembers.some((m) => areTypeElementsEqual(m, member))) {
+  uniqueMembers.push(
+    ...members.filter(member => member._typeElementBrand === 'fake'),
+  );
+  members.forEach(member => {
+    if (!uniqueMembers.some(m => areTypeElementsEqual(m, member))) {
       uniqueMembers.push(member);
     }
   });
-
   return uniqueMembers;
 }
 
@@ -21,8 +61,6 @@ export function removeDuplicateTypeElements(
  * @returns {boolean} - True if the TypeElements are equal, false otherwise.
  */
 function areTypeElementsEqual(a: TypeElement, b: TypeElement): boolean {
-  // Custom logic to compare the TypeElements for equality.
-  // You may need to adjust this based on the specific TypeElement properties you want to consider.
-  // For example, you could compare the names or types of the TypeElements.
+  // Compare the names and types of the TypeElements.
   return a.getText() === b.getText() && a.kind === b.kind;
 }

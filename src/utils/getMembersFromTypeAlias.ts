@@ -16,9 +16,9 @@ import {
   TypeElement,
   TypeNode,
   UnionTypeNode,
-} from "typescript";
-import { syntaxKindToType } from "./syntaxKindToType";
-import { isKeyword } from "./isKeyword";
+} from 'typescript';
+import { syntaxKindToType } from './syntaxKindToType';
+import { isKeyword } from './isKeyword';
 
 /**
  * Gets the members from a type alias
@@ -53,7 +53,7 @@ function getMatchingLiteralForReferences(
 ): TypeAliasDeclaration | undefined {
   if (isTypeReferenceNode(typeReference)) {
     return typeAliases.find(
-      (typeAlias) =>
+      typeAlias =>
         typeAlias.name.getText() === typeReference.typeName.getText(),
     );
   }
@@ -160,7 +160,7 @@ function getTypesFromTypeNodeArray(
   typeNodes: NodeArray<TypeNode> | TypeNode[],
   typeAliases: TypeAliasDeclaration[],
 ): TypeElement[] {
-  return typeNodes.flatMap((typeNode) =>
+  return typeNodes.flatMap(typeNode =>
     getTypesFromTypeNode(typeNode, typeAliases),
   );
 }
@@ -247,7 +247,7 @@ function createPropertySignatureFromLiteralType(
       typeNode._typeNodeBrand = syntaxKindToType(SyntaxKind.UndefinedKeyword);
       break;
     default:
-      throw new Error("Unsupported literal type.");
+      throw new Error('Unsupported literal type.');
   }
   return factory.createPropertySignature(
     undefined,

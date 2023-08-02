@@ -3,8 +3,8 @@ import {
   LiteralType,
   SyntaxKind,
   TypeNode,
-} from "typescript";
-import { getLiteralType, isKeyword, syntaxKindToType } from "../utils";
+} from 'typescript';
+import { getLiteralType, isKeyword, syntaxKindToType } from '../utils';
 
 /**
  * Generates type guards for the given TypeScript TypeNode, which can be a keyword or a literal Type.
@@ -83,6 +83,6 @@ function generateKeywordTypeGuard(
  * @param {SyntaxKind} keywordKind - The kind of the keyword type.
  * @returns {string} The type guard condition as a string.
  */
-function generateKeywordGuardForType(keywordKind: SyntaxKind): string {
+export function generateKeywordGuardForType(keywordKind: SyntaxKind): string {
   return `typeof value === '${syntaxKindToType(keywordKind)}'`;
 }
