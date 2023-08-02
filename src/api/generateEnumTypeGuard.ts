@@ -15,17 +15,23 @@ import {getEscapedCapitalizedStringLiteral} from "../utils";
  * ```
  */
 export function generateEnumTypeGuards(enums: EnumDeclaration[]) {
-    const enumGuards: string[] = []
-    for(const definition of enums) {
-        enumGuards.push(generateEnumTypeGuard(definition))
-    }
-    return enumGuards.join('\n');
+  const enumGuards: string[] = [];
+  for (const definition of enums) {
+    enumGuards.push(generateEnumTypeGuard(definition));
+  }
+  return enumGuards.join('\n');
 }
 export function generateEnumTypeGuard(enumDefinition: EnumDeclaration) {
-    const {name} = enumDefinition;
-    return `export function is${getEscapedCapitalizedStringLiteral(name.getText())}(value: any): value is ${getEscapedCapitalizedStringLiteral(name.getText())} {
-        return Object.values(${getEscapedCapitalizedStringLiteral(name.getText())}).includes(value);
-        }`
+  const { name } = enumDefinition;
+  return `export function is${getEscapedCapitalizedStringLiteral(
+    name.getText(),
+  )}(value: any): value is ${getEscapedCapitalizedStringLiteral(
+    name.getText(),
+  )} {
+        return Object.values(${getEscapedCapitalizedStringLiteral(
+          name.getText(),
+        )}).includes(value);
+        }`;
 }
 export function handleEnumIntersection(definition: TypeAliasDeclaration, enums: EnumDeclaration[]) {
     const enumGuards: string[] = [];

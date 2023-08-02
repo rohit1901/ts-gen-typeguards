@@ -52,20 +52,20 @@ export type Point3Type = {
 } & PersonType;
 
 export enum Color {
-    Red = 'red',
-    Green = 'green',
-    Blue = 'blue',
+  Red = 'red',
+  Green = 'green',
+  Blue = 'blue',
 }
 export enum Fruit {
-  Apple = "APPLE",
-  Banana = "BANANA",
-  Orange = "ORANGE",
+  Apple = 'APPLE',
+  Banana = 'BANANA',
+  Orange = 'ORANGE',
 }
 
 export enum Animal {
-  Dog = "DOG",
-  Cat = "CAT",
-  Lion = "LION",
+  Dog = 'DOG',
+  Cat = 'CAT',
+  Lion = 'LION',
 }
 export type enumIntersection = Color & Fruit & Animal
 export type enumUnion = Color | Fruit | Animal
