@@ -1,14 +1,24 @@
 import * as fs from 'fs';
 import * as prettier from 'prettier';
+import {Options} from "prettier";
 
 const filePath = 'out/typeguards.ts';
-
+const prettierRC: Options = {
+  "printWidth": 80,
+  "tabWidth": 2,
+  "singleQuote": true,
+  "trailingComma": "all",
+  "semi": true,
+  "bracketSpacing": true,
+  "arrowParens": "avoid",
+};
 function prettify(input: string): Promise<string> {
   return prettier.format(input, {
     singleQuote: true,
     trailingComma: 'es5',
     tabWidth: 2,
     parser: 'typescript',
+    ...prettierRC
   });
 }
 /**
