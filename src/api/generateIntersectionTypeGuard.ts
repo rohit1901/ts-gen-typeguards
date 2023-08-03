@@ -22,4 +22,3 @@ export function generateIntersectionTypeGuard(
   }
   return typeGuard;
 }
-

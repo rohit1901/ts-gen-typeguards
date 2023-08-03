@@ -21,7 +21,7 @@ import {
 } from '../api';
 import {
   getEscapedCapitalizedStringLiteral,
-  handleIntersectionTypesForTypeAlias
+  handleIntersectionTypesForTypeAlias,
 } from '../utils';
 
 /**
@@ -37,7 +37,10 @@ export function generateTypeTypeGuard(
   const typeGuard: string[] = [];
   for (const definition of definitions) {
     const typeGuardStrings: string[] = [];
-    const newDefinition = handleIntersectionTypesForTypeAlias(definition, definitions);
+    const newDefinition = handleIntersectionTypesForTypeAlias(
+      definition,
+      definitions,
+    );
     const { name, type } = newDefinition;
     const typeName = name.getText();
     const typeGuardName = getEscapedCapitalizedStringLiteral(typeName);
@@ -46,7 +49,9 @@ export function generateTypeTypeGuard(
     )}(value: any): value is ${typeName} {return(typeof value === "object" &&
     value !== null`);
     typeGuardStrings.push(...generateTypeLiteralTypeGuard(newDefinition));
-    typeGuardStrings.push(...generateUnionTypeGuard(type, typeName, undefined, definitions));
+    typeGuardStrings.push(
+      ...generateUnionTypeGuard(type, typeName, undefined, definitions),
+    );
     typeGuardStrings.push(...generateKeywordGuard(type));
     typeGuardStrings.push(...generateFakeTypeElement(newDefinition));
     typeGuardStrings.push(...handleEnumIntersection(definition, enums));

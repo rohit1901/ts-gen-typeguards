@@ -2,21 +2,28 @@ import {
   factory,
   isIntersectionTypeNode,
   isLiteralTypeNode,
-  isTypeLiteralNode, isTypeNode, isTypeReferenceNode,
+  isTypeLiteralNode,
+  isTypeNode,
+  isTypeReferenceNode,
   isUnionTypeNode,
   TypeAliasDeclaration,
   TypeElement,
-  TypeNode
+  TypeNode,
 } from 'typescript';
-import {generateIntersectionTypeGuard, generateKeywordGuard, generatePropertyGuard} from '../api';
+import {
+  generateIntersectionTypeGuard,
+  generateKeywordGuard,
+  generatePropertyGuard,
+} from '../api';
 import { generateTypeReferenceGuard } from '../api';
 import {
   createFakeTypeElement,
-  getMembersFromTypeAlias, handleIntersectionTypesForTypeNode,
+  getMembersFromTypeAlias,
+  handleIntersectionTypesForTypeNode,
   isKeywordTypeSyntaxKind,
   removeDuplicateTypeElements,
-  syntaxKindToType
-} from "../utils";
+  syntaxKindToType,
+} from '../utils';
 
 /**
  * Generates a type guard for a union type.
@@ -36,11 +43,15 @@ export function generateUnionTypeGuard(
   if (!type.types) return typeGuard;
   for (const member of type.types) {
     const newMember = handleIntersectionTypesForTypeNode(member, definitions);
-    typeGuard.push(...generateIntersectionTypeGuard(newMember, typeName, isProperty))
+    typeGuard.push(
+      ...generateIntersectionTypeGuard(newMember, typeName, isProperty),
+    );
     typeGuard.push(...generateKeywordGuard(newMember, typeName, isProperty));
-    typeGuard.push(...generateTypeReferenceGuard(newMember, typeName, isProperty));
-    if(isTypeLiteralNode(newMember)) {
-      for(const prop of newMember.members) {
+    typeGuard.push(
+      ...generateTypeReferenceGuard(newMember, typeName, isProperty),
+    );
+    if (isTypeLiteralNode(newMember)) {
+      for (const prop of newMember.members) {
         typeGuard.push(...generatePropertyGuard(prop));
       }
     }

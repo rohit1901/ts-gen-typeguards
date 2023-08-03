@@ -37,16 +37,20 @@ export type PersonType = {
 //Parenthesis types
 export type Person4 = number & string;
 export type Person5 = Point & Point2Type;
-export type AddressType = {
-  street: string;
-} & PersonType | {
-  street2: string;
-};
-export type Point2Type = {
-  x: number;
-  y: number;
-  z?: Point;
-} | Point & PersonType;
+export type AddressType =
+  | ({
+      street: string;
+    } & PersonType)
+  | {
+      street2: string;
+    };
+export type Point2Type =
+  | {
+      x: number;
+      y: number;
+      z?: Point;
+    }
+  | (Point & PersonType);
 export type Point3Type = {
   z?: number;
   m?: string & Point;
