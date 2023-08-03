@@ -14,18 +14,16 @@ export function generateTypeReferenceGuard(
 ) {
   const typeGuard: string[] = [];
   if (!isTypeReferenceNode(type)) return typeGuard;
-  if(isProperty) {
+  if (isProperty) {
     typeGuard.push(
-        `is${getEscapedCapitalizedStringLiteral(
-            type.typeName.getText(),
-        )}(value.${typeName})`,
+      `is${getEscapedCapitalizedStringLiteral(
+        type.typeName.getText(),
+      )}(value.${typeName})`,
     );
     return typeGuard;
   }
   typeGuard.push(
-      `is${getEscapedCapitalizedStringLiteral(
-          type.typeName.getText(),
-      )}(value)`,
+    `is${getEscapedCapitalizedStringLiteral(type.typeName.getText())}(value)`,
   );
   return typeGuard;
 }

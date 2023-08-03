@@ -8,7 +8,11 @@ import { generateTypeReferenceGuard } from '../api';
  * @param typeName - The name of the type.
  * @param isProperty - Optional. Whether the type is a property.
  */
-export function generateUnionTypeGuard(type: TypeNode, typeName: string, isProperty?: boolean) {
+export function generateUnionTypeGuard(
+  type: TypeNode,
+  typeName: string,
+  isProperty?: boolean,
+) {
   const typeGuard: string[] = [];
   if (!isUnionTypeNode(type)) return typeGuard;
   if (!type.types) return typeGuard;
