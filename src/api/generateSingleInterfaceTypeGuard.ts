@@ -18,7 +18,7 @@ export function generateSingleInterfaceTypeGuard(
   )}(value: any): value is ${interfaceName} {return(typeof value === "object" &&
     value !== null`);
   for (const property of updatedDefinition.members) {
-    typeGuardStrings.push(...generatePropertyGuard(property, interfaceName));
+    typeGuardStrings.push(...generatePropertyGuard(property));
   }
   return typeGuardStrings.join('&&') + `)}`;
 }

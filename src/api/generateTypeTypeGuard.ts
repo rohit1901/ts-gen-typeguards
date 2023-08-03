@@ -73,7 +73,7 @@ function generateTypeLiteralTypeGuard(definition: TypeAliasDeclaration) {
   }
   //NOTE: Return empty string if the definition is not a TypeLiteralNode
   for (const property of type.members) {
-    typeGuardStrings.push(...generatePropertyGuard(property, typeName));
+    typeGuardStrings.push(...generatePropertyGuard(property));
   }
   return typeGuardStrings;
 }
