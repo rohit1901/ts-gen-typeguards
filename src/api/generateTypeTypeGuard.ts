@@ -1,6 +1,6 @@
 import {
   EnumDeclaration,
-  factory,
+  factory, InterfaceDeclaration,
   isEnumDeclaration,
   isIntersectionTypeNode,
   isLiteralTypeNode,
@@ -28,11 +28,13 @@ import {
  * Generate a set of type guard functions based on provided TypeAliasDeclarations.
  * @param definitions - An array of TypeAliasDeclarations.
  * @param enums - An array of EnumDeclarations
+ * @param interfaces
  * @returns A string containing the generated type guard functions.
  */
 export function generateTypeTypeGuard(
   definitions: TypeAliasDeclaration[],
   enums: EnumDeclaration[],
+  interfaces: InterfaceDeclaration[],
 ): string {
   const typeGuard: string[] = [];
   for (const definition of definitions) {
@@ -40,6 +42,7 @@ export function generateTypeTypeGuard(
     const newDefinition = handleIntersectionTypesForTypeAlias(
       definition,
       definitions,
+        enums, interfaces
     );
     const { name, type } = newDefinition;
     const typeName = name.getText();

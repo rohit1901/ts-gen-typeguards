@@ -4,7 +4,7 @@ import {
   SyntaxKind,
   TypeNode,
 } from 'typescript';
-import { getLiteralType, isKeyword, syntaxKindToType } from '../utils';
+import {getEscapedStringLiteral, getLiteralType, isKeyword, isLiteral, isLiteralType, syntaxKindToType} from '../utils';
 
 /**
  * Generates type guards for the given TypeScript TypeNode, which can be a keyword or a literal Type.
@@ -27,11 +27,11 @@ export function generateKeywordGuard(
     return typeGuard;
   }
   if (!isProperty) {
-    typeGuard.push(generateKeywordGuardForType(type.kind));
+    typeGuard.push(generateKeywordGuardForType(type));
     return typeGuard;
   }
   if (isLiteralTypeNode(type)) {
-    typeGuard.push(generateLiteralTypeGuard(typeName, type.literal.kind));
+    typeGuard.push(generateLiteralTypeGuard(typeName, type.literal.kind, type.literal.getText()));
     return typeGuard;
   }
   typeGuard.push(generateKeywordTypeGuard(typeName, type.kind));
@@ -59,8 +59,9 @@ function isKeywordType(kind: any): boolean {
 function generateLiteralTypeGuard(
   propertyName: string,
   literalKind: SyntaxKind,
+  literalText?: string,
 ): string {
-  return `typeof value.${propertyName} === '${getLiteralType(literalKind)}'`;
+  return `typeof value.${propertyName} === '${getEscapedStringLiteral(literalText) ?? getLiteralType(literalKind)}'`;
 }
 
 /**
@@ -82,9 +83,10 @@ function generateKeywordTypeGuard(
  * ```
  * export type Person4 = number;
  * ```
- * @param {SyntaxKind} keywordKind - The kind of the keyword type.
  * @returns {string} The type guard condition as a string.
+ * @param type
  */
-export function generateKeywordGuardForType(keywordKind: SyntaxKind): string {
-  return `typeof value === '${syntaxKindToType(keywordKind)}'`;
+export function generateKeywordGuardForType(type: TypeNode): string {
+  if(isLiteralTypeNode(type) && isLiteral(type.literal.kind)) return `typeof value === '${getEscapedStringLiteral(type.literal.getText())}'`;
+  return `typeof value === '${syntaxKindToType(type.kind)}'`;
 }

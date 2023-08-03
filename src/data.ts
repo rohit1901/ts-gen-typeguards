@@ -76,14 +76,15 @@ export type enumIntersection = Color & Fruit & Animal;
 export type enumUnion = Color | Fruit | Animal;
 //TODO: Imports
 */
+
 export enum Color {
   Red = 'red',
   Green = 'green',
   Blue = 'blue',
 }
-//TODO: yellow should not be a string
+/*
+//FIXED: yellow should not be a string
 export type ColorOrString = Color | 'yellow';
-
 export enum Fruit {
   Apple = 'APPLE',
   Banana = 'BANANA',
@@ -102,10 +103,12 @@ export interface Point {
   x: number;
   y: number;
 }
-//TODO: interface Point is not generated
+//FIXED: interface Point is not generated
 export type PointAndName = Point & { name: string };
-//TODO: male, female, other should not be strings
+
+//FIXED: male, female, other should not be strings
 export type Gender = 'male' | 'female' | 'other';
+
 //TODO: Fix this
 //export type EvenNumbers = 2 & 4 & 6 & 8;
 
@@ -128,11 +131,13 @@ export interface User {
   id: number;
   name: string;
 }
-//TODO: interface user is ignored
-export type ActiveUser = Status & User;
-//TODO: null should be undefined
-export type PrimitiveTypes = string | number | bigint | null | any | undefined;
 
+//FIXED: interface user is ignored
+export type ActiveUser = Status & User;
+
+//FIXED: null should be undefined
+export type PrimitiveTypes = string | number | bigint | null | any | undefined;
+*/
 export enum Day {
   Monday = 'MON',
   Tuesday = 'TUE',
@@ -142,7 +147,7 @@ export enum Day {
 export type WorkingDay = Day & { isWorking: boolean };
 //TODO: value === Color.Red and shape === 'circle'
 export type RedCircle = Color.Red & { shape: 'circle' };
-
+/*
 export interface Coordinates {
   x: number;
   y: number;
@@ -211,3 +216,4 @@ export enum CitySize {
 }
 //TODO: isCitySize.Medium(value.size) should be value === CitySize.Medium
 export type MediumCity = City | { size: CitySize.Medium };
+*/

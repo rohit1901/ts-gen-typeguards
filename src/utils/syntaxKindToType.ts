@@ -1,4 +1,5 @@
 import { KeywordSyntaxKind, SyntaxKind } from 'typescript';
+import {getLiteralType} from "./isLiteral";
 
 /**
  * Converts a SyntaxKind value to a string type.
@@ -48,7 +49,7 @@ export function syntaxKindToType(syntaxKind: SyntaxKind): string {
     case SyntaxKind.ReadonlyKeyword:
       return 'readonly';
     case SyntaxKind.LiteralType:
-      return 'literal';
+      return getLiteralType(syntaxKind);
     case SyntaxKind.IndexedAccessType:
       return 'indexedAccess';
     default:

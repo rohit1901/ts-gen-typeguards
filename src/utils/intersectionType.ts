@@ -1,6 +1,7 @@
 import {
-  factory,
-  isIntersectionTypeNode,
+  EnumDeclaration, EnumMember,
+  factory, InterfaceDeclaration, isEnumDeclaration, isInterfaceDeclaration,
+  isIntersectionTypeNode, isTypeAliasDeclaration,
   isTypeLiteralNode,
   isTypeReferenceNode,
   isUnionTypeNode,
@@ -28,6 +29,8 @@ import {
 export function handleIntersectionTypesForTypeAlias(
   definition: TypeAliasDeclaration,
   definitions: TypeAliasDeclaration[],
+  enums: EnumDeclaration[],
+  interfaces: InterfaceDeclaration[],
 ): TypeAliasDeclaration {
   // Function logic to handle intersection types and merge properties from related TypeAliasDeclarations.
   // It processes each type in the intersection and extracts their properties to create a new TypeAliasDeclaration
@@ -47,14 +50,25 @@ export function handleIntersectionTypesForTypeAlias(
       // If it's a TypeReferenceNode, find the related TypeAliasDeclaration and process it.
       const foundMember = definitions.find(
         d => d.name.getText() === typeNode.typeName.getText(),
-      );
+      ) || interfaces.find(
+        i => i.name.getText() === typeNode.typeName.getText(),
+        ) || enums.find(
+            e => e.name.getText() === typeNode.typeName.getText(),
+        );
       if (foundMember) {
-        if (isTypeLiteralNode(foundMember.type)) {
+        if (isInterfaceDeclaration(foundMember)) {
+          // If the related type is a TypeReferenceNode, find the related TypeAliasDeclaration and process it.
+          members.push(...foundMember.members);
+        }
+        /*if(isEnumDeclaration(foundMember)) {
+            members.push(...foundMember.members);
+        }*/
+        if (isTypeAliasDeclaration(foundMember) && isTypeLiteralNode(foundMember.type)) {
           // If the related type is a TypeLiteralNode, merge its members into the current members array.
           members.push(...foundMember.type.members);
         } else {
           // If the related type is not a TypeLiteralNode, recursively process it.
-          members.push(...getMembersFromTypeAlias(foundMember, definitions));
+          if(isTypeAliasDeclaration(foundMember)) members.push(...getMembersFromTypeAlias(foundMember, definitions));
         }
       }
     } else if (isUnionTypeNode(typeNode)) {
