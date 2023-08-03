@@ -1,6 +1,7 @@
 import {
   EnumDeclaration,
-  factory, InterfaceDeclaration,
+  factory,
+  InterfaceDeclaration,
   isEnumDeclaration,
   isIntersectionTypeNode,
   isLiteralTypeNode,
@@ -42,7 +43,8 @@ export function generateTypeTypeGuard(
     const newDefinition = handleIntersectionTypesForTypeAlias(
       definition,
       definitions,
-        enums, interfaces
+      enums,
+      interfaces,
     );
     const { name, type } = newDefinition;
     const typeName = name.getText();

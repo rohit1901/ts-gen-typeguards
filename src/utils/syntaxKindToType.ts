@@ -1,5 +1,5 @@
 import { KeywordSyntaxKind, SyntaxKind } from 'typescript';
-import {getLiteralType} from "./isLiteral";
+import { getLiteralType } from './isLiteral';
 
 /**
  * Converts a SyntaxKind value to a string type.
