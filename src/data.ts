@@ -1,3 +1,4 @@
+/*
 export interface Person {
   intersectionLiteralType?: string & bigint;
   unionLiteralType?: string | number;
@@ -26,7 +27,6 @@ export type Point = {
 // TODO: For union types, literals like 'a' are generated as 'literal' instead of 'string', 'null'
 // 'null' as 'literal' instead of 'undefined'
 export type someType = 'a' | null | undefined | boolean | number | string;
-//TODO: Fix this. Literal types are getting ignored
 export type simple = { a: string } | PersonType;
 export type PersonType = {
   name: string & number;
@@ -71,3 +71,139 @@ export enum Animal {
 export type enumIntersection = Color & Fruit & Animal;
 export type enumUnion = Color | Fruit | Animal;
 //TODO: Imports
+*/
+export enum Color {
+  Red = 'red',
+  Green = 'green',
+  Blue = 'blue',
+}
+//TODO: yellow should not be a string
+export type ColorOrString = Color | 'yellow';
+
+export enum Fruit {
+  Apple = 'APPLE',
+  Banana = 'BANANA',
+  Orange = 'ORANGE',
+}
+
+export enum Animal {
+  Dog = 'DOG',
+  Cat = 'CAT',
+  Lion = 'LION',
+}
+
+export type FruitAndAnimal = Fruit & Animal;
+
+export interface Point {
+  x: number;
+  y: number;
+}
+//TODO: interface Point is not generated
+export type PointAndName = Point & { name: string };
+//TODO: male, female, other should not be strings
+export type Gender = 'male' | 'female' | 'other';
+//TODO: Fix this
+//export type EvenNumbers = 2 & 4 & 6 & 8;
+
+//TODO: male, female should not be strings
+export interface Person {
+  name: string;
+  gender: 'male' | 'female';
+}
+
+export interface Employee extends Person {
+  employeeId: number;
+}
+
+export enum Status {
+  Active = 'ACTIVE',
+  Inactive = 'INACTIVE',
+}
+
+export interface User {
+  id: number;
+  name: string;
+}
+//TODO: interface user is ignored
+export type ActiveUser = Status & User;
+//TODO: null should be undefined
+export type PrimitiveTypes = string | number | bigint | null | any | undefined;
+
+export enum Day {
+  Monday = 'MON',
+  Tuesday = 'TUE',
+  Wednesday = 'WED',
+}
+
+export type WorkingDay = Day & { isWorking: boolean };
+//TODO: value === Color.Red and shape === 'circle'
+export type RedCircle = Color.Red & { shape: 'circle' };
+
+export interface Coordinates {
+  x: number;
+  y: number;
+}
+
+export interface Move {
+  direction: Day;
+  distance: number;
+  position: Coordinates;
+}
+
+export enum Month {
+  January = 'JAN',
+  February = 'FEB',
+  March = 'MAR',
+}
+
+export type MonthOrUndefined = Month | undefined;
+
+export interface Product {
+  name: string;
+  price: number;
+}
+
+export enum Category {
+  Electronics = 'ELECTRONICS',
+  Clothing = 'CLOTHING',
+}
+//TODO: Product is ignored, category should be value.category === Category.Electronics
+export type ElectronicProduct = Product & { category: Category.Electronics };
+//TODO
+export type NumberOrZero = 1 | 2 | 3 | 4 | 0;
+
+export interface Vehicle {
+  type: 'car' | 'bike' | 'bus';
+  wheels: number;
+}
+//TODO: 'HR' should not be string
+export type EmployeeOrHR = Employee | { department: 'HR' };
+
+export type PersonId = number;
+
+export interface Person {
+  id: PersonId;
+  name: string;
+}
+//TODO: Interface is ignored
+export type PersonWithId = Person & { id: PersonId };
+
+export interface Car {
+  brand: 'Toyota' | 'Honda' | 'Ford';
+  color: 'red' | 'blue' | 'black';
+}
+//TODO: Interface is ignored, Toyota and red should not be strings
+export type RedToyota = Car & { brand: 'Toyota'; color: 'red' };
+
+export interface City {
+  name: string;
+  population: number;
+}
+
+export enum CitySize {
+  Small = 'Small',
+  Medium = 'Medium',
+  Large = 'Large',
+}
+//TODO: isCitySize.Medium(value.size) should be value === CitySize.Medium
+export type MediumCity = City | { size: CitySize.Medium };
