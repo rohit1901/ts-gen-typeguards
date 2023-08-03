@@ -150,7 +150,7 @@ function loadConfig() {
 const { interfaces, types, enums } = readObjects(loadConfig());
 deleteFileIfExists('out/typeguards.ts');
 generateTypeGuardsFile(
-  `${generateTypeTypeGuard(types, enums)}\n${generateInterfaceTypeGuard(
-    interfaces,
-  )}\n${generateEnumTypeGuards(enums)}`,
+  `${generateInterfaceTypeGuard(
+      interfaces,
+  )}\n${generateTypeTypeGuard(types, enums)}\n${generateEnumTypeGuards(enums)}`,
 );

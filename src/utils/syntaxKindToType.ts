@@ -22,7 +22,7 @@ export function syntaxKindToType(syntaxKind: SyntaxKind): string {
     case SyntaxKind.ObjectKeyword:
       return 'object';
     case SyntaxKind.AnyKeyword:
-      return 'any';
+      return 'object';
     case SyntaxKind.UnknownKeyword:
       return 'unknown';
     case SyntaxKind.NeverKeyword:

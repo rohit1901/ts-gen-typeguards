@@ -13,26 +13,28 @@ import { getLiteralType, isKeyword, syntaxKindToType } from '../utils';
  * export type Person4 = number;
  * ```
  * @param {TypeNode} type - The TypeScript TypeNode to generate type guards for.
- * @param {string} [propertyName] - Optional property name used in the type guard condition.
+ * @param {string} [typeName] - Optional property name used in the type guard condition.
+ * @param isProperty - Optional boolean indicating whether the type is a property type.
  * @returns {string[]} An array of strings representing the generated type guards.
  */
 export function generateKeywordGuard(
   type: TypeNode,
-  propertyName?: string,
+  typeName?: string,
+  isProperty?: boolean,
 ): string[] {
   const typeGuard: string[] = [];
   if (!isKeywordType(type.kind)) {
     return typeGuard;
   }
-  if (!propertyName) {
+  if (!isProperty) {
     typeGuard.push(generateKeywordGuardForType(type.kind));
     return typeGuard;
   }
   if (isLiteralTypeNode(type)) {
-    typeGuard.push(generateLiteralTypeGuard(propertyName, type.literal.kind));
+    typeGuard.push(generateLiteralTypeGuard(typeName, type.literal.kind));
     return typeGuard;
   }
-  typeGuard.push(generateKeywordTypeGuard(propertyName, type.kind));
+  typeGuard.push(generateKeywordTypeGuard(typeName, type.kind));
   return typeGuard;
 }
 
