@@ -2,6 +2,7 @@ import {
   factory,
   IntersectionTypeNode,
   isConditionalTypeNode,
+  isEnumDeclaration,
   isIntersectionTypeNode,
   isLiteralTypeNode,
   isTypeElement,
