@@ -23,4 +23,7 @@ export {
 export * from './isKeyword';
 export * from './isLiteral';
 
-export {handleIntersectionTypesForTypeAlias, handleIntersectionTypesForTypeNode} from './intersectionType';
+export {
+  handleIntersectionTypesForTypeAlias,
+  handleIntersectionTypesForTypeNode,
+} from './intersectionType';
