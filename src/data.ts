@@ -27,11 +27,7 @@ export type Point = {
 // 'null' as 'literal' instead of 'undefined'
 export type someType = 'a' | null | undefined | boolean | number | string;
 //TODO: Fix this. Literal types are getting ignored
-export type simple =
-  | {
-      a: string;
-    }
-  | PersonType;
+export type simple = { a: string } | PersonType;
 export type PersonType = {
   name: string & number;
   extra: string | number;
@@ -43,12 +39,14 @@ export type Person4 = number & string;
 export type Person5 = Point & Point2Type;
 export type AddressType = {
   street: string;
-} & PersonType;
+} & PersonType | {
+  street2: string;
+};
 export type Point2Type = {
   x: number;
   y: number;
   z?: Point;
-} & Point;
+} | Point & PersonType;
 export type Point3Type = {
   z?: number;
   m?: string & Point;
