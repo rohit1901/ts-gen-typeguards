@@ -77,12 +77,15 @@ export type enumUnion = Color | Fruit | Animal;
 //TODO: Imports
 */
 
+export type EvenNumbers = 2 & 4 & 6 & 8;
+export type EvenNumberStrings = '2' & '4' & '6' & '8';
+export type EvenNumberStringsCombi = '2' & 4 & '6' & 8;
 export enum Color {
   Red = 'red',
   Green = 'green',
   Blue = 'blue',
 }
-/*
+
 //FIXED: yellow should not be a string
 export type ColorOrString = Color | 'yellow';
 export enum Fruit {
@@ -109,9 +112,6 @@ export type PointAndName = Point & { name: string };
 //FIXED: male, female, other should not be strings
 export type Gender = 'male' | 'female' | 'other';
 
-//TODO: Fix this
-//export type EvenNumbers = 2 & 4 & 6 & 8;
-
 //TODO: male, female should not be strings
 export interface Person {
   name: string;
@@ -132,12 +132,12 @@ export interface User {
   name: string;
 }
 
-//FIXED: interface user is ignored
+//FIXED
 export type ActiveUser = Status & User;
 
 //FIXED: null should be undefined
 export type PrimitiveTypes = string | number | bigint | null | any | undefined;
-*/
+
 export enum Day {
   Monday = 'MON',
   Tuesday = 'TUE',
@@ -147,7 +147,7 @@ export enum Day {
 export type WorkingDay = Day & { isWorking: boolean };
 //TODO: value === Color.Red and shape === 'circle'
 export type RedCircle = Color.Red & { shape: 'circle' };
-/*
+
 export interface Coordinates {
   x: number;
   y: number;
@@ -176,9 +176,9 @@ export enum Category {
   Electronics = 'ELECTRONICS',
   Clothing = 'CLOTHING',
 }
-//TODO: Product is ignored, category should be value.category === Category.Electronics
+//TODO: isCategory.Electronics(value.category) should be isCategory(value.category)
 export type ElectronicProduct = Product & { category: Category.Electronics };
-//TODO
+//FIXED
 export type NumberOrZero = 1 | 2 | 3 | 4 | 0;
 
 export interface Vehicle {
@@ -216,4 +216,4 @@ export enum CitySize {
 }
 //TODO: isCitySize.Medium(value.size) should be value === CitySize.Medium
 export type MediumCity = City | { size: CitySize.Medium };
-*/
+

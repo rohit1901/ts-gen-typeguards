@@ -5,7 +5,7 @@ import {
   InterfaceDeclaration,
   isEnumDeclaration,
   isInterfaceDeclaration,
-  isIntersectionTypeNode,
+  isIntersectionTypeNode, isLiteralTypeNode,
   isTypeAliasDeclaration,
   isTypeLiteralNode,
   isTypeReferenceNode,
@@ -15,11 +15,12 @@ import {
   TypeNode,
 } from 'typescript';
 import { getMembersFromTypeAlias } from './getMembersFromTypeAlias';
-import { isKeywordTypeSyntaxKind } from './isKeyword';
+import {isKeywordTypeSyntaxKind, isLiteralType} from './isKeyword';
 import {
   createFakeTypeElement,
   removeDuplicateTypeElements,
 } from './typeElementUtils';
+import {getLiteralTypeValue} from "./isLiteral";
 
 /**
  * Processes a given TypeAliasDeclaration to handle intersection types.
@@ -29,6 +30,8 @@ import {
  * NOTE: If the property is a KeywordTypeSyntaxKind, the function creates a fake TypeElement and adds it to the members array.
  * @param {TypeAliasDeclaration} definition - The TypeAliasDeclaration to process.
  * @param {TypeAliasDeclaration[]} definitions - An array of TypeAliasDeclarations to check for intersection.
+ * @param enums - An array of EnumDeclarations to check for intersection.
+ * @param interfaces - An array of InterfaceDeclarations to check for intersection.
  * @returns {TypeAliasDeclaration} - A new TypeAliasDeclaration with the properties merged from intersection types, if applicable.
  */
 export function handleIntersectionTypesForTypeAlias(
@@ -90,12 +93,13 @@ export function handleIntersectionTypesForTypeAlias(
     } else if (isKeywordTypeSyntaxKind(typeNode.kind)) {
       // If it's a KeywordTypeSyntaxKind, create a fake TypeElement and add it to the members array.
       members.push(createFakeTypeElement(typeNode.kind));
+    } else if (isLiteralTypeNode(typeNode)) {
+      members.push(createFakeTypeElement(typeNode, getLiteralTypeValue(typeNode)));
     } else {
       // Throw an error for unhandled typeNode kind.
       throw new Error(`Unhandled typeNode kind: ${typeNode.kind}`);
     }
   }
-
   // Create a new TypeAliasDeclaration with the merged properties from intersection types.
   return factory.createTypeAliasDeclaration(
     definition.modifiers,
@@ -104,6 +108,8 @@ export function handleIntersectionTypesForTypeAlias(
     factory.createTypeLiteralNode(removeDuplicateTypeElements(members)),
   );
 }
+//suggest a better name
+
 export function handleIntersectionTypesForTypeNode(
   type: TypeNode,
   definitions?: TypeAliasDeclaration[],
@@ -149,7 +155,6 @@ export function handleIntersectionTypesForTypeNode(
       throw new Error(`Unhandled typeNode kind: ${typeNode.kind}`);
     }
   }
-
   // Create a new TypeLiteral with the merged properties from intersection types.
   return factory.createTypeLiteralNode(removeDuplicateTypeElements(members));
 }

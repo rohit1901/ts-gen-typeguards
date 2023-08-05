@@ -103,8 +103,6 @@ function generateKeywordTypeGuard(
  */
 export function generateKeywordGuardForType(type: TypeNode): string {
   if (isLiteralTypeNode(type) && isLiteral(type.literal.kind))
-    return `typeof value === '${getEscapedStringLiteral(
-      type.literal.getText(),
-    )}'`;
+    return `value === ${type.literal.getText()}`;
   return `typeof value === '${syntaxKindToType(type.kind)}'`;
 }
