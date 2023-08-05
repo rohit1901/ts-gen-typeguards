@@ -1,5 +1,11 @@
-import {isLiteralTypeLiteral, isLiteralTypeNode, LiteralType, LiteralTypeNode, SyntaxKind} from 'typescript';
-import {getEscapedStringLiteral} from "./capitalize";
+import {
+  isLiteralTypeLiteral,
+  isLiteralTypeNode,
+  LiteralType,
+  LiteralTypeNode,
+  SyntaxKind,
+} from 'typescript';
+import { getEscapedStringLiteral } from './capitalize';
 
 /**
  * Define an array of all literal types.
@@ -48,38 +54,40 @@ const literalTypeMap: { [key in LiteralSyntaxKind]: string } = {
   [SyntaxKind.RegularExpressionLiteral]: 'regexp',
   [SyntaxKind.NoSubstitutionTemplateLiteral]: 'string',
 };
-type spFunction = (type: LiteralTypeNode) => string | number | bigint | boolean | RegExp | undefined;
+type spFunction = (
+  type: LiteralTypeNode,
+) => string | number | bigint | boolean | RegExp | undefined;
 const literalTypeValues: Record<LiteralSyntaxKind, spFunction> = {
   [SyntaxKind.StringLiteral]: (type: LiteralTypeNode) => {
-    if(isLiteral(type.kind)) return type.getText();
+    if (isLiteral(type.kind)) return type.getText();
     return;
   },
   [SyntaxKind.NumericLiteral]: (type: LiteralTypeNode) => {
-    if(isLiteral(type.kind)) return +(type.getText());
+    if (isLiteral(type.kind)) return +type.getText();
     return;
   },
   [SyntaxKind.BigIntLiteral]: (type: LiteralTypeNode) => {
-    if(isLiteral(type.kind)) return +(type.getText());
+    if (isLiteral(type.kind)) return +type.getText();
     return;
   },
   [SyntaxKind.TrueKeyword]: (type: LiteralTypeNode) => {
-    if(isLiteral(type.kind)) return Boolean(type.getText());
+    if (isLiteral(type.kind)) return Boolean(type.getText());
     return;
   },
   [SyntaxKind.FalseKeyword]: (type: LiteralTypeNode) => {
-    if(isLiteral(type.kind)) return Boolean(type.getText());
+    if (isLiteral(type.kind)) return Boolean(type.getText());
     return;
   },
   [SyntaxKind.NullKeyword]: (type: LiteralTypeNode) => {
-    if(isLiteral(type.kind)) return 'null';
+    if (isLiteral(type.kind)) return 'null';
     return;
   },
   [SyntaxKind.RegularExpressionLiteral]: (type: LiteralTypeNode) => {
-    if(isLiteral(type.kind)) return new RegExp(type.literal.getText());
+    if (isLiteral(type.kind)) return new RegExp(type.literal.getText());
     return;
   },
   [SyntaxKind.NoSubstitutionTemplateLiteral]: (type: LiteralTypeNode) => {
-    if(isLiteral(type.kind)) return type.getText();
+    if (isLiteral(type.kind)) return type.getText();
     return;
   },
 };
@@ -91,5 +99,5 @@ export function getLiteralType(kind: SyntaxKind): string | undefined {
   return literalTypeMap[kind];
 }
 export function getLiteralTypeValue(type: LiteralTypeNode) {
-  return literalTypeValues[type.literal.kind](type.literal)
+  return literalTypeValues[type.literal.kind](type.literal);
 }

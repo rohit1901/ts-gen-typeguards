@@ -5,7 +5,8 @@ import {
   InterfaceDeclaration,
   isEnumDeclaration,
   isInterfaceDeclaration,
-  isIntersectionTypeNode, isLiteralTypeNode,
+  isIntersectionTypeNode,
+  isLiteralTypeNode,
   isTypeAliasDeclaration,
   isTypeLiteralNode,
   isTypeReferenceNode,
@@ -15,12 +16,12 @@ import {
   TypeNode,
 } from 'typescript';
 import { getMembersFromTypeAlias } from './getMembersFromTypeAlias';
-import {isKeywordTypeSyntaxKind, isLiteralType} from './isKeyword';
+import { isKeywordTypeSyntaxKind, isLiteralType } from './isKeyword';
 import {
   createFakeTypeElement,
   removeDuplicateTypeElements,
 } from './typeElementUtils';
-import {getLiteralTypeValue} from "./isLiteral";
+import { getLiteralTypeValue } from './isLiteral';
 
 /**
  * Processes a given TypeAliasDeclaration to handle intersection types.
@@ -94,7 +95,9 @@ export function handleIntersectionTypesForTypeAlias(
       // If it's a KeywordTypeSyntaxKind, create a fake TypeElement and add it to the members array.
       members.push(createFakeTypeElement(typeNode.kind));
     } else if (isLiteralTypeNode(typeNode)) {
-      members.push(createFakeTypeElement(typeNode, getLiteralTypeValue(typeNode)));
+      members.push(
+        createFakeTypeElement(typeNode, getLiteralTypeValue(typeNode)),
+      );
     } else {
       // Throw an error for unhandled typeNode kind.
       throw new Error(`Unhandled typeNode kind: ${typeNode.kind}`);

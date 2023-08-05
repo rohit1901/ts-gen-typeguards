@@ -4,9 +4,9 @@ import {
   LiteralTypeNode,
   SourceFile,
   SyntaxKind,
-  TypeElement
+  TypeElement,
 } from 'typescript';
-import {isKeywordTypeSyntaxKind} from "./isKeyword";
+import { isKeywordTypeSyntaxKind } from './isKeyword';
 /**
  * Creates a fake TypeElement with the given `brand` representing a KeywordTypeSyntaxKind property.
  * The `_typeElementBrand` property is set to 'fake' to indicate it is a KeywordTypeSyntaxKind.
@@ -54,7 +54,9 @@ export function removeDuplicateTypeElements(
 ): TypeElement[] {
   const uniqueMembers: TypeElement[] = [];
   uniqueMembers.push(
-    ...members.filter(member => member._typeElementBrand ? member._typeElementBrand === 'fake' : false),
+    ...members.filter(member =>
+      member._typeElementBrand ? member._typeElementBrand === 'fake' : false,
+    ),
   );
   members.forEach(member => {
     if (!uniqueMembers.some(m => areTypeElementsEqual(m, member))) {

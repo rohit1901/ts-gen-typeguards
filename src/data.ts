@@ -216,4 +216,3 @@ export enum CitySize {
 }
 //TODO: isCitySize.Medium(value.size) should be value === CitySize.Medium
 export type MediumCity = City | { size: CitySize.Medium };
-
