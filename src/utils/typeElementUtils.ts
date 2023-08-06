@@ -1,11 +1,22 @@
-import { KeywordTypeSyntaxKind, SourceFile, TypeElement } from 'typescript';
+import {
+  KeywordTypeSyntaxKind,
+  LiteralSyntaxKind,
+  LiteralTypeNode,
+  SourceFile,
+  SyntaxKind,
+  TypeElement,
+} from 'typescript';
+import { isKeywordTypeSyntaxKind } from './isKeyword';
 /**
  * Creates a fake TypeElement with the given `brand` representing a KeywordTypeSyntaxKind property.
  * The `_typeElementBrand` property is set to 'fake' to indicate it is a KeywordTypeSyntaxKind.
  * @param {KeywordTypeSyntaxKind} brand - The brand representing a KeywordTypeSyntaxKind property.
+ * @param literalText
  * @returns {TypeElement} - A fake TypeElement with the `_typeElementBrand` set to 'fake'.
- */ export function createFakeTypeElement(
-  brand: KeywordTypeSyntaxKind,
+ */
+export function createFakeTypeElement(
+  brand: KeywordTypeSyntaxKind | LiteralTypeNode | SyntaxKind,
+  literalText?: string,
 ): TypeElement {
   return {
     _declarationBrand: brand,
@@ -27,7 +38,7 @@ import { KeywordTypeSyntaxKind, SourceFile, TypeElement } from 'typescript';
     getLeadingTriviaWidth: undefined,
     getSourceFile: undefined,
     getStart: undefined,
-    getText: (sourceFile?: SourceFile): string => '',
+    getText: (sourceFile?: SourceFile): string => literalText ?? '',
     getWidth: undefined,
     _typeElementBrand: 'fake',
   };
@@ -44,7 +55,9 @@ export function removeDuplicateTypeElements(
 ): TypeElement[] {
   const uniqueMembers: TypeElement[] = [];
   uniqueMembers.push(
-    ...members.filter(member => member._typeElementBrand === 'fake'),
+    ...members.filter(member =>
+      member._typeElementBrand ? member._typeElementBrand === 'fake' : false,
+    ),
   );
   members.forEach(member => {
     if (!uniqueMembers.some(m => areTypeElementsEqual(m, member))) {

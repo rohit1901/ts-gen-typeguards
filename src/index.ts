@@ -153,5 +153,6 @@ generateTypeGuardsFile(
   `${generateInterfaceTypeGuard(interfaces)}\n${generateTypeTypeGuard(
     types,
     enums,
+    interfaces,
   )}\n${generateEnumTypeGuards(enums)}`,
 );

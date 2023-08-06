@@ -22,3 +22,8 @@ export {
 } from './typeElementUtils';
 export * from './isKeyword';
 export * from './isLiteral';
+
+export {
+  handleIntersectionTypesForTypeAlias,
+  handleIntersectionTypesForTypeNode,
+} from './intersectionType';

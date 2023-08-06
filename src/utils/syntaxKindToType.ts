@@ -1,16 +1,19 @@
 import { KeywordSyntaxKind, SyntaxKind } from 'typescript';
+import { getLiteralType } from './isLiteral';
 
 /**
  * Converts a SyntaxKind value to a string type.
  * @param {SyntaxKind} syntaxKind - The SyntaxKind value to be converted.
- * @returns {string} - The string representation of the SyntaxKind.
+ * @returns string | undefined | null
  */
-export function syntaxKindToType(syntaxKind: SyntaxKind): string {
+export function syntaxKindToType(
+  syntaxKind: SyntaxKind,
+): string | undefined | null {
   switch (syntaxKind) {
     case SyntaxKind.BooleanKeyword:
       return 'boolean';
     case SyntaxKind.UndefinedKeyword:
-      return 'undefined';
+      return undefined;
     case SyntaxKind.StringKeyword:
       return 'string';
     case SyntaxKind.NumberKeyword:
@@ -32,7 +35,7 @@ export function syntaxKindToType(syntaxKind: SyntaxKind): string {
     case SyntaxKind.KeyOfKeyword:
       return 'keyof';
     case SyntaxKind.NullKeyword:
-      return 'null';
+      return null;
     case SyntaxKind.EnumKeyword:
       return 'enum';
     case SyntaxKind.ThisKeyword:
@@ -48,7 +51,7 @@ export function syntaxKindToType(syntaxKind: SyntaxKind): string {
     case SyntaxKind.ReadonlyKeyword:
       return 'readonly';
     case SyntaxKind.LiteralType:
-      return 'literal';
+      return getLiteralType(syntaxKind);
     case SyntaxKind.IndexedAccessType:
       return 'indexedAccess';
     default:
