@@ -199,7 +199,7 @@ export interface Car {
 export type RedToyota = Car & { brand: 'Toyota'; color: 'red' };
 
 export interface City {
-  name: string;
+  name?: string;
   population: number;
 }
 
@@ -208,5 +208,5 @@ export enum CitySize {
   Medium = 'Medium',
   Large = 'Large',
 }
-//TODO: isCitySize.Medium(value.size) should be value === CitySize.Medium
+//FIXED: isCitySize.Medium(value.size) should be value === CitySize.Medium
 export type MediumCity = City | { size: CitySize.Medium };
