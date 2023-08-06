@@ -67,6 +67,7 @@ function isKeywordType(kind: any): boolean {
  * Generates a type guard condition for a literal type node.
  * @param {string} propertyName - The name of the property being type checked.
  * @param {SyntaxKind} literalKind - The kind of the literal type node.
+ * @param literalText
  * @returns {string} The type guard condition as a string.
  */
 function generateLiteralTypeGuard(

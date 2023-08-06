@@ -1,27 +1,26 @@
 import {
   EnumDeclaration,
-  EnumMember,
   factory,
   InterfaceDeclaration,
   isEnumDeclaration,
   isInterfaceDeclaration,
   isIntersectionTypeNode,
   isLiteralTypeNode,
+  isQualifiedName,
   isTypeAliasDeclaration,
   isTypeLiteralNode,
   isTypeReferenceNode,
   isUnionTypeNode,
+  SyntaxKind,
   TypeAliasDeclaration,
   TypeElement,
   TypeNode,
 } from 'typescript';
-import { getMembersFromTypeAlias } from './getMembersFromTypeAlias';
-import { isKeywordTypeSyntaxKind, isLiteralType } from './isKeyword';
-import {
-  createFakeTypeElement,
-  removeDuplicateTypeElements,
-} from './typeElementUtils';
-import { getLiteralTypeValue } from './isLiteral';
+import {getMembersFromTypeAlias} from './getMembersFromTypeAlias';
+import {isKeywordTypeSyntaxKind} from './isKeyword';
+import {createFakeTypeElement, removeDuplicateTypeElements,} from './typeElementUtils';
+import {getLiteralTypeValue} from './isLiteral';
+import {getQualifiedNameText} from "../generator";
 
 /**
  * Processes a given TypeAliasDeclaration to handle intersection types.
@@ -63,16 +62,20 @@ export function handleIntersectionTypesForTypeAlias(
         ) ||
         interfaces.find(
           i => i.name.getText() === typeNode.typeName.getText(),
-        ) ||
-        enums.find(e => e.name.getText() === typeNode.typeName.getText());
+        )
+      if (isQualifiedName(typeNode.typeName)){
+        members.push(
+            createFakeTypeElement(SyntaxKind.LiteralType, getQualifiedNameText(typeNode.typeName)),
+        )
+      }
       if (foundMember) {
         if (isInterfaceDeclaration(foundMember)) {
           // If the related type is a TypeReferenceNode, find the related TypeAliasDeclaration and process it.
           members.push(...foundMember.members);
         }
-        /*if(isEnumDeclaration(foundMember)) {
-            members.push(...foundMember.members);
-        }*/
+        if(isEnumDeclaration(foundMember)) {
+          //TODO: Continue here for Enums
+        }
         if (
           isTypeAliasDeclaration(foundMember) &&
           isTypeLiteralNode(foundMember.type)

@@ -85,7 +85,8 @@ export enum Color {
   Green = 'green',
   Blue = 'blue',
 }
-
+//TODO: value === Color.Red and shape === 'circle'
+export type RedCircle = Color.Red & { shape: 'circle' };
 //FIXED: yellow should not be a string
 export type ColorOrString = Color | 'yellow';
 export enum Fruit {
@@ -112,7 +113,7 @@ export type PointAndName = Point & { name: string };
 //FIXED: male, female, other should not be strings
 export type Gender = 'male' | 'female' | 'other';
 
-//TODO: male, female should not be strings
+//FIXED: male, female should not be strings
 export interface Person {
   name: string;
   gender: 'male' | 'female';
@@ -145,8 +146,6 @@ export enum Day {
 }
 
 export type WorkingDay = Day & { isWorking: boolean };
-//TODO: value === Color.Red and shape === 'circle'
-export type RedCircle = Color.Red & { shape: 'circle' };
 
 export interface Coordinates {
   x: number;
@@ -176,7 +175,7 @@ export enum Category {
   Electronics = 'ELECTRONICS',
   Clothing = 'CLOTHING',
 }
-//TODO: isCategory.Electronics(value.category) should be isCategory(value.category)
+//FIXED: isCategory.Electronics(value.category) should be isCategory(value.category)
 export type ElectronicProduct = Product & { category: Category.Electronics };
 //FIXED
 export type NumberOrZero = 1 | 2 | 3 | 4 | 0;
@@ -185,15 +184,10 @@ export interface Vehicle {
   type: 'car' | 'bike' | 'bus';
   wheels: number;
 }
-//TODO: 'HR' should not be string
 export type EmployeeOrHR = Employee | { department: 'HR' };
 
 export type PersonId = number;
 
-export interface Person {
-  id: PersonId;
-  name: string;
-}
 //TODO: Interface is ignored
 export type PersonWithId = Person & { id: PersonId };
 
@@ -201,7 +195,7 @@ export interface Car {
   brand: 'Toyota' | 'Honda' | 'Ford';
   color: 'red' | 'blue' | 'black';
 }
-//TODO: Interface is ignored, Toyota and red should not be strings
+//TODO: Could be improved by checking isCar(value)
 export type RedToyota = Car & { brand: 'Toyota'; color: 'red' };
 
 export interface City {

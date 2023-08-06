@@ -38,6 +38,7 @@ enum LiteralSyntaxKind {
   TrueKeyword = SyntaxKind.TrueKeyword,
   FalseKeyword = SyntaxKind.FalseKeyword,
   NullKeyword = SyntaxKind.NullKeyword,
+  UndefinedKeyyword = SyntaxKind.UndefinedKeyword,
   RegularExpressionLiteral = SyntaxKind.RegularExpressionLiteral,
   NoSubstitutionTemplateLiteral = SyntaxKind.NoSubstitutionTemplateLiteral,
 }
@@ -51,12 +52,13 @@ const literalTypeMap: { [key in LiteralSyntaxKind]: string } = {
   [SyntaxKind.TrueKeyword]: 'boolean',
   [SyntaxKind.FalseKeyword]: 'boolean',
   [SyntaxKind.NullKeyword]: 'null',
+  [SyntaxKind.UndefinedKeyword]: 'undefined',
   [SyntaxKind.RegularExpressionLiteral]: 'regexp',
   [SyntaxKind.NoSubstitutionTemplateLiteral]: 'string',
 };
 type spFunction = (
   type: LiteralTypeNode,
-) => string | number | bigint | boolean | RegExp | undefined;
+) => string | number | bigint | boolean | RegExp | undefined | null;
 const literalTypeValues: Record<LiteralSyntaxKind, spFunction> = {
   [SyntaxKind.StringLiteral]: (type: LiteralTypeNode) => {
     if (isLiteral(type.kind)) return type.getText();
@@ -79,7 +81,11 @@ const literalTypeValues: Record<LiteralSyntaxKind, spFunction> = {
     return;
   },
   [SyntaxKind.NullKeyword]: (type: LiteralTypeNode) => {
-    if (isLiteral(type.kind)) return 'null';
+    if (isLiteral(type.kind)) return null;
+    return;
+  },
+  [SyntaxKind.UndefinedKeyword]: (type: LiteralTypeNode) => {
+    if (isLiteral(type.kind)) return undefined;
     return;
   },
   [SyntaxKind.RegularExpressionLiteral]: (type: LiteralTypeNode) => {

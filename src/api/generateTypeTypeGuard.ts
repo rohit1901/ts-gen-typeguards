@@ -4,7 +4,7 @@ import {
   InterfaceDeclaration,
   isEnumDeclaration,
   isIntersectionTypeNode,
-  isLiteralTypeNode,
+  isLiteralTypeNode, isPropertySignature,
   isTypeLiteralNode,
   isTypeReferenceNode,
   isUnionTypeNode,
@@ -16,14 +16,17 @@ import {
 import {
   generateKeywordGuard,
   generateKeywordGuardForType,
-  generatePropertyGuard,
+  generatePropertyGuard, generateTypeReferenceGuard,
   generateUnionTypeGuard,
   handleEnumIntersection,
 } from '../api';
 import {
+  capitalize,
   getEscapedCapitalizedStringLiteral,
-  handleIntersectionTypesForTypeAlias,
+  handleIntersectionTypesForTypeAlias, isLiteralType,
 } from '../utils';
+import {generateTypeAliasTypeGuard, generateTypeReferenceTypeGuard} from "../generator/generateUnionTypeGuard";
+import {generateQualifiedNameTypeGuard} from "../generator";
 
 /**
  * Generate a set of type guard functions based on provided TypeAliasDeclarations.
@@ -102,7 +105,10 @@ function generateFakeTypeElement(typeAlias: TypeAliasDeclaration): string[] {
 
   // Iterate through each property in the TypeLiteralNode.
   for (const property of typeAlias.type.members) {
-    if (property._typeElementBrand === 'fake') {
+    if(property._typeElementBrand === 'fake' && !isPropertySignature(property)){
+      typeGuardStrings.push(`value === ${property.getText()}`);
+    }
+     else if (property._typeElementBrand === 'fake') {
       // If the property has the 'fake' brand, generate a keyword type guard for its custom brand and add it to the array.
       typeGuardStrings.push(
         generateKeywordGuardForType(property._declarationBrand),

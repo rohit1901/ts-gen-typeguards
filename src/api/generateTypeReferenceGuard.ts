@@ -1,5 +1,6 @@
-import { isTypeReferenceNode, TypeNode } from 'typescript';
+import {isQualifiedName, isTypeReferenceNode, TypeNode} from 'typescript';
 import { getEscapedCapitalizedStringLiteral } from '../utils';
+import {generateQualifiedNameTypeGuard} from "../generator";
 
 /**
  * Function to generate a type guard for a TypeReferenceNode. Used to generate type guard string for type aliases.
@@ -15,6 +16,10 @@ export function generateTypeReferenceGuard(
   const typeGuard: string[] = [];
   if (!isTypeReferenceNode(type)) return typeGuard;
   if (isProperty) {
+    if(isQualifiedName(type.typeName)) {
+      typeGuard.push(generateQualifiedNameTypeGuard(type.typeName, typeName));
+      return typeGuard
+    }
     typeGuard.push(
       `is${getEscapedCapitalizedStringLiteral(
         type.typeName.getText(),

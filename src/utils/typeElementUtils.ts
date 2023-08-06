@@ -13,7 +13,8 @@ import { isKeywordTypeSyntaxKind } from './isKeyword';
  * @param {KeywordTypeSyntaxKind} brand - The brand representing a KeywordTypeSyntaxKind property.
  * @param literalText
  * @returns {TypeElement} - A fake TypeElement with the `_typeElementBrand` set to 'fake'.
- */ export function createFakeTypeElement(
+ */
+export function createFakeTypeElement(
   brand: KeywordTypeSyntaxKind | LiteralTypeNode | SyntaxKind,
   literalText?: string,
 ): TypeElement {
