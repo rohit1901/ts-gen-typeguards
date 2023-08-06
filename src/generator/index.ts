@@ -31,4 +31,7 @@ export {
   generateUnknownKeywordTypeGuard,
   generateVoidKeywordTypeGuard,
 } from './generateKeywordTypeGuardsForUnion';
-export {generateQualifiedNameTypeGuard, getQualifiedNameText} from './generateQualifiedNameTypeGuard';
+export {
+  generateQualifiedNameTypeGuard,
+  getQualifiedNameText,
+} from './generateQualifiedNameTypeGuard';

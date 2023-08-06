@@ -1,4 +1,4 @@
-import {QualifiedName} from "typescript";
+import { QualifiedName } from 'typescript';
 
 /**
  * Function to generate a type guard for a QualifiedName.
@@ -20,8 +20,11 @@ import {QualifiedName} from "typescript";
  * @param typeName - The name of the type.
  * @param isProperty - Optional boolean to indicate if the type is a property.
  */
-export function generateQualifiedNameTypeGuard(type: QualifiedName, typeName: string) {
-    return `value.${typeName} === ${type.left.getText()}.${type.right.getText()}`
+export function generateQualifiedNameTypeGuard(
+  type: QualifiedName,
+  typeName: string,
+) {
+  return `value.${typeName} === ${type.left.getText()}.${type.right.getText()}`;
 }
 
 /**
@@ -29,6 +32,6 @@ export function generateQualifiedNameTypeGuard(type: QualifiedName, typeName: st
  * Example: `A.B` returns `A.B`.
  * @param type
  */
-export function getQualifiedNameText(type: QualifiedName){
-    return `${type.left.getText()}.${type.right.getText()}`;
+export function getQualifiedNameText(type: QualifiedName) {
+  return `${type.left.getText()}.${type.right.getText()}`;
 }

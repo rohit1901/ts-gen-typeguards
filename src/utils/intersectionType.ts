@@ -16,11 +16,14 @@ import {
   TypeElement,
   TypeNode,
 } from 'typescript';
-import {getMembersFromTypeAlias} from './getMembersFromTypeAlias';
-import {isKeywordTypeSyntaxKind} from './isKeyword';
-import {createFakeTypeElement, removeDuplicateTypeElements,} from './typeElementUtils';
-import {getLiteralTypeValue} from './isLiteral';
-import {getQualifiedNameText} from "../generator";
+import { getMembersFromTypeAlias } from './getMembersFromTypeAlias';
+import { isKeywordTypeSyntaxKind } from './isKeyword';
+import {
+  createFakeTypeElement,
+  removeDuplicateTypeElements,
+} from './typeElementUtils';
+import { getLiteralTypeValue } from './isLiteral';
+import { getQualifiedNameText } from '../generator';
 
 /**
  * Processes a given TypeAliasDeclaration to handle intersection types.
@@ -60,20 +63,21 @@ export function handleIntersectionTypesForTypeAlias(
         definitions.find(
           d => d.name.getText() === typeNode.typeName.getText(),
         ) ||
-        interfaces.find(
-          i => i.name.getText() === typeNode.typeName.getText(),
-        )
-      if (isQualifiedName(typeNode.typeName)){
+        interfaces.find(i => i.name.getText() === typeNode.typeName.getText());
+      if (isQualifiedName(typeNode.typeName)) {
         members.push(
-            createFakeTypeElement(SyntaxKind.LiteralType, getQualifiedNameText(typeNode.typeName)),
-        )
+          createFakeTypeElement(
+            SyntaxKind.LiteralType,
+            getQualifiedNameText(typeNode.typeName),
+          ),
+        );
       }
       if (foundMember) {
         if (isInterfaceDeclaration(foundMember)) {
           // If the related type is a TypeReferenceNode, find the related TypeAliasDeclaration and process it.
           members.push(...foundMember.members);
         }
-        if(isEnumDeclaration(foundMember)) {
+        if (isEnumDeclaration(foundMember)) {
           //TODO: Continue here for Enums
         }
         if (

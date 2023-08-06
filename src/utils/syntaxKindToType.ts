@@ -6,7 +6,9 @@ import { getLiteralType } from './isLiteral';
  * @param {SyntaxKind} syntaxKind - The SyntaxKind value to be converted.
  * @returns string | undefined | null
  */
-export function syntaxKindToType(syntaxKind: SyntaxKind): string | undefined | null {
+export function syntaxKindToType(
+  syntaxKind: SyntaxKind,
+): string | undefined | null {
   switch (syntaxKind) {
     case SyntaxKind.BooleanKeyword:
       return 'boolean';
