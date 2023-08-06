@@ -2,6 +2,6 @@ dist/
 node_modules/
 .idea/
 coverage/
-package-lock.json
 *.js
+*.d.ts
 src/out/**/*

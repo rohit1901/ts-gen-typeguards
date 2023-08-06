@@ -2,12 +2,18 @@
   "compilerOptions": {
     "target": "es6",
     "module": "commonjs",
-    "outDir": "dist"
+    "declaration": true,
+    "rootDir": "src",
+    // NOTE: add to produce production build
+    //"outDir": "dist",
   },
   "include": [
     "src/**/*.ts"
   ],
+  "start": "node src/index.js",
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "src/out/",
+    "src/__tests__/**/*.ts"
   ]
 }
