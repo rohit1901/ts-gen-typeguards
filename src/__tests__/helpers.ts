@@ -1,12 +1,17 @@
 //TypeAliasDeclarations
 import {
-    EnumDeclaration,
-    factory,
-    Identifier, InterfaceDeclaration, IntersectionTypeNode,
-    LiteralType,
-    LiteralTypeNode, NumericLiteral, StringLiteral,
-    SyntaxKind,
-    TypeAliasDeclaration, TypeLiteralNode,
+  EnumDeclaration,
+  factory,
+  Identifier,
+  InterfaceDeclaration,
+  IntersectionTypeNode,
+  LiteralType,
+  LiteralTypeNode,
+  NumericLiteral,
+  StringLiteral,
+  SyntaxKind,
+  TypeAliasDeclaration,
+  TypeLiteralNode,
 } from 'typescript';
 
 /**
@@ -207,106 +212,117 @@ export const setupVariables = () => {
     point3,
     someType,
   };*/
-    const getNumericLiteralMock = (value: number): NumericLiteral => ({
-        ...factory.createNumericLiteral(value),
-        getText: jest.fn().mockReturnValue(value.toString()),
-    });
-    const getStringLiteralMock = (value: string): StringLiteral => ({
-        ...factory.createStringLiteral(value),
-        getText: jest.fn().mockReturnValue(value),
-    });
-    // Mock for EvenNumbers type (2 & 4 & 6 & 8)
-    const evenNumbersMock: IntersectionTypeNode = factory.createIntersectionTypeNode([
-        factory.createLiteralTypeNode(getNumericLiteralMock(2)),
-        factory.createLiteralTypeNode(getNumericLiteralMock(4)),
-        factory.createLiteralTypeNode(getNumericLiteralMock(6)),
-        factory.createLiteralTypeNode(getNumericLiteralMock(8)),
+  const getNumericLiteralMock = (value: number): NumericLiteral => ({
+    ...factory.createNumericLiteral(value),
+    getText: jest.fn().mockReturnValue(value.toString()),
+  });
+  const getStringLiteralMock = (value: string): StringLiteral => ({
+    ...factory.createStringLiteral(value),
+    getText: jest.fn().mockReturnValue(value),
+  });
+  // Mock for EvenNumbers type (2 & 4 & 6 & 8)
+  const evenNumbersMock: IntersectionTypeNode =
+    factory.createIntersectionTypeNode([
+      factory.createLiteralTypeNode(getNumericLiteralMock(2)),
+      factory.createLiteralTypeNode(getNumericLiteralMock(4)),
+      factory.createLiteralTypeNode(getNumericLiteralMock(6)),
+      factory.createLiteralTypeNode(getNumericLiteralMock(8)),
     ]);
 
-    // Mock for EvenNumberStrings type ("2" & "4" & "6" & "8")
-    const evenNumberStringsMock: IntersectionTypeNode = factory.createIntersectionTypeNode([
-        factory.createLiteralTypeNode(getStringLiteralMock("2")),
-        factory.createLiteralTypeNode(getStringLiteralMock("4")),
-        factory.createLiteralTypeNode(getStringLiteralMock("6")),
-        factory.createLiteralTypeNode(getStringLiteralMock("8")),
+  // Mock for EvenNumberStrings type ("2" & "4" & "6" & "8")
+  const evenNumberStringsMock: IntersectionTypeNode =
+    factory.createIntersectionTypeNode([
+      factory.createLiteralTypeNode(getStringLiteralMock('2')),
+      factory.createLiteralTypeNode(getStringLiteralMock('4')),
+      factory.createLiteralTypeNode(getStringLiteralMock('6')),
+      factory.createLiteralTypeNode(getStringLiteralMock('8')),
     ]);
 
-    // Mock for EvenNumberStringsCombi type ("2" & 4 & "6" & 8)
-    const evenNumberStringsCombiMock: IntersectionTypeNode = factory.createIntersectionTypeNode([
-        factory.createLiteralTypeNode(getStringLiteralMock("2")),
-        factory.createLiteralTypeNode(getNumericLiteralMock(4)),
-        factory.createLiteralTypeNode(getStringLiteralMock("6")),
-        factory.createLiteralTypeNode(getNumericLiteralMock(8)),
+  // Mock for EvenNumberStringsCombi type ("2" & 4 & "6" & 8)
+  const evenNumberStringsCombiMock: IntersectionTypeNode =
+    factory.createIntersectionTypeNode([
+      factory.createLiteralTypeNode(getStringLiteralMock('2')),
+      factory.createLiteralTypeNode(getNumericLiteralMock(4)),
+      factory.createLiteralTypeNode(getStringLiteralMock('6')),
+      factory.createLiteralTypeNode(getNumericLiteralMock(8)),
     ]);
-    const evenNumbersTypeAlias: TypeAliasDeclaration = factory.createTypeAliasDeclaration(
-        [factory.createToken(SyntaxKind.ExportKeyword)],
-        {
-            ...factory.createIdentifier('EvenNumbers'),
-            getText: jest.fn().mockReturnValue('EvenNumbers'),
-        },
-        undefined,
-        evenNumbersMock,
+  const evenNumbersTypeAlias: TypeAliasDeclaration =
+    factory.createTypeAliasDeclaration(
+      [factory.createToken(SyntaxKind.ExportKeyword)],
+      {
+        ...factory.createIdentifier('EvenNumbers'),
+        getText: jest.fn().mockReturnValue('EvenNumbers'),
+      },
+      undefined,
+      evenNumbersMock,
     );
-    const evenNumberStringsTypeAlias: TypeAliasDeclaration = factory.createTypeAliasDeclaration(
-        [factory.createToken(SyntaxKind.ExportKeyword)],
-        {
-            ...factory.createIdentifier('EvenNumberStrings'),
-            getText: jest.fn().mockReturnValue('EvenNumberStrings'),
-        },
-        undefined,
-        evenNumberStringsMock,
+  const evenNumberStringsTypeAlias: TypeAliasDeclaration =
+    factory.createTypeAliasDeclaration(
+      [factory.createToken(SyntaxKind.ExportKeyword)],
+      {
+        ...factory.createIdentifier('EvenNumberStrings'),
+        getText: jest.fn().mockReturnValue('EvenNumberStrings'),
+      },
+      undefined,
+      evenNumberStringsMock,
     );
-    const evenNumberStringsCombiTypeAlias: TypeAliasDeclaration = factory.createTypeAliasDeclaration(
-        [factory.createToken(SyntaxKind.ExportKeyword)],
-        {
-            ...factory.createIdentifier('EvenNumberStringsCombi'),
-            getText: jest.fn().mockReturnValue('EvenNumberStringsCombi'),
-        },
-        undefined,
-        evenNumberStringsCombiMock,
+  const evenNumberStringsCombiTypeAlias: TypeAliasDeclaration =
+    factory.createTypeAliasDeclaration(
+      [factory.createToken(SyntaxKind.ExportKeyword)],
+      {
+        ...factory.createIdentifier('EvenNumberStringsCombi'),
+        getText: jest.fn().mockReturnValue('EvenNumberStringsCombi'),
+      },
+      undefined,
+      evenNumberStringsCombiMock,
     );
-    const colorEnum: EnumDeclaration = factory.createEnumDeclaration(
-        [factory.createToken(SyntaxKind.ExportKeyword)],
-        {
-            ...factory.createIdentifier('Color'),
-            getText: jest.fn().mockReturnValue('Color'),
-        },
-        [factory.createEnumMember('Red'), factory.createEnumMember('Green'), factory.createEnumMember('Blue')],
+  const colorEnum: EnumDeclaration = factory.createEnumDeclaration(
+    [factory.createToken(SyntaxKind.ExportKeyword)],
+    {
+      ...factory.createIdentifier('Color'),
+      getText: jest.fn().mockReturnValue('Color'),
+    },
+    [
+      factory.createEnumMember('Red'),
+      factory.createEnumMember('Green'),
+      factory.createEnumMember('Blue'),
+    ],
+  );
+  const cityInterface: InterfaceDeclaration =
+    factory.createInterfaceDeclaration(
+      [factory.createToken(SyntaxKind.ExportKeyword)],
+      {
+        ...factory.createIdentifier('City'),
+        getText: jest.fn().mockReturnValue('City'),
+      },
+      undefined,
+      undefined,
+      [
+        factory.createPropertySignature(
+          undefined,
+          {
+            ...factory.createIdentifier('name'),
+            getText: jest.fn().mockReturnValue('name'),
+          },
+          undefined,
+          factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+        ),
+        factory.createPropertySignature(
+          undefined,
+          {
+            ...factory.createIdentifier('population'),
+            getText: jest.fn().mockReturnValue('population'),
+          },
+          undefined,
+          factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
+        ),
+      ],
     );
-    const cityInterface: InterfaceDeclaration = factory.createInterfaceDeclaration(
-        [factory.createToken(SyntaxKind.ExportKeyword)],
-        {
-            ...factory.createIdentifier('City'),
-            getText: jest.fn().mockReturnValue('City'),
-        },
-        undefined,
-        undefined,
-        [
-            factory.createPropertySignature(
-                undefined,
-                {
-                    ...factory.createIdentifier('name'),
-                    getText: jest.fn().mockReturnValue('name'),
-                },
-                undefined,
-                factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-            ),
-            factory.createPropertySignature(
-                undefined,
-                {
-                    ...factory.createIdentifier('population'),
-                    getText: jest.fn().mockReturnValue('population'),
-                },
-                undefined,
-                factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
-            ),
-        ],
-    );
-    return {
-        evenNumbersTypeAlias,
-        evenNumberStringsTypeAlias,
-        evenNumberStringsCombiTypeAlias,
-        colorEnum,
-        cityInterface,
-    }
+  return {
+    evenNumbersTypeAlias,
+    evenNumberStringsTypeAlias,
+    evenNumberStringsCombiTypeAlias,
+    colorEnum,
+    cityInterface,
+  };
 };
