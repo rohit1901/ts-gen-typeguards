@@ -9,6 +9,7 @@
     "start": "cd src && node index.js",
     "start-prod": "node dist/ts-gen-typeguards.min.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
     "prettify": "prettier --write \"src/**/*.ts\""
   },
   "repository": {
