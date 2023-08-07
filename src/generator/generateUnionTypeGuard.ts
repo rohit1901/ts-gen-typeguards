@@ -41,7 +41,7 @@ import {
   generateVoidKeywordTypeGuard,
 } from './generateKeywordTypeGuardsForUnion';
 import { generateIntersectionTypeGuard } from './generateIntersectionTypeGuard';
-import {generatePropertyGuard} from "../api";
+import { generatePropertyGuard } from '../api';
 
 /**
  * Processes the given union type node and generates type guards based on its individual members.
@@ -71,7 +71,9 @@ function processUnionTypeWithTypeGuards(
   typeGuardCode: string[],
 ) {
   if (isTypeReferenceNode(unionType)) {
-    typeGuardCode.push(...generateTypeReferenceTypeGuard(unionType, typeAliases));
+    typeGuardCode.push(
+      ...generateTypeReferenceTypeGuard(unionType, typeAliases),
+    );
   } else if (isTypeLiteralNode(unionType)) {
     typeGuardCode.push(...generateTypeLiteralTypeGuard(unionType));
   } else if (isLiteralTypeNode(unionType)) {
@@ -164,7 +166,9 @@ export function generateTypeLiteralTypeGuard(
       propertyGuards.push(...generatePropertyGuard(member, parentName));
     }
   }
-  return (propertyGuards.length > 0) ? [`(${propertyGuards.join(' && ')})`] : [`(${propertyGuards.join('')})`];
+  return propertyGuards.length > 0
+    ? [`(${propertyGuards.join(' && ')})`]
+    : [`(${propertyGuards.join('')})`];
 }
 
 /**

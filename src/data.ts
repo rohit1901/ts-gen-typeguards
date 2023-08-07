@@ -148,7 +148,6 @@ export type EvenNumbers = 2 & 4 & 6 & 8;
 export type EvenNumberStrings = '2' & '4' & '6' & '8';
 export type EvenNumberStringsCombi = '2' & 4 & '6' & 8;
 
-
 export type FruitAndAnimal = Fruit & Animal;
 
 export type PointAndName = Point & { name: string };
@@ -200,5 +199,3 @@ export enum Month {
   February = 'FEB',
   March = 'MAR',
 }
-
-
