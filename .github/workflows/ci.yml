@@ -1,4 +1,4 @@
-name: Compile & Test (CI)
+name: Tests
 
 on:
   push:
