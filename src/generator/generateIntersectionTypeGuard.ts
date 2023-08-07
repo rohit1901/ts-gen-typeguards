@@ -163,7 +163,7 @@ function generateTypeLiteralGuards(
         if (!encounteredPropertyNames.has(propName)) {
           encounteredPropertyNames.add(propName);
           typeGuardCode.push(
-            generateOptionalPropertyTypeGuard(member, typeAliases),
+              ...generateOptionalPropertyTypeGuard(member),
           );
           typeGuardCode.push(generatePropertyTypeGuard(member, typeAliases));
         }
@@ -249,13 +249,12 @@ function processIntersectionTypeWithTypeGuards(
   typeGuardCode: string[],
 ) {
   if (isTypeReferenceNode(intersectionType)) {
-    generateTypeReferenceTypeGuard(
+    typeGuardCode.push(...generateTypeReferenceTypeGuard(
       intersectionType,
       typeAliases,
-      typeGuardCode,
-    );
+    ));
   } else if (isTypeLiteralNode(intersectionType)) {
-    generateTypeLiteralTypeGuard(intersectionType, typeGuardCode);
+    typeGuardCode.push(...generateTypeLiteralTypeGuard(intersectionType));
   } else if (isLiteralTypeNode(intersectionType)) {
     typeGuardCode.push(generateLiteralTypeTypeGuard(intersectionType));
   } else if (isUndefinedKeyword(intersectionType.kind)) {

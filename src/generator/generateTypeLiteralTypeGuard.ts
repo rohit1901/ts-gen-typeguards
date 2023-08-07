@@ -98,7 +98,7 @@ export function generateUniqueTypeGuardsFromTypeLiteral(
       propSet.add(property.name.getText());
       if (isPropertySignature(property)) {
         typeGuardCode.push(
-          generateOptionalPropertyTypeGuard(property, typeAliases),
+            ...generateOptionalPropertyTypeGuard(property),
         );
         typeGuardCode.push(generatePropertyTypeGuard(property, typeAliases));
       }
