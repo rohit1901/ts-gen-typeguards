@@ -6,7 +6,6 @@ import {
   isTypeString,
   removeWhitespace,
 } from '../utils';
-import { readObjects } from '../index';
 
 describe('capitalize', () => {
   it('should capitalize a string', () => {

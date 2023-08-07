@@ -132,15 +132,6 @@ const buildTypeGuards = (
   return typeGuardFunctions.join('\n');
 };
 
-/**
- * Generates the type guards for the interfaces
- * @param interfaceNode
- */
-function generateTypeGuards2(interfaceNode: InterfaceDeclaration): string {
-  const properties = interfaceNode.members;
-  const interfaceName = capitalize(interfaceNode.name.text);
-  return buildTypeGuards(interfaceName, properties);
-}
 function loadConfig() {
   const fileContent = fs.readFileSync('./config.json', 'utf8');
   const jsonContent = JSON.parse(fileContent);

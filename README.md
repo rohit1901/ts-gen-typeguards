@@ -2,7 +2,6 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Build Status](https://github.com/rohit1901/ts-gen-typeguards/actions/workflows/ci.yml/badge.svg)
-![Build Status](https://github.com/rohit1901/ts-gen-typeguards/actions/workflows/lint.yml/badge.svg)
 > A TypeScript project that provides utility functions to generate type guards for interfaces, type aliases, and enums.
 
 ## Description

@@ -41,6 +41,7 @@ import {
   generateVoidKeywordTypeGuard,
 } from './generateKeywordTypeGuardsForUnion';
 import { generateIntersectionTypeGuard } from './generateIntersectionTypeGuard';
+import { generatePropertyGuard } from '../api';
 
 /**
  * Processes the given union type node and generates type guards based on its individual members.
@@ -70,9 +71,11 @@ function processUnionTypeWithTypeGuards(
   typeGuardCode: string[],
 ) {
   if (isTypeReferenceNode(unionType)) {
-    generateTypeReferenceTypeGuard(unionType, typeAliases, typeGuardCode);
+    typeGuardCode.push(
+      ...generateTypeReferenceTypeGuard(unionType, typeAliases),
+    );
   } else if (isTypeLiteralNode(unionType)) {
-    generateTypeLiteralTypeGuard(unionType, typeGuardCode);
+    typeGuardCode.push(...generateTypeLiteralTypeGuard(unionType));
   } else if (isLiteralTypeNode(unionType)) {
     typeGuardCode.push(generateLiteralTypeTypeGuard(unionType));
   } else if (isUndefinedKeyword(unionType.kind)) {
@@ -136,35 +139,36 @@ export function generateUnionTypeGuard(
 export function generateTypeReferenceTypeGuard(
   typeRefNode: TypeReferenceNode,
   typeAliases: TypeAliasDeclaration[],
-  typeGuardCode: string[],
-): void {
+): string[] {
+  const typeGuardCode = [];
   const typeAlias = typeAliases.find(
     typeAlias => typeAlias.name.getText() === typeRefNode.typeName.getText(),
   );
   if (typeAlias) {
     typeGuardCode.push(generateTypeAliasTypeGuard(typeAlias));
   }
+  return typeGuardCode;
 }
 
 /**
  * Generate a type guard for a TypeLiteralNode within a union type.
  *
  * @param typeLiteral - The TypeLiteralNode representing the union member type literal.
- * @param typeGuardCode - The array to store the generated type guard code as strings.
+ * @param parentName
  */
 export function generateTypeLiteralTypeGuard(
   typeLiteral: TypeLiteralNode,
-  typeGuardCode: string[],
-): void {
+  parentName?: string,
+): string[] {
   const propertyGuards: string[] = [];
   for (const member of typeLiteral.members) {
     if (isPropertySignature(member)) {
-      //TODO: check here if the property is optional
+      propertyGuards.push(...generatePropertyGuard(member, parentName));
     }
   }
-  if (propertyGuards.length > 0) {
-    typeGuardCode.push(`(${propertyGuards.join(' && ')})`);
-  }
+  return propertyGuards.length > 0
+    ? [`(${propertyGuards.join(' && ')})`]
+    : [`(${propertyGuards.join('')})`];
 }
 
 /**

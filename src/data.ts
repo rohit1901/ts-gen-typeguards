@@ -77,76 +77,35 @@ export type enumUnion = Color | Fruit | Animal;
 //TODO: Imports
 */
 
-export type EvenNumbers = 2 & 4 & 6 & 8;
-export type EvenNumberStrings = '2' & '4' & '6' & '8';
-export type EvenNumberStringsCombi = '2' & 4 & '6' & 8;
-export enum Color {
-  Red = 'red',
-  Green = 'green',
-  Blue = 'blue',
-}
-//TODO: value === Color.Red and shape === 'circle'
-export type RedCircle = Color.Red & { shape: 'circle' };
-//FIXED: yellow should not be a string
-export type ColorOrString = Color | 'yellow';
-export enum Fruit {
-  Apple = 'APPLE',
-  Banana = 'BANANA',
-  Orange = 'ORANGE',
-}
-
-export enum Animal {
-  Dog = 'DOG',
-  Cat = 'CAT',
-  Lion = 'LION',
-}
-
-export type FruitAndAnimal = Fruit & Animal;
-
 export interface Point {
-  x: number;
+  x?: number;
   y: number;
 }
-//FIXED: interface Point is not generated
-export type PointAndName = Point & { name: string };
-
-//FIXED: male, female, other should not be strings
-export type Gender = 'male' | 'female' | 'other';
-
-//FIXED: male, female should not be strings
 export interface Person {
-  name: string;
+  name?: string;
   gender: 'male' | 'female';
 }
 
 export interface Employee extends Person {
   employeeId: number;
 }
-
-export enum Status {
-  Active = 'ACTIVE',
-  Inactive = 'INACTIVE',
-}
-
 export interface User {
   id: number;
   name: string;
 }
-
-//FIXED
-export type ActiveUser = Status & User;
-
-//FIXED: null should be undefined
-export type PrimitiveTypes = string | number | bigint | null | any | undefined;
-
-export enum Day {
-  Monday = 'MON',
-  Tuesday = 'TUE',
-  Wednesday = 'WED',
+export interface Car {
+  brand: 'Toyota' | 'Honda' | 'Ford';
+  color: 'red' | 'blue' | 'black';
 }
-
-export type WorkingDay = Day & { isWorking: boolean };
-
+//TODO: Nested Literal types are not supported
+export interface City {
+  name?: string;
+  literalType?: '2';
+  typeLiteralType: {
+    x: MediumCity;
+  };
+  population: number;
+}
 export interface Coordinates {
   x: number;
   y: number;
@@ -158,27 +117,10 @@ export interface Move {
   position: Coordinates;
 }
 
-export enum Month {
-  January = 'JAN',
-  February = 'FEB',
-  March = 'MAR',
-}
-
-export type MonthOrUndefined = Month | undefined;
-
 export interface Product {
   name: string;
   price: number;
 }
-
-export enum Category {
-  Electronics = 'ELECTRONICS',
-  Clothing = 'CLOTHING',
-}
-//FIXED: isCategory.Electronics(value.category) should be isCategory(value.category)
-export type ElectronicProduct = Product & { category: Category.Electronics };
-//FIXED
-export type NumberOrZero = 1 | 2 | 3 | 4 | 0;
 
 export interface Vehicle {
   type: 'car' | 'bike' | 'bus';
@@ -188,25 +130,72 @@ export type EmployeeOrHR = Employee | { department: 'HR' };
 
 export type PersonId = number;
 
-//TODO: Interface is ignored
 export type PersonWithId = Person & { id: PersonId };
 
-export interface Car {
-  brand: 'Toyota' | 'Honda' | 'Ford';
-  color: 'red' | 'blue' | 'black';
-}
+export type MonthOrUndefined = Month | undefined;
+
+export type ElectronicProduct = Product & { category: Category.Electronics };
+export type NumberOrZero = 1 | 2 | 3 | 4 | 0;
 //TODO: Could be improved by checking isCar(value)
 export type RedToyota = Car & { brand: 'Toyota'; color: 'red' };
+export type MediumCity = City | { size: CitySize.Medium };
 
-export interface City {
-  name?: string;
-  population: number;
+//TODO: Could be improved by checking isUser(value)
+export type ActiveUser = Status & User;
+
+export type PrimitiveTypes = string | number | bigint | null | any | undefined;
+export type EvenNumbers = 2 & 4 & 6 & 8;
+export type EvenNumberStrings = '2' & '4' & '6' & '8';
+export type EvenNumberStringsCombi = '2' & 4 & '6' & 8;
+
+export type FruitAndAnimal = Fruit & Animal;
+
+export type PointAndName = Point & { name: string };
+
+export type Gender = 'male' | 'female' | 'other';
+export type RedCircle = Color.Red & { shape: 'circle' };
+export type ColorOrString = Color | 'yellow';
+export type WorkingDay = Day & { isWorking?: boolean };
+
+export enum Fruit {
+  Apple = 'APPLE',
+  Banana = 'BANANA',
+  Orange = 'ORANGE',
 }
 
+export enum Animal {
+  Dog = 'DOG',
+  Cat = 'CAT',
+  Lion = 'LION',
+}
+export enum Color {
+  Red = 'red',
+  Green = 'green',
+  Blue = 'blue',
+}
+
+export enum Status {
+  Active = 'ACTIVE',
+  Inactive = 'INACTIVE',
+}
+
+export enum Day {
+  Monday = 'MON',
+  Tuesday = 'TUE',
+  Wednesday = 'WED',
+}
 export enum CitySize {
   Small = 'Small',
   Medium = 'Medium',
   Large = 'Large',
 }
-//FIXED: isCitySize.Medium(value.size) should be value === CitySize.Medium
-export type MediumCity = City | { size: CitySize.Medium };
+export enum Category {
+  Electronics = 'ELECTRONICS',
+  Clothing = 'CLOTHING',
+}
+
+export enum Month {
+  January = 'JAN',
+  February = 'FEB',
+  March = 'MAR',
+}

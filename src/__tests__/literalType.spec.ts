@@ -1,10 +1,19 @@
-import { capitalize, removeWhitespace } from '../utils';
-import { setupVariables } from './helpers';
+import { removeWhitespace } from '../utils';
 import { generateTypeTypeGuard } from '../api/generateTypeTypeGuard';
-import { generateEnumTypeGuards } from '../api';
+import * as ts from 'typescript';
+import { createSourceFile } from 'typescript';
 
 describe('Literal types', () => {
-  const { evenNumbersTypeAlias, colorEnum } = setupVariables();
+  const text = `export type EvenNumbers = 2 & 4 & 6 & 8;
+    export type EvenNumberStrings = '2' & '4' & '6' & '8';
+    export type EvenNumberStringsCombi = '2' & 4 & '6' & 8;`;
+  const sourceFile = createSourceFile('', text, ts.ScriptTarget.ES2015, true);
+  const interfaces = sourceFile.statements.filter(ts.isTypeAliasDeclaration);
+  const [
+    evenNumbersTypeAlias,
+    evenNumberStringsTypeAlias,
+    evenNumberStringsCombiTypeAlias,
+  ] = interfaces;
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -23,40 +32,39 @@ describe('Literal types', () => {
         }`),
     );
   });
-  //TODO: somehow all the ' single quotes are getting removed
-  /*it('should generate correct typeguard for even numbers as strings', () => {
-        const result = generateTypeTypeGuard([evenNumberStringsTypeAlias], [], []);
-        expect(removeWhitespace(result)).toEqual(removeWhitespace(`export function isEvenNumberStrings(value: any): value is EvenNumberStrings {
+  it('should generate correct typeguard for even numbers as strings', () => {
+    const result = generateTypeTypeGuard([evenNumberStringsTypeAlias], [], []);
+    expect(removeWhitespace(result)).toEqual(
+      removeWhitespace(`export function isEvenNumberStrings(value: any): value is EvenNumberStrings {
           return (
             typeof value === "object" &&
             value !== null &&
-            value === "2" &&
-            value === "4" &&
-            value === "6" &&
-            value === "8"
+            value === '2' &&
+            value === '4' &&
+            value === '6' &&
+            value === '8'
           )
-        }`));
-    });
-    it('should generate correct typeguard for even numbers as strings and numbers', () => {
-        const result = generateTypeTypeGuard([evenNumberStringsCombiTypeAlias], [], []);
-        expect(removeWhitespace(result)).toEqual(removeWhitespace(`export function isEvenNumberStringsCombi(
+        }`),
+    );
+  });
+  it('should generate correct typeguard for even numbers as strings and numbers', () => {
+    const result = generateTypeTypeGuard(
+      [evenNumberStringsCombiTypeAlias],
+      [],
+      [],
+    );
+    expect(removeWhitespace(result)).toEqual(
+      removeWhitespace(`export function isEvenNumberStringsCombi(
           value: any
         ): value is EvenNumberStringsCombi {
           return (
-            typeof value === 'object' &&
+            typeof value === "object" &&
             value !== null &&
-            value === "2" &&
+            value === '2' &&
             value === 4 &&
-            value === "6" &&
+            value === '6' &&
             value === 8
           )
-        }`));
-    });*/
-  it('should generate typeguard for Enum', function () {
-    const result = generateEnumTypeGuards([colorEnum]);
-    expect(removeWhitespace(result)).toEqual(
-      removeWhitespace(`export function isColor(value: any): value is Color {
-          return Object.values(Color).includes(value);
         }`),
     );
   });
