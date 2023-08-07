@@ -1,26 +1,23 @@
-import { removeWhitespace } from '../utils';
-import { generateTypeTypeGuard } from '../api/generateTypeTypeGuard';
-import * as ts from 'typescript';
-import { createSourceFile } from 'typescript';
+import {removeWhitespace} from '../utils';
+import {generateTypeTypeGuard} from '../api/generateTypeTypeGuard';
+import * as ts from "typescript";
+import {createSourceFile} from "typescript";
 
 describe('Literal types', () => {
-  const text = `export type EvenNumbers = 2 & 4 & 6 & 8;
+    const text = `export type EvenNumbers = 2 & 4 & 6 & 8;
     export type EvenNumberStrings = '2' & '4' & '6' & '8';
     export type EvenNumberStringsCombi = '2' & 4 & '6' & 8;`;
-  const sourceFile = createSourceFile('', text, ts.ScriptTarget.ES2015, true);
-  const interfaces = sourceFile.statements.filter(ts.isTypeAliasDeclaration);
-  const [
-    evenNumbersTypeAlias,
-    evenNumberStringsTypeAlias,
-    evenNumberStringsCombiTypeAlias,
-  ] = interfaces;
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-  it('should generate correct typeguard for even numbers', () => {
-    const result = generateTypeTypeGuard([evenNumbersTypeAlias], [], []);
-    expect(removeWhitespace(result)).toEqual(
-      removeWhitespace(`export function isEvenNumbers(value: any): value is EvenNumbers {
+    const sourceFile = createSourceFile('', text,
+        ts.ScriptTarget.ES2015,
+        true,);
+    const interfaces = sourceFile.statements.filter(ts.isTypeAliasDeclaration);
+    const [evenNumbersTypeAlias, evenNumberStringsTypeAlias, evenNumberStringsCombiTypeAlias] = interfaces;
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+    it('should generate correct typeguard for even numbers', () => {
+        const result = generateTypeTypeGuard([evenNumbersTypeAlias], [], []);
+        expect(removeWhitespace(result)).toEqual(removeWhitespace(`export function isEvenNumbers(value: any): value is EvenNumbers {
           return (
             typeof value === "object" &&
             value !== null &&
@@ -30,12 +27,11 @@ describe('Literal types', () => {
             value === 8
           )
         }`),
-    );
-  });
-  it('should generate correct typeguard for even numbers as strings', () => {
-    const result = generateTypeTypeGuard([evenNumberStringsTypeAlias], [], []);
-    expect(removeWhitespace(result)).toEqual(
-      removeWhitespace(`export function isEvenNumberStrings(value: any): value is EvenNumberStrings {
+        );
+    });
+    it('should generate correct typeguard for even numbers as strings', () => {
+        const result = generateTypeTypeGuard([evenNumberStringsTypeAlias], [], []);
+        expect(removeWhitespace(result)).toEqual(removeWhitespace(`export function isEvenNumberStrings(value: any): value is EvenNumberStrings {
           return (
             typeof value === "object" &&
             value !== null &&
@@ -65,7 +61,6 @@ describe('Literal types', () => {
             value === '6' &&
             value === 8
           )
-        }`),
-    );
-  });
+        }`));
+    });
 });

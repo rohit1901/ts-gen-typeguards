@@ -1,8 +1,7 @@
 import { capitalize, removeWhitespace } from '../utils';
-import { setupVariables } from './helpers';
 import { generateEnumTypeGuards } from '../api';
-import { createSourceFile } from 'typescript';
-import * as ts from 'typescript';
+import {createSourceFile} from "typescript";
+import * as ts from "typescript";
 
 describe('Enum types', () => {
   const text = `export enum Fruit {
@@ -17,7 +16,7 @@ describe('Enum types', () => {
       Thursday = 4,
       Friday = 5
   }`;
-  const sourceFile = createSourceFile('', text, ts.ScriptTarget.ES2015, true);
+  const sourceFile = createSourceFile('', text, ts.ScriptTarget.ES2015, true,);
   const enums = sourceFile.statements.filter(ts.isEnumDeclaration);
   beforeEach(() => {
     jest.clearAllMocks();
