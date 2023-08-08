@@ -45,18 +45,17 @@ export function generateOptionalPropertyTypeGuard(
   // check if the type is a TypeReference
   if (isTypeReferenceNode(type)) {
     typeGuardCode.push(
-        createTypeguardString(name.getText(), capitalize(type.getText()), true),
+      createTypeguardString(name.getText(), capitalize(type.getText()), true),
     );
   } else if (isKeyword(type.kind)) {
     typeGuardCode.push(
-        createTypeguardString(
-            name.getText(),
-            `typeof value.${name.getText()} === ${type.getText()}`,
-            false,
-        ),
+      createTypeguardString(
+        name.getText(),
+        `typeof value.${name.getText()} === ${type.getText()}`,
+        false,
+      ),
     );
-  }
-  else if (isLiteralTypeNode(type)) {
+  } else if (isLiteralTypeNode(type)) {
     typeGuardCode.push(
       createTypeguardString(
         name.getText(),
@@ -65,11 +64,11 @@ export function generateOptionalPropertyTypeGuard(
       ),
     );
   } else if (isUnionTypeNode(type)) {
-    for(const member of type.types) {
+    for (const member of type.types) {
       // push typeguard for each member of the union type
     }
   } else if (isIntersectionTypeNode(type)) {
-    for(const member of type.types) {
+    for (const member of type.types) {
       // push typeguard for each member of the intersection type
     }
     // return typeguard for intersection type

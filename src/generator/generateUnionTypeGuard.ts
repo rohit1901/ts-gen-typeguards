@@ -7,7 +7,8 @@ import {
   isTypeReferenceNode,
   isUnionTypeNode,
   PropertyName,
-  PropertySignature, SyntaxKind,
+  PropertySignature,
+  SyntaxKind,
   TypeAliasDeclaration,
   TypeLiteralNode,
   TypeNode,
@@ -61,7 +62,9 @@ export function generateUnionTypeGuard(
   }
   const typeGuardCode: string[] = [];
   for (const unionType of type.types) {
-    typeGuardCode.push(...processUnionTypeWithTypeGuards(unionType, typeAliases));
+    typeGuardCode.push(
+      ...processUnionTypeWithTypeGuards(unionType, typeAliases),
+    );
   }
 
   return `if(${typeGuardCode.join(' || ')}) return false;`;
@@ -124,7 +127,7 @@ export function generateTypeLiteralTypeGuard(
   typeLiteral: TypeNode,
   parentName?: string,
 ): string[] {
-  if(!isTypeLiteralNode(typeLiteral)) return [];
+  if (!isTypeLiteralNode(typeLiteral)) return [];
   const propertyGuards: string[] = [];
   for (const member of typeLiteral.members) {
     if (isPropertySignature(member)) {
@@ -212,13 +215,13 @@ export function generateUnionTypeGuardForProperty(
  * The generated type guard code snippets can be later used for runtime type checks or other purposes.
  */
 function processUnionTypeWithTypeGuards(
-    unionType: TypeNode,
-    typeAliases: TypeAliasDeclaration[],
+  unionType: TypeNode,
+  typeAliases: TypeAliasDeclaration[],
 ): string[] {
   const typeGuardCode: string[] = [];
   if (isTypeReferenceNode(unionType)) {
     typeGuardCode.push(
-        ...generateTypeReferenceTypeGuard(unionType, typeAliases),
+      ...generateTypeReferenceTypeGuard(unionType, typeAliases),
     );
   } else if (isTypeLiteralNode(unionType)) {
     typeGuardCode.push(...generateTypeLiteralTypeGuard(unionType));

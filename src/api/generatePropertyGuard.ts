@@ -30,9 +30,7 @@ export function generatePropertyGuard(
   // handle required properties in a different way
   const propertyName = property.name.getText();
   typeGuard.push(`value.hasOwnProperty('${propertyName}')`);
-  typeGuard.push(
-      ...generateTypeLiteralTypeGuard(property.type, propertyName),
-  );
+  typeGuard.push(...generateTypeLiteralTypeGuard(property.type, propertyName));
   typeGuard.push(...generateKeywordGuard(property.type, propertyName, true));
   typeGuard.push(
     ...generateTypeReferenceGuard(property.type, propertyName, true),
