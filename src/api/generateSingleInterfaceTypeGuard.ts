@@ -2,6 +2,11 @@ import { InterfaceDeclaration, isInterfaceDeclaration } from 'typescript';
 import { generatePropertyGuard, handleHeritageClauses } from '../api';
 import { getEscapedCapitalizedStringLiteral } from '../utils';
 
+/**
+ * Generates a type guard for a single interface definition.
+ * @param definition
+ * @param definitions
+ */
 export function generateSingleInterfaceTypeGuard(
   definition: InterfaceDeclaration,
   definitions: InterfaceDeclaration[],

@@ -29,7 +29,7 @@ import {
   isLiteralType,
 } from '../utils';
 import {
-  generateTypeAliasTypeGuard,
+  generateTypeAliasGuardExpression,
   generateTypeReferenceTypeGuard,
 } from '../generator/generateUnionTypeGuard';
 import { generateQualifiedNameTypeGuard } from '../generator';
