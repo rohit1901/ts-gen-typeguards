@@ -1,88 +1,13 @@
-/*
-export interface Person {
-  intersectionLiteralType?: string & bigint;
-  unionLiteralType?: string | number;
-  intersectionReferenceType?: string & Point;
-  unionReferenceType?: string | Point;
-  literalType: number;
-  referenceType: Point;
-  anyType?: any;
-}
-
-export interface Person2 extends Person {
-  person2Prop: string;
-  person2Interface: Person;
-  // TODO: person2InterfaceTernary: Person extends Point ? Person : Point;
-}
-export interface Person3 extends Person2 {
-  person3Prop: string & Point;
-  person3ReferenceType: Point;
-  person3UnionLiteralType?: string | number;
-  person3UnionReferenceType?: string | Point;
-}
-export type Point = {
-  x: number;
-  y: number;
-};
-// TODO: For union types, literals like 'a' are generated as 'literal' instead of 'string', 'null'
-// 'null' as 'literal' instead of 'undefined'
-export type someType = 'a' | null | undefined | boolean | number | string;
-export type simple = { a: string } | PersonType;
-export type PersonType = {
-  name: string & number;
-  extra: string | number;
-};
-//TODO
-//conditional types
-//Parenthesis types
-export type Person4 = number & string;
-export type Person5 = Point & Point2Type;
-export type AddressType =
-  | ({
-      street: string;
-    } & PersonType)
-  | {
-      street2: string;
-    };
-export type Point2Type =
-  | {
-      x: number;
-      y: number;
-      z?: Point;
-    }
-  | (Point & PersonType);
-export type Point3Type = {
-  z?: number;
-  m?: string & Point;
-} & PersonType;
-
-export enum Color {
-  Red = 'red',
-  Green = 'green',
-  Blue = 'blue',
-}
-export enum Fruit {
-  Apple = 'APPLE',
-  Banana = 'BANANA',
-  Orange = 'ORANGE',
-}
-
-export enum Animal {
-  Dog = 'DOG',
-  Cat = 'CAT',
-  Lion = 'LION',
-}
-export type enumIntersection = Color & Fruit & Animal;
-export type enumUnion = Color | Fruit | Animal;
-//TODO: Imports
-*/
-
 export interface Point {
-  x?: number;
-  y: number;
+  required: string;
+  optional?: string;
 }
 export interface Person {
   name?: string;
+  optionalReferenceType?: Point;
+  optionalLiteralType?: 3;
+  optionalIntersectionReferenceType?: Point & City;
+  literalType: 2;
   gender: 'male' | 'female';
 }
 
@@ -97,22 +22,26 @@ export interface Car {
   brand: 'Toyota' | 'Honda' | 'Ford';
   color: 'red' | 'blue' | 'black';
 }
-//TODO: Nested Literal types are not supported
 export interface City {
   name?: string;
   literalType?: '2';
-  typeLiteralType: {
+  typeLiteralType?: {
     x: MediumCity;
   };
   population: number;
 }
 export interface Coordinates {
-  x: number;
-  y: number;
+  latitude: number;
+  longitude: number;
 }
-
+export interface Direction {
+  north: 'North';
+  south: 'South';
+  east: 'East';
+  west: 'West';
+}
 export interface Move {
-  direction: Day;
+  direction: Direction | 'up' | 'down' | 'left' | 'right';
   distance: number;
   position: Coordinates;
 }
@@ -136,12 +65,14 @@ export type MonthOrUndefined = Month | undefined;
 
 export type ElectronicProduct = Product & { category: Category.Electronics };
 export type NumberOrZero = 1 | 2 | 3 | 4 | 0;
-//TODO: Could be improved by checking isCar(value)
 export type RedToyota = Car & { brand: 'Toyota'; color: 'red' };
 export type MediumCity = City | { size: CitySize.Medium };
 
-//TODO: Could be improved by checking isUser(value)
-export type ActiveUser = Status & User;
+export type ActiveUser = Status &
+  User &
+  MediumCity &
+  ElectronicProduct &
+  NumberOrZero;
 
 export type PrimitiveTypes = string | number | bigint | null | any | undefined;
 export type EvenNumbers = 2 & 4 & 6 & 8;
@@ -155,7 +86,50 @@ export type PointAndName = Point & { name: string };
 export type Gender = 'male' | 'female' | 'other';
 export type RedCircle = Color.Red & { shape: 'circle' };
 export type ColorOrString = Color | 'yellow';
+export type RedOrBlue = Color.Red | Color.Blue;
 export type WorkingDay = Day & { isWorking?: boolean };
+export type NestedType = {
+  person: {
+    id?: PersonId;
+    color: Color.Blue;
+    green?: Color.Green;
+  };
+};
+export type PointType = {
+  required: string;
+  optional?: string;
+  typeLiteralRequired: {
+    x: number;
+  };
+  typeLiteralOptional?: {
+    y: number;
+    literalTypeRequired: '2';
+  };
+};
+export type LiteralType = 2 & 3;
+export type LiteralTypeObject = {
+  literalTypeRequired: '2';
+  typeLiteralRequired: {
+    typeLiteralNestedRequired: {
+      x: number;
+      y: 2;
+      z: 'z';
+    };
+  };
+};
+export type LiteralTypeObjectOptional = {
+  typeLiteralOptional?: {
+    typeLiteralNestedOptional?: {
+      x?: number;
+      y: LiteralType;
+      z: 'z';
+    };
+    typeLiteralNestedRequired: {
+      x?: number;
+      y?: LiteralType;
+    };
+  };
+};
 
 export enum Fruit {
   Apple = 'APPLE',

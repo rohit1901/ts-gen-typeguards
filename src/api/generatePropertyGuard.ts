@@ -11,8 +11,12 @@ import { generateTypeLiteralTypeGuard } from '../generator/generateUnionTypeGuar
 
 /**
  * Function to generate a type guard for a TypeElement. Used to generate type guard string for properties.
+ * A property (TypeElement) can be either a required or optional property.
+ * A property could be a TypeLiteral, a TypeReference, an IntersectionType, or a UnionType.
+ * If the property is optional, the type guard will be generated using the generateOptionalPropertyTypeGuard function.
+ * If the property is required, the type guard will be generated using the generateTypeLiteralTypeGuard function.
  * @param property - A TypeElement.
- * @param parentName
+ * @param parentName - The name of the parent interface. Its presence signifies that the property is a nested property.
  */
 export function generatePropertyGuard(
   property: TypeElement,
@@ -23,19 +27,15 @@ export function generatePropertyGuard(
   const propertyName = parentName
     ? `${parentName}.${property.name.getText()}`
     : property.name.getText();
-  if (parentName) {
-    typeGuard.push(
-      `value.${parentName}.hasOwnProperty('${property.name.getText()}')`,
-    );
-  } else {
-    typeGuard.push(`value.hasOwnProperty('${propertyName}')`);
-  }
+  const hasOwnPropertyString = parentName ? `value.${parentName}` : `value`;
+  // handle optional properties separately
   if (property.questionToken)
-    return generateOptionalPropertyTypeGuard(property, parentName);
-  if (isTypeLiteralNode(property.type))
-    typeGuard.push(
-      ...generateTypeLiteralTypeGuard(property.type, propertyName),
-    );
+    return generateOptionalPropertyTypeGuard(property, propertyName);
+  // handle required properties in a different way
+  typeGuard.push(
+    `${hasOwnPropertyString}.hasOwnProperty('${property.name.getText()}')`,
+  );
+  typeGuard.push(...generateTypeLiteralTypeGuard(property.type, propertyName));
   typeGuard.push(...generateKeywordGuard(property.type, propertyName, true));
   typeGuard.push(
     ...generateTypeReferenceGuard(property.type, propertyName, true),

@@ -1,19 +1,33 @@
 // Generate type guards for optional properties
 import {
+  factory,
   isArrayTypeNode,
   isIntersectionTypeNode,
   isLiteralTypeNode,
+  isQualifiedName,
   isTupleTypeNode,
   isTypeLiteralNode,
   isTypeReferenceNode,
   isUnionTypeNode,
   PropertySignature,
+  SyntaxKind,
 } from 'typescript';
-import { capitalize, isKeyword } from '../utils';
+import {
+  capitalize,
+  getEscapedStringLiteral,
+  getLiteralType,
+  isKeyword,
+} from '../utils';
 import {
   generateTypeLiteralTypeGuard,
   generateTypeReferenceTypeGuard,
 } from './generateUnionTypeGuard';
+import {
+  generateIntersectionTypeGuard,
+  generateKeywordGuard,
+  generateTypeReferenceGuard,
+} from '../api';
+import { getQualifiedNameText } from './generateQualifiedNameTypeGuard';
 
 /**
  * Generates Typeguards for an Optional property which could be of the following types:
@@ -25,9 +39,15 @@ import {
  * - ArrayType
  * - TupleType
  * - TypeLiteral
- * The would look like:
+ * @example
+ * export type Person = {
+ *  name: string;
+ * }
+ * export type Employee = {
+ *  person?: Person;
+ * }
  * ```
- * (value.property === 'undefined' || isLiteralType(value.property))
+ * (value.person === 'undefined' || isPerson(value.person))
  * ```
  */
 export function generateOptionalPropertyTypeGuard(
@@ -36,40 +56,72 @@ export function generateOptionalPropertyTypeGuard(
 ): string[] {
   if (!questionToken) return [];
   const typeGuardCode: string[] = [];
-  if (isLiteralTypeNode(type)) {
+  // check if the type is a TypeReference
+  if (isTypeReferenceNode(type)) {
+    if (isQualifiedName(type.typeName)) {
+      typeGuardCode.push(
+        createTypeguardString(
+          parentName ?? name.getText(),
+          `value.${parentName ?? name.getText()} === ${getQualifiedNameText(
+            type.typeName,
+          )}`,
+          false,
+        ),
+      );
+    } else {
+      typeGuardCode.push(
+        createTypeguardString(
+          parentName ?? name.getText(),
+          capitalize(type.getText()),
+          true,
+        ),
+      );
+    }
+  } else if (isKeyword(type.kind) && type.kind !== SyntaxKind.LiteralType) {
     typeGuardCode.push(
       createTypeguardString(
-        name.getText(),
-        `value.${name.getText()} === ${type.getText()}`,
+        parentName ?? name.getText(),
+        `typeof value.${
+          parentName ?? name.getText()
+        } === '${getEscapedStringLiteral(type.getText())}'`,
         false,
       ),
     );
-  } else if (isTypeReferenceNode(type)) {
+  } else if (isLiteralTypeNode(type)) {
     typeGuardCode.push(
-      createTypeguardString(name.getText(), capitalize(type.getText()), true),
+      createTypeguardString(
+        parentName ?? name.getText(),
+        `value.${parentName ?? name.getText()} === ${type.getText()}`,
+        false,
+      ),
     );
-    // return typeguard for type reference
   } else if (isUnionTypeNode(type)) {
-    // return typeguard for union type
+    for (const member of type.types) {
+      // push typeguard for each member of the union type
+    }
   } else if (isIntersectionTypeNode(type)) {
-    // return typeguard for intersection type
-  } else if (isKeyword(type.kind)) {
     typeGuardCode.push(
       createTypeguardString(
         name.getText(),
-        `typeof value.${name.getText()} === '${type.getText()}'`,
+        generateIntersectionTypeGuard(type, name.getText(), true).join(' && '),
         false,
       ),
     );
-    // return typeguard for keyword type
   } else if (isArrayTypeNode(type)) {
     // return typeguard for array type
   } else if (isTupleTypeNode(type)) {
     // return typeguard for tuple type
   } else if (isTypeLiteralNode(type)) {
-    const text = generateTypeLiteralTypeGuard(type, parentName).join('');
-    console.log('text', text, parentName);
-    typeGuardCode.push(createTypeguardString(name.getText(), text));
+    typeGuardCode.push(
+      createTypeguardString(
+        parentName ?? name.getText(),
+        generateTypeLiteralTypeGuard(type, parentName ?? name.getText()).join(
+          '',
+        ),
+        false,
+      ),
+    );
+    // return typeguard for TypeLiteral
   } else {
     console.error('Unsupported type', name, type.getText());
   }
