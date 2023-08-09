@@ -1,6 +1,6 @@
-import {factory, isIntersectionTypeNode, TypeNode} from 'typescript';
-import {generateKeywordGuard, generateTypeReferenceGuard} from '../api';
-import {generateTypeLiteralTypeGuard} from "./generateTypeTypeGuard";
+import { factory, isIntersectionTypeNode, TypeNode } from 'typescript';
+import { generateKeywordGuard, generateTypeReferenceGuard } from '../api';
+import { generateTypeLiteralTypeGuard } from './generateTypeTypeGuard';
 
 /**
  * Generates a type guard for an IntersectionTypeNode.
@@ -31,17 +31,26 @@ import {generateTypeLiteralTypeGuard} from "./generateTypeTypeGuard";
  * types, an empty array is returned.
  */
 export function generateIntersectionTypeGuard(
-    type: TypeNode,
-    typeName: string,
-    isProperty?: boolean,
+  type: TypeNode,
+  typeName: string,
+  isProperty?: boolean,
 ) {
-    const typeGuard: string[] = [];
-    if (!isIntersectionTypeNode(type)) return typeGuard;
-    if (!type.types) return typeGuard;
-    for (const member of type.types) {
-        typeGuard.push(...generateKeywordGuard(member, typeName, isProperty));
-        typeGuard.push(...generateTypeReferenceGuard(member, typeName, isProperty));
-        typeGuard.push(...generateTypeLiteralTypeGuard(factory.createTypeAliasDeclaration(undefined, typeName, undefined, member)))
-    }
-    return typeGuard;
+  const typeGuard: string[] = [];
+  if (!isIntersectionTypeNode(type)) return typeGuard;
+  if (!type.types) return typeGuard;
+  for (const member of type.types) {
+    typeGuard.push(...generateKeywordGuard(member, typeName, isProperty));
+    typeGuard.push(...generateTypeReferenceGuard(member, typeName, isProperty));
+    typeGuard.push(
+      ...generateTypeLiteralTypeGuard(
+        factory.createTypeAliasDeclaration(
+          undefined,
+          typeName,
+          undefined,
+          member,
+        ),
+      ),
+    );
+  }
+  return typeGuard;
 }

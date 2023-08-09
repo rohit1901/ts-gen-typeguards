@@ -1,6 +1,7 @@
 import {
   EnumDeclaration,
-  factory, Identifier,
+  factory,
+  Identifier,
   InterfaceDeclaration,
   isEnumDeclaration,
   isIntersectionTypeNode,
@@ -87,8 +88,8 @@ export function generateTypeLiteralTypeGuard(definition: TypeAliasDeclaration) {
   return typeGuardStrings;
 }
 function getName(name: Identifier): string {
-  if(!name) return;
-  if(name.hasOwnProperty('escapedText')) {
+  if (!name) return;
+  if (name.hasOwnProperty('escapedText')) {
     return name.escapedText.toString();
   }
   return name.getText();

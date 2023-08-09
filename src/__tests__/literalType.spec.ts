@@ -48,10 +48,7 @@ describe('Literal types', () => {
     );
   });
   it('should generate correct typeguard for even numbers as strings and numbers', () => {
-    const result = generateTypeTypeGuard(
-      [evenNumberStringsCombiTypeAlias],
-      [],
-    );
+    const result = generateTypeTypeGuard([evenNumberStringsCombiTypeAlias], []);
     expect(removeWhitespace(result)).toEqual(
       removeWhitespace(`export function isEvenNumberStringsCombi(
           value: any

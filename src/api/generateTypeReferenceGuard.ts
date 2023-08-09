@@ -32,7 +32,12 @@ export function generateTypeReferenceGuard(
   if (!isTypeReferenceNode(type)) return typeGuard;
   // Enums: Check if the typeName is a qualified name
   if (isQualifiedName(type.typeName)) {
-    typeGuard.push(generateQualifiedNameTypeGuard(type.typeName, isProperty ? typeName : undefined));
+    typeGuard.push(
+      generateQualifiedNameTypeGuard(
+        type.typeName,
+        isProperty ? typeName : undefined,
+      ),
+    );
     return typeGuard;
   }
   if (isProperty) {
