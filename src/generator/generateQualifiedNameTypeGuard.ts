@@ -18,13 +18,13 @@ import { QualifiedName } from 'typescript';
  *  where `A.B` is a QualifiedName.
  * @param type - A QualifiedName.
  * @param typeName - The name of the type.
- * @param isProperty - Optional boolean to indicate if the type is a property.
  */
 export function generateQualifiedNameTypeGuard(
   type: QualifiedName,
-  typeName: string,
+  typeName?: string,
 ) {
-  return `value.${typeName} === ${type.left.getText()}.${type.right.getText()}`;
+  const v = typeName ? `value.${typeName}` : 'value';
+  return `${v} === ${type.left.getText()}.${type.right.getText()}`;
 }
 
 /**

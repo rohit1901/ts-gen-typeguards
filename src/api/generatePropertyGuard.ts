@@ -24,13 +24,15 @@ export function generatePropertyGuard(
 ) {
   const typeGuard: string[] = [];
   if (!isPropertySignature(property)) return typeGuard;
+  const propertyName = parentName ? `${parentName}.${property.name.getText()}`: property.name.getText();
+  const hasOwnPropertyString = parentName ? `value.${parentName}` : `value`
   // handle optional properties separately
-  if (property.questionToken)
-    return generateOptionalPropertyTypeGuard(property, parentName);
+  if (property.questionToken) return generateOptionalPropertyTypeGuard(property, propertyName);
   // handle required properties in a different way
-  const propertyName = property.name.getText();
-  typeGuard.push(`value.hasOwnProperty('${propertyName}')`);
-  typeGuard.push(...generateTypeLiteralTypeGuard(property.type, propertyName));
+  typeGuard.push(`${hasOwnPropertyString}.hasOwnProperty('${property.name.getText()}')`);
+  typeGuard.push(
+      ...generateTypeLiteralTypeGuard(property.type, propertyName),
+  );
   typeGuard.push(...generateKeywordGuard(property.type, propertyName, true));
   typeGuard.push(
     ...generateTypeReferenceGuard(property.type, propertyName, true),

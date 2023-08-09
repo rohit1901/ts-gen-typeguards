@@ -88,9 +88,9 @@ function generateLiteralTypeGuard(
   literalKind: SyntaxKind,
   literalText?: string,
 ): string {
-  return `typeof value.${propertyName} === '${
-    getEscapedStringLiteral(literalText) ?? getLiteralType(literalKind)
-  }'`;
+    return `value.${propertyName} === '${
+        getEscapedStringLiteral(literalText) ?? getLiteralType(literalKind)
+    }'`;
 }
 
 /**

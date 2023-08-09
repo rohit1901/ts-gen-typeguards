@@ -1,6 +1,6 @@
 import {
   EnumDeclaration,
-  factory,
+  factory, Identifier,
   InterfaceDeclaration,
   isEnumDeclaration,
   isIntersectionTypeNode,
@@ -15,6 +15,7 @@ import {
   TypeElement,
 } from 'typescript';
 import {
+  generateIntersectionTypeGuard,
   generateKeywordGuard,
   generateKeywordGuardForType,
   generatePropertyGuard,
@@ -44,30 +45,23 @@ import { generateQualifiedNameTypeGuard } from '../generator';
 export function generateTypeTypeGuard(
   definitions: TypeAliasDeclaration[],
   enums: EnumDeclaration[],
-  interfaces: InterfaceDeclaration[],
 ): string {
   const typeGuard: string[] = [];
   for (const definition of definitions) {
     const typeGuardStrings: string[] = [];
-    const newDefinition = handleIntersectionTypesForTypeAlias(
-      definition,
-      definitions,
-      enums,
-      interfaces,
-    );
-    const { name, type } = newDefinition;
-    const typeName = name.getText();
+    const { name, type } = definition;
+    const typeName = name ? name.getText() : undefined;
     const typeGuardName = getEscapedCapitalizedStringLiteral(typeName);
     typeGuardStrings.push(`export function is${getEscapedCapitalizedStringLiteral(
       typeGuardName,
     )}(value: any): value is ${typeName} {return(typeof value === "object" &&
     value !== null`);
-    typeGuardStrings.push(...generateTypeLiteralTypeGuard(newDefinition));
+    typeGuardStrings.push(...generateIntersectionTypeGuard(type, typeName));
+    typeGuardStrings.push(...generateTypeLiteralTypeGuard(definition));
     typeGuardStrings.push(
       ...generateUnionTypeGuard(type, typeName, undefined, definitions),
     );
     typeGuardStrings.push(...generateKeywordGuard(type));
-    typeGuardStrings.push(...generateFakeTypeElement(newDefinition));
     typeGuardStrings.push(...handleEnumIntersection(definition, enums));
     typeGuard.push(typeGuardStrings.join('&&') + `)}`);
   }
@@ -79,9 +73,9 @@ export function generateTypeTypeGuard(
  * @param definition - The TypeAliasDeclaration to process.
  * @returns An array of strings containing the type guard statements for the TypeLiteralNode properties.
  */
-function generateTypeLiteralTypeGuard(definition: TypeAliasDeclaration) {
+export function generateTypeLiteralTypeGuard(definition: TypeAliasDeclaration) {
   const { name, type } = definition;
-  const typeName = name.getText();
+  const parentName = getName(name);
   const typeGuardStrings: string[] = [];
   if (!isTypeLiteralNode(type)) {
     return '';
@@ -92,38 +86,10 @@ function generateTypeLiteralTypeGuard(definition: TypeAliasDeclaration) {
   }
   return typeGuardStrings;
 }
-
-/**
- * Generates fake type guards for properties with a custom brand of 'fake' in a given TypeAliasDeclaration.
- *
- * @param {TypeAliasDeclaration} typeAlias - The TypeAliasDeclaration to process and generate fake type guards.
- * @returns {string[]} - An array of strings representing the fake type guards for properties with the 'fake' brand.
- */
-function generateFakeTypeElement(typeAlias: TypeAliasDeclaration): string[] {
-  // Function logic to generate fake type guards for properties with a custom brand of 'fake'.
-
-  const typeGuardStrings: string[] = [];
-
-  // Check if the typeAlias has a TypeLiteralNode type.
-  if (!isTypeLiteralNode(typeAlias.type)) {
-    return typeGuardStrings;
+function getName(name: Identifier): string {
+  if(!name) return;
+  if(name.hasOwnProperty('escapedText')) {
+    return name.escapedText.toString();
   }
-
-  // Iterate through each property in the TypeLiteralNode.
-  for (const property of typeAlias.type.members) {
-    if (
-      property._typeElementBrand === 'fake' &&
-      !isPropertySignature(property)
-    ) {
-      typeGuardStrings.push(`value === ${property.getText()}`);
-    } else if (property._typeElementBrand === 'fake') {
-      // If the property has the 'fake' brand, generate a keyword type guard for its custom brand and add it to the array.
-      typeGuardStrings.push(
-        generateKeywordGuardForType(property._declarationBrand),
-      );
-    }
-  }
-
-  // Return the array of generated fake type guards.
-  return typeGuardStrings;
+  return name.getText();
 }

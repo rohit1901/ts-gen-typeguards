@@ -1,11 +1,12 @@
 export interface Point {
-  x?: number;
-  y: number;
+    required: string;
+    optional?: string;
 }
 export interface Person {
   name?: string;
   optionalReferenceType?: Point;
   optionalLiteralType?: 3;
+  optionalIntersectionReferenceType?: Point & City;
   literalType: 2;
   gender: 'male' | 'female';
 }
@@ -21,22 +22,26 @@ export interface Car {
   brand: 'Toyota' | 'Honda' | 'Ford';
   color: 'red' | 'blue' | 'black';
 }
-//TODO: Nested Literal types are not supported
 export interface City {
   name?: string;
   literalType?: '2';
-  typeLiteralType: {
+  typeLiteralType?: {
     x: MediumCity;
   };
   population: number;
 }
 export interface Coordinates {
-  x: number;
-  y: number;
+  latitude: number;
+  longitude: number;
 }
-
+export interface Direction {
+  north: 'North';
+    south: 'South';
+    east: 'East';
+    west: 'West';
+}
 export interface Move {
-  direction: Day;
+  direction: Direction | 'up' | 'down' | 'left' | 'right';
   distance: number;
   position: Coordinates;
 }
@@ -60,12 +65,10 @@ export type MonthOrUndefined = Month | undefined;
 
 export type ElectronicProduct = Product & { category: Category.Electronics };
 export type NumberOrZero = 1 | 2 | 3 | 4 | 0;
-//TODO: Could be improved by checking isCar(value)
 export type RedToyota = Car & { brand: 'Toyota'; color: 'red' };
 export type MediumCity = City | { size: CitySize.Medium };
 
-//TODO: Could be improved by checking isUser(value)
-export type ActiveUser = Status & User;
+export type ActiveUser = Status & User & MediumCity & ElectronicProduct & NumberOrZero;
 
 export type PrimitiveTypes = string | number | bigint | null | any | undefined;
 export type EvenNumbers = 2 & 4 & 6 & 8;
@@ -79,7 +82,50 @@ export type PointAndName = Point & { name: string };
 export type Gender = 'male' | 'female' | 'other';
 export type RedCircle = Color.Red & { shape: 'circle' };
 export type ColorOrString = Color | 'yellow';
+export type RedOrBlue = Color.Red | Color.Blue;
 export type WorkingDay = Day & { isWorking?: boolean };
+export type NestedType = {
+    person: {
+      id?: PersonId;
+      color: Color.Blue;
+      green?: Color.Green;
+    }
+}
+export type PointType = {
+    required: string;
+    optional?: string;
+    typeLiteralRequired: {
+        x: number;
+    }
+    typeLiteralOptional?: {
+        y: number;
+        literalTypeRequired: '2';
+    }
+}
+export type LiteralType = 2 & 3;
+export type LiteralTypeObject = {
+    literalTypeRequired: '2';
+    typeLiteralRequired: {
+        typeLiteralNestedRequired: {
+            x: number;
+            y: 2;
+            z: 'z'
+        }
+    }
+}
+export type LiteralTypeObjectOptional = {
+    typeLiteralOptional?: {
+        typeLiteralNestedOptional?: {
+            x?: number;
+            y: LiteralType;
+            z: 'z'
+        }
+        typeLiteralNestedRequired: {
+            x?: number;
+            y?: LiteralType;
+        }
+    }
+}
 
 export enum Fruit {
   Apple = 'APPLE',

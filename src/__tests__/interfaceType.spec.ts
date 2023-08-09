@@ -96,7 +96,7 @@ describe('Interfaces', () => {
         value !== null &&
         (typeof value.name === 'undefined' || typeof value.name === 'string') &&
         value.hasOwnProperty('gender') &&
-        (typeof value.gender === 'male' || typeof value.gender === 'female')
+        ( value.gender === 'male' ||  value.gender === 'female')
       )
     }`;
     expect(removeWhitespace(result)).toEqual(removeWhitespace(expectedResult));
@@ -114,7 +114,7 @@ describe('Interfaces', () => {
         typeof value.employeeId === 'number' &&
         (typeof value.name === 'undefined' || typeof value.name === 'string') &&
         value.hasOwnProperty('gender') &&
-        (typeof value.gender === 'male' || typeof value.gender === 'female')
+        ( value.gender === 'male' ||  value.gender === 'female')
       )
     }`;
     const expectedPersonResult = `export function isPerson(value: any): value is Person {
@@ -123,7 +123,7 @@ describe('Interfaces', () => {
         value !== null &&
         (typeof value.name === 'undefined' || typeof value.name === 'string') &&
         value.hasOwnProperty('gender') &&
-        (typeof value.gender === 'male' || typeof value.gender === 'female')
+        ( value.gender === 'male' ||  value.gender === 'female')
       )
     }`;
     expect(removeWhitespace(result)).toEqual(
@@ -151,9 +151,9 @@ describe('Interfaces', () => {
         typeof value === "object" &&
         value !== null &&
         value.hasOwnProperty('brand') &&
-        (typeof value.brand === 'Toyota' || typeof value.brand === 'Honda' || typeof value.brand === 'Ford') &&
+        ( value.brand === 'Toyota' ||  value.brand === 'Honda' ||  value.brand === 'Ford') &&
         value.hasOwnProperty('color') &&
-        (typeof value.color === 'red' || typeof value.color === 'blue' || typeof value.color === 'black')
+        ( value.color === 'red' ||  value.color === 'blue' ||  value.color === 'black')
       )
     }`;
     expect(removeWhitespace(result)).toEqual(removeWhitespace(expectedResult));
@@ -225,9 +225,9 @@ describe('Interfaces', () => {
             typeof value === "object" &&
             value !== null &&
             value.hasOwnProperty('type') &&
-            (typeof value.type === 'car' ||
-              typeof value.type === 'bike' ||
-              typeof value.type === 'bus') &&
+            ( value.type === 'car' ||
+               value.type === 'bike' ||
+               value.type === 'bus') &&
             value.hasOwnProperty('wheels') &&
             typeof value.wheels === 'number'
           )

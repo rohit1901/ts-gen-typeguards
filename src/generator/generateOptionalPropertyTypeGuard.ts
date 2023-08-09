@@ -1,19 +1,22 @@
 // Generate type guards for optional properties
 import {
+  factory,
   isArrayTypeNode,
   isIntersectionTypeNode,
-  isLiteralTypeNode,
+  isLiteralTypeNode, isQualifiedName,
   isTupleTypeNode,
   isTypeLiteralNode,
   isTypeReferenceNode,
   isUnionTypeNode,
-  PropertySignature,
+  PropertySignature, SyntaxKind,
 } from 'typescript';
-import { capitalize, isKeyword } from '../utils';
+import {capitalize, getEscapedStringLiteral, getLiteralType, isKeyword} from '../utils';
 import {
   generateTypeLiteralTypeGuard,
   generateTypeReferenceTypeGuard,
 } from './generateUnionTypeGuard';
+import {generateIntersectionTypeGuard, generateKeywordGuard, generateTypeReferenceGuard} from "../api";
+import {getQualifiedNameText} from "./generateQualifiedNameTypeGuard";
 
 /**
  * Generates Typeguards for an Optional property which could be of the following types:
@@ -44,22 +47,26 @@ export function generateOptionalPropertyTypeGuard(
   const typeGuardCode: string[] = [];
   // check if the type is a TypeReference
   if (isTypeReferenceNode(type)) {
+    if(isQualifiedName(type.typeName)) {
+      typeGuardCode.push(createTypeguardString(parentName ?? name.getText(), `value.${parentName ?? name.getText()} === ${getQualifiedNameText(type.typeName)}`, false));
+    } else {
+      typeGuardCode.push(
+          createTypeguardString(parentName ?? name.getText(), capitalize(type.getText()), true),
+      );
+    }
+  } else if (isKeyword(type.kind) && type.kind !== SyntaxKind.LiteralType) {
     typeGuardCode.push(
-      createTypeguardString(name.getText(), capitalize(type.getText()), true),
-    );
-  } else if (isKeyword(type.kind)) {
-    typeGuardCode.push(
-      createTypeguardString(
-        name.getText(),
-        `typeof value.${name.getText()} === ${type.getText()}`,
-        false,
-      ),
+        createTypeguardString(
+            parentName ?? name.getText(),
+            `typeof value.${parentName ?? name.getText()} === '${getEscapedStringLiteral(type.getText())}'`,
+            false,
+        ),
     );
   } else if (isLiteralTypeNode(type)) {
     typeGuardCode.push(
       createTypeguardString(
-        name.getText(),
-        `value.${name.getText()} === ${type.getText()}`,
+        parentName ?? name.getText(),
+        `value.${parentName ?? name.getText()} === ${type.getText()}`,
         false,
       ),
     );
@@ -68,15 +75,13 @@ export function generateOptionalPropertyTypeGuard(
       // push typeguard for each member of the union type
     }
   } else if (isIntersectionTypeNode(type)) {
-    for (const member of type.types) {
-      // push typeguard for each member of the intersection type
-    }
-    // return typeguard for intersection type
+    typeGuardCode.push(createTypeguardString(name.getText(), generateIntersectionTypeGuard(type, name.getText(), true).join(' && '), false));
   } else if (isArrayTypeNode(type)) {
     // return typeguard for array type
   } else if (isTupleTypeNode(type)) {
     // return typeguard for tuple type
   } else if (isTypeLiteralNode(type)) {
+    typeGuardCode.push(createTypeguardString(parentName ?? name.getText(), generateTypeLiteralTypeGuard(type, parentName ?? name.getText()).join(''), false))
     // return typeguard for TypeLiteral
   } else {
     console.error('Unsupported type', name, type.getText());

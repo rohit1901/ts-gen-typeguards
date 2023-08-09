@@ -30,12 +30,12 @@ export function generateTypeReferenceGuard(
 ) {
   const typeGuard: string[] = [];
   if (!isTypeReferenceNode(type)) return typeGuard;
+  // Enums: Check if the typeName is a qualified name
+  if (isQualifiedName(type.typeName)) {
+    typeGuard.push(generateQualifiedNameTypeGuard(type.typeName, isProperty ? typeName : undefined));
+    return typeGuard;
+  }
   if (isProperty) {
-    // Enums: Check if the typeName is a qualified name
-    if (isQualifiedName(type.typeName)) {
-      typeGuard.push(generateQualifiedNameTypeGuard(type.typeName, typeName));
-      return typeGuard;
-    }
     // Generate type guard for property
     typeGuard.push(
       `is${getEscapedCapitalizedStringLiteral(

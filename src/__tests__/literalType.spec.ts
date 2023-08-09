@@ -18,7 +18,7 @@ describe('Literal types', () => {
     jest.clearAllMocks();
   });
   it('should generate correct typeguard for even numbers', () => {
-    const result = generateTypeTypeGuard([evenNumbersTypeAlias], [], []);
+    const result = generateTypeTypeGuard([evenNumbersTypeAlias], []);
     expect(removeWhitespace(result)).toEqual(
       removeWhitespace(`export function isEvenNumbers(value: any): value is EvenNumbers {
           return (
@@ -33,7 +33,7 @@ describe('Literal types', () => {
     );
   });
   it('should generate correct typeguard for even numbers as strings', () => {
-    const result = generateTypeTypeGuard([evenNumberStringsTypeAlias], [], []);
+    const result = generateTypeTypeGuard([evenNumberStringsTypeAlias], []);
     expect(removeWhitespace(result)).toEqual(
       removeWhitespace(`export function isEvenNumberStrings(value: any): value is EvenNumberStrings {
           return (
@@ -50,7 +50,6 @@ describe('Literal types', () => {
   it('should generate correct typeguard for even numbers as strings and numbers', () => {
     const result = generateTypeTypeGuard(
       [evenNumberStringsCombiTypeAlias],
-      [],
       [],
     );
     expect(removeWhitespace(result)).toEqual(

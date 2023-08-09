@@ -1,29 +1,24 @@
 // Generate type guards for literal types
 import {
-  factory,
-  isIntersectionTypeNode,
-  isPropertySignature,
-  isTypeLiteralNode,
-  isTypeReferenceNode,
-  isUnionTypeNode,
-  PropertySignature,
-  TypeAliasDeclaration,
-  TypeNode,
+    isIntersectionTypeNode,
+    isPropertySignature,
+    isTypeLiteralNode,
+    isTypeReferenceNode,
+    isUnionTypeNode,
+    PropertySignature,
+    TypeAliasDeclaration, TypeLiteralNode,
+    TypeNode,
 } from 'typescript';
 import {
-  getEscapedCapitalizedStringLiteral,
-  getEscapedStringLiteral,
-  getMembersFromTypeAlias,
-  isKeywordSyntaxKind,
-  isPrimitiveSyntaxKind,
-  syntaxKindToType,
+    getEscapedCapitalizedStringLiteral,
+    getEscapedStringLiteral,
+    isPrimitiveSyntaxKind,
+    syntaxKindToType,
 } from '../utils';
-import {
-  generateUnionTypeGuard,
-  generateUnionTypeGuardForProperty,
-} from './generateUnionTypeGuard';
-import { generateOptionalPropertyTypeGuard } from './generateOptionalPropertyTypeGuard';
-import { generateIntersectionTypeGuardForProperty } from './generateIntersectionTypeGuard';
+import {generateUnionTypeGuardForProperty,} from './generateUnionTypeGuard';
+import {generateOptionalPropertyTypeGuard} from './generateOptionalPropertyTypeGuard';
+import {generateIntersectionTypeGuardForProperty} from './generateIntersectionTypeGuard';
+
 /**
  * Generates a type guard for a property based on its TypeScript PropertySignature.
  *
@@ -32,74 +27,61 @@ import { generateIntersectionTypeGuardForProperty } from './generateIntersection
  * @returns {string} The generated type guard code as a string.
  */
 export function generatePropertyTypeGuard(
-  { questionToken, name, type }: PropertySignature,
-  typeAliases: TypeAliasDeclaration[],
+    {questionToken, name, type}: PropertySignature,
+    typeAliases: TypeAliasDeclaration[],
 ): string {
-  const propType = syntaxKindToType(type.kind);
-  const typeGuardCode: string[] = [];
-  if (isTypeReferenceNode(type) && !questionToken) {
-    typeGuardCode.push(
-      `if (!value.hasOwnProperty('${getEscapedStringLiteral(
-        name.getText(),
-      )}') || !is${getEscapedCapitalizedStringLiteral(
-        type.typeName.getText(),
-      )}(value.${getEscapedStringLiteral(name.getText())})) {`,
-    );
-    typeGuardCode.push(`    return false;\n`);
+    const propType = syntaxKindToType(type.kind);
+    const typeGuardCode: string[] = [];
+    if (isTypeReferenceNode(type) && !questionToken) {
+        typeGuardCode.push(
+            `if (!value.hasOwnProperty('${getEscapedStringLiteral(
+                name.getText(),
+            )}') || !is${getEscapedCapitalizedStringLiteral(
+                type.typeName.getText(),
+            )}(value.${getEscapedStringLiteral(name.getText())})) {`,
+        );
+        typeGuardCode.push(`    return false;\n`);
 
-    typeGuardCode.push(`}\n`);
-  } else if (isPrimitiveSyntaxKind(type.kind) && !questionToken) {
-    typeGuardCode.push(
-      `if (!value.hasOwnProperty('${getEscapedStringLiteral(
-        name.getText(),
-      )}') || typeof value.${getEscapedStringLiteral(
-        name.getText(),
-      )} !== '${propType}') {`,
-    );
-    typeGuardCode.push(`    return false;\n`);
+        typeGuardCode.push(`}\n`);
+    } else if (isPrimitiveSyntaxKind(type.kind) && !questionToken) {
+        typeGuardCode.push(
+            `if (!value.hasOwnProperty('${getEscapedStringLiteral(
+                name.getText(),
+            )}') || typeof value.${getEscapedStringLiteral(
+                name.getText(),
+            )} !== '${propType}') {`,
+        );
+        typeGuardCode.push(`    return false;\n`);
 
-    typeGuardCode.push(`}\n`);
-  } else if (isUnionTypeNode(type)) {
-    typeGuardCode.push(
-      generateUnionTypeGuardForProperty(type, typeAliases, name?.getText()),
-    );
-  } else if (isIntersectionTypeNode(type)) {
-    typeGuardCode.push(
-      generateIntersectionTypeGuardForProperty(
-        type,
-        typeAliases,
-        name?.getText(),
-      ),
-    );
-  }
-  return typeGuardCode.join('');
-}
-/**
- * Generates unique type guards for a given TypeLiteral node by iterating through its properties.
- *
- * @param {TypeNode} type - The TypeNode to analyze.
- * @param {Set<string>} propSet - A Set to track the properties already processed to avoid duplicates.
- * @param {string[]} typeGuardCode - An array to store the generated type guards.
- * @param {TypeAliasDeclaration[]} typeAliases - An array of TypeAliasDeclaration to consider when generating type guards.
- */
-
-export function generateUniqueTypeGuardsFromTypeLiteral(
-  type: TypeNode,
-  propSet: Set<string>,
-  typeGuardCode: string[],
-  typeAliases: TypeAliasDeclaration[],
-) {
-  if (isTypeLiteralNode(type)) {
-    const properties = type.members;
-    for (const property of properties) {
-      if (propSet.has(property.name.getText())) {
-        return;
-      }
-      propSet.add(property.name.getText());
-      if (isPropertySignature(property)) {
-        typeGuardCode.push(...generateOptionalPropertyTypeGuard(property));
-        typeGuardCode.push(generatePropertyTypeGuard(property, typeAliases));
-      }
+        typeGuardCode.push(`}\n`);
+    } else if (isUnionTypeNode(type)) {
+        typeGuardCode.push(
+            generateUnionTypeGuardForProperty(type, typeAliases, name?.getText()),
+        );
+    } else if (isIntersectionTypeNode(type)) {
+        typeGuardCode.push(
+            generateIntersectionTypeGuardForProperty(
+                type,
+                typeAliases,
+                name?.getText(),
+            ),
+        );
     }
-  }
+    return typeGuardCode.join('');
+}
+
+export function generateTypeLiteralTypeGuard(
+    typeLiteral: TypeLiteralNode,
+    typeAliases: TypeAliasDeclaration[],
+    parentName?: string,
+): string[] {
+    const typeGuardCode: string[] = [];
+    typeLiteral.members.forEach((member) => {
+        if (isPropertySignature(member)) {
+            typeGuardCode.push(
+                generatePropertyTypeGuard(member, typeAliases),
+            );
+        }
+    });
+    return typeGuardCode;
 }
