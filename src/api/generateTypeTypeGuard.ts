@@ -33,14 +33,13 @@ import {
 import {
   generateTypeAliasGuardExpression,
   generateTypeReferenceTypeGuard,
-} from '../generator/generateUnionTypeGuard';
-import { generateQualifiedNameTypeGuard } from '../generator';
+} from './generateUnionTypeGuardForIntersection';
+import { generateQualifiedNameTypeGuard } from '../api';
 
 /**
  * Generate a set of type guard functions based on provided TypeAliasDeclarations.
  * @param definitions - An array of TypeAliasDeclarations.
  * @param enums - An array of EnumDeclarations
- * @param interfaces
  * @returns A string containing the generated type guard functions.
  */
 export function generateTypeTypeGuard(
@@ -58,7 +57,7 @@ export function generateTypeTypeGuard(
     )}(value: any): value is ${typeName} {return(typeof value === "object" &&
     value !== null`);
     typeGuardStrings.push(...generateIntersectionTypeGuard(type, typeName));
-    typeGuardStrings.push(...generateTypeLiteralTypeGuard(definition));
+    typeGuardStrings.push(...generateTypeWithinTypeLiteralTypeGuard(definition));
     typeGuardStrings.push(
       ...generateUnionTypeGuard(type, typeName, undefined, definitions),
     );
@@ -74,7 +73,7 @@ export function generateTypeTypeGuard(
  * @param definition - The TypeAliasDeclaration to process.
  * @returns An array of strings containing the type guard statements for the TypeLiteralNode properties.
  */
-export function generateTypeLiteralTypeGuard(definition: TypeAliasDeclaration) {
+export function generateTypeWithinTypeLiteralTypeGuard(definition: TypeAliasDeclaration) {
   const { name, type } = definition;
   const parentName = getName(name);
   const typeGuardStrings: string[] = [];
@@ -87,6 +86,14 @@ export function generateTypeLiteralTypeGuard(definition: TypeAliasDeclaration) {
   }
   return typeGuardStrings;
 }
+
+/**
+ * Gets the name from an Identifier object.
+ * This function takes an Identifier object and extracts the name
+ * from it. An Identifier can represent a variable, function,
+ * class, or other named entity in TypeScript code.
+ * @param name - The Identifier object to extract the name from.
+ */
 function getName(name: Identifier): string {
   if (!name) return;
   if (name.hasOwnProperty('escapedText')) {

@@ -1,13 +1,12 @@
+import {isPropertySignature, TypeElement,} from 'typescript';
 import {
-  isPropertySignature,
-  isTypeLiteralNode,
-  TypeElement,
-} from 'typescript';
-import { generateKeywordGuard } from '../api';
-import { generateTypeReferenceGuard } from '../api';
-import { generateIntersectionTypeGuard, generateUnionTypeGuard } from '../api';
-import { generateOptionalPropertyTypeGuard } from '../generator';
-import { generateTypeLiteralTypeGuard } from '../generator/generateUnionTypeGuard';
+    generateIntersectionTypeGuard,
+    generateKeywordGuard,
+    generateOptionalPropertyTypeGuard,
+    generateTypeReferenceGuard,
+    generateUnionTypeGuard
+} from '../api';
+import {generateTypeLiteralTypeGuardWithinUnion} from './generateUnionTypeGuardForIntersection';
 
 /**
  * Function to generate a type guard for a TypeElement. Used to generate type guard string for properties.
@@ -19,30 +18,30 @@ import { generateTypeLiteralTypeGuard } from '../generator/generateUnionTypeGuar
  * @param parentName - The name of the parent interface. Its presence signifies that the property is a nested property.
  */
 export function generatePropertyGuard(
-  property: TypeElement,
-  parentName?: string,
+    property: TypeElement,
+    parentName?: string,
 ) {
-  const typeGuard: string[] = [];
-  if (!isPropertySignature(property)) return typeGuard;
-  const propertyName = parentName
-    ? `${parentName}.${property.name.getText()}`
-    : property.name.getText();
-  const hasOwnPropertyString = parentName ? `value.${parentName}` : `value`;
-  // handle optional properties separately
-  if (property.questionToken)
-    return generateOptionalPropertyTypeGuard(property, propertyName);
-  // handle required properties in a different way
-  typeGuard.push(
-    `${hasOwnPropertyString}.hasOwnProperty('${property.name.getText()}')`,
-  );
-  typeGuard.push(...generateTypeLiteralTypeGuard(property.type, propertyName));
-  typeGuard.push(...generateKeywordGuard(property.type, propertyName, true));
-  typeGuard.push(
-    ...generateTypeReferenceGuard(property.type, propertyName, true),
-  );
-  typeGuard.push(
-    ...generateIntersectionTypeGuard(property.type, propertyName, true),
-  );
-  typeGuard.push(...generateUnionTypeGuard(property.type, propertyName, true));
-  return typeGuard;
+    const typeGuard: string[] = [];
+    if (!isPropertySignature(property)) return typeGuard;
+    const propertyName = parentName
+        ? `${parentName}.${property.name.getText()}`
+        : property.name.getText();
+    const hasOwnPropertyString = parentName ? `value.${parentName}` : `value`;
+    // handle optional properties separately
+    if (property.questionToken)
+        return generateOptionalPropertyTypeGuard(property, propertyName);
+    // handle required properties in a different way
+    typeGuard.push(
+        `${hasOwnPropertyString}.hasOwnProperty('${property.name.getText()}')`,
+    );
+    typeGuard.push(...generateTypeLiteralTypeGuardWithinUnion(property.type, propertyName));
+    typeGuard.push(...generateKeywordGuard(property.type, propertyName, true));
+    typeGuard.push(
+        ...generateTypeReferenceGuard(property.type, propertyName, true),
+    );
+    typeGuard.push(
+        ...generateIntersectionTypeGuard(property.type, propertyName, true),
+    );
+    typeGuard.push(...generateUnionTypeGuard(property.type, propertyName, true));
+    return typeGuard;
 }

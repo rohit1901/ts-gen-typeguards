@@ -1,13 +1,7 @@
 import {
-  factory,
-  isIntersectionTypeNode,
-  isLiteralTypeNode,
   isTypeLiteralNode,
-  isTypeNode,
-  isTypeReferenceNode,
   isUnionTypeNode,
   TypeAliasDeclaration,
-  TypeElement,
   TypeNode,
 } from 'typescript';
 import {
@@ -17,12 +11,7 @@ import {
 } from '../api';
 import { generateTypeReferenceGuard } from '../api';
 import {
-  createFakeTypeElement,
-  getMembersFromTypeAlias,
   handleIntersectionTypesForTypeNode,
-  isKeywordTypeSyntaxKind,
-  removeDuplicateTypeElements,
-  syntaxKindToType,
 } from '../utils';
 
 /**

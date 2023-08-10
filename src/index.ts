@@ -1,9 +1,8 @@
 import * as fs from 'fs';
-import * as ts from 'typescript';
 import { deleteFileIfExists, generateTypeGuardsFile } from './utils';
 
 import { generateEnumTypeGuards, generateInterfaceTypeGuard } from './api';
-import { generateTypeTypeGuard } from './api/generateTypeTypeGuard';
+import { generateTypeTypeGuard } from './api';
 import {
   createSourceFile,
   EnumDeclaration,

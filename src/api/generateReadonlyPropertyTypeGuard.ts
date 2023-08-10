@@ -1,7 +1,4 @@
 // Generate type guards for readonly properties
-
-import { generateInterfaceTypeGuard } from '../api/generateInterfaceTypeGuard';
-
 export function generateReadonlyPropertyTypeGuard(
   typeName: string,
   definition: any,

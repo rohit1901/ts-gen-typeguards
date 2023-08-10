@@ -15,18 +15,14 @@ import {
 import {
   capitalize,
   getEscapedStringLiteral,
-  getLiteralType,
   isKeyword,
 } from '../utils';
 import {
-  generateTypeLiteralTypeGuard,
-  generateTypeReferenceTypeGuard,
-} from './generateUnionTypeGuard';
+  generateTypeLiteralTypeGuardWithinUnion,
+} from './generateUnionTypeGuardForIntersection';
 import {
   generateIntersectionTypeGuard,
-  generateKeywordGuard,
-  generateTypeReferenceGuard,
-} from '../api';
+} from './index';
 import { getQualifiedNameText } from './generateQualifiedNameTypeGuard';
 
 /**
@@ -115,7 +111,7 @@ export function generateOptionalPropertyTypeGuard(
     typeGuardCode.push(
       createTypeguardString(
         parentName ?? name.getText(),
-        generateTypeLiteralTypeGuard(type, parentName ?? name.getText()).join(
+        generateTypeLiteralTypeGuardWithinUnion(type, parentName ?? name.getText()).join(
           '',
         ),
         false,
@@ -127,6 +123,14 @@ export function generateOptionalPropertyTypeGuard(
   }
   return typeGuardCode;
 }
+/**
+ * Creates a conditional expression string for a type guard based on a property's type check.
+ *
+ * @param {string} propertyName - The name of the property to check.
+ * @param {string} text - The type guard condition text.
+ * @param {boolean} [isTypeReference] - Whether the type guard condition should use a type reference check.
+ * @returns {string} The conditional expression string for the type guard.
+ */
 function createTypeguardString(
   propertyName: string,
   text: string,

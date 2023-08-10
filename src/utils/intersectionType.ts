@@ -23,7 +23,7 @@ import {
   removeDuplicateTypeElements,
 } from './typeElementUtils';
 import { getLiteralTypeValue } from './isLiteral';
-import { getQualifiedNameText } from '../generator';
+import { getQualifiedNameText } from '../api';
 
 /**
  * Processes a given TypeAliasDeclaration to handle intersection types.

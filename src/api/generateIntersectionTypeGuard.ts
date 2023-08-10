@@ -1,6 +1,6 @@
 import { factory, isIntersectionTypeNode, TypeNode } from 'typescript';
 import { generateKeywordGuard, generateTypeReferenceGuard } from '../api';
-import { generateTypeLiteralTypeGuard } from './generateTypeTypeGuard';
+import { generateTypeWithinTypeLiteralTypeGuard } from './generateTypeTypeGuard';
 
 /**
  * Generates a type guard for an IntersectionTypeNode.
@@ -42,7 +42,7 @@ export function generateIntersectionTypeGuard(
     typeGuard.push(...generateKeywordGuard(member, typeName, isProperty));
     typeGuard.push(...generateTypeReferenceGuard(member, typeName, isProperty));
     typeGuard.push(
-      ...generateTypeLiteralTypeGuard(
+      ...generateTypeWithinTypeLiteralTypeGuard(
         factory.createTypeAliasDeclaration(
           undefined,
           typeName,
