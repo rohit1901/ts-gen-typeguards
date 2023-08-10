@@ -16,6 +16,7 @@ export * from './generateTypeLiteralTypeGuard';
 export * from './generateTypeReferenceGuard';
 export * from './generateUnionTypeGuard';
 export * from './handleHeritageClauses';
+export * from './generateArrayTypeGuard';
 
 export * from './generateUnionTypeGuardForIntersection';
 
