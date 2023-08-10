@@ -10,9 +10,7 @@ import {
   generatePropertyGuard,
 } from '../api';
 import { generateTypeReferenceGuard } from '../api';
-import {
-  handleIntersectionTypesForTypeNode,
-} from '../utils';
+import { handleIntersectionTypesForTypeNode } from '../utils';
 
 /**
  * Generates a type guard for a union type.

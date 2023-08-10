@@ -12,17 +12,9 @@ import {
   PropertySignature,
   SyntaxKind,
 } from 'typescript';
-import {
-  capitalize,
-  getEscapedStringLiteral,
-  isKeyword,
-} from '../utils';
-import {
-  generateTypeLiteralTypeGuardWithinUnion,
-} from './generateUnionTypeGuardForIntersection';
-import {
-  generateIntersectionTypeGuard,
-} from './index';
+import { capitalize, getEscapedStringLiteral, isKeyword } from '../utils';
+import { generateTypeLiteralTypeGuardWithinUnion } from './generateUnionTypeGuardForIntersection';
+import { generateIntersectionTypeGuard } from './index';
 import { getQualifiedNameText } from './generateQualifiedNameTypeGuard';
 
 /**
@@ -111,9 +103,10 @@ export function generateOptionalPropertyTypeGuard(
     typeGuardCode.push(
       createTypeguardString(
         parentName ?? name.getText(),
-        generateTypeLiteralTypeGuardWithinUnion(type, parentName ?? name.getText()).join(
-          '',
-        ),
+        generateTypeLiteralTypeGuardWithinUnion(
+          type,
+          parentName ?? name.getText(),
+        ).join(''),
         false,
       ),
     );
