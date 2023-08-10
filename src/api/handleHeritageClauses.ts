@@ -1,8 +1,8 @@
 import {factory, HeritageClause, InterfaceDeclaration, SyntaxKind} from 'typescript';
 
 export function handleHeritageClauses(
-  definition: InterfaceDeclaration,
-  definitions: InterfaceDeclaration[],
+    definition: InterfaceDeclaration,
+    definitions: InterfaceDeclaration[],
 ): InterfaceDeclaration {
   if (!definition.heritageClauses) return definition;
   // Iterate through each heritage clause
