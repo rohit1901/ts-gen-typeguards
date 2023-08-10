@@ -57,7 +57,9 @@ export function generateTypeTypeGuard(
     )}(value: any): value is ${typeName} {return(typeof value === "object" &&
     value !== null`);
     typeGuardStrings.push(...generateIntersectionTypeGuard(type, typeName));
-    typeGuardStrings.push(...generateTypeWithinTypeLiteralTypeGuard(definition));
+    typeGuardStrings.push(
+      ...generateTypeWithinTypeLiteralTypeGuard(definition),
+    );
     typeGuardStrings.push(
       ...generateUnionTypeGuard(type, typeName, undefined, definitions),
     );
@@ -73,7 +75,9 @@ export function generateTypeTypeGuard(
  * @param definition - The TypeAliasDeclaration to process.
  * @returns An array of strings containing the type guard statements for the TypeLiteralNode properties.
  */
-export function generateTypeWithinTypeLiteralTypeGuard(definition: TypeAliasDeclaration) {
+export function generateTypeWithinTypeLiteralTypeGuard(
+  definition: TypeAliasDeclaration,
+) {
   const { name, type } = definition;
   const parentName = getName(name);
   const typeGuardStrings: string[] = [];
