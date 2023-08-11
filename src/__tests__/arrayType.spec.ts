@@ -3,7 +3,7 @@ import * as ts from 'typescript';
 import { generateInterfaceTypeGuard, generateTypeTypeGuard } from '../api';
 import { removeWhitespace } from '../utils';
 
-describe('Enum types', () => {
+describe('Generator', () => {
   const text = `interface ArrayInterface {
       arrayProperty: string[];
       arrayOptional?: string[];
