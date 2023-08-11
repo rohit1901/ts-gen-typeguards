@@ -1,7 +1,7 @@
-import {createSourceFile} from "typescript";
-import * as ts from "typescript";
-import {generateInterfaceTypeGuard, generateTypeTypeGuard} from "../api";
-import {removeWhitespace} from "../utils";
+import { createSourceFile } from 'typescript';
+import * as ts from 'typescript';
+import { generateInterfaceTypeGuard, generateTypeTypeGuard } from '../api';
+import { removeWhitespace } from '../utils';
 
 describe('Enum types', () => {
   const text = `interface ArrayInterface {
@@ -19,15 +19,16 @@ describe('Enum types', () => {
       };
     };
     `;
-    const sourceFile = createSourceFile('', text, ts.ScriptTarget.ES2015, true);
-    const interfaces = sourceFile.statements.filter(ts.isInterfaceDeclaration);
-    const types = sourceFile.statements.filter(ts.isTypeAliasDeclaration);
-    beforeEach(() => {
-        jest.clearAllMocks();
-    });
-    it('should correctly generate typeguards for required and optional properties (array of strings) of an interface', () => {
-        const result = generateInterfaceTypeGuard(interfaces);
-        const expectedResult = removeWhitespace(`export function isArrayInterface(value: any): value is ArrayInterface {
+  const sourceFile = createSourceFile('', text, ts.ScriptTarget.ES2015, true);
+  const interfaces = sourceFile.statements.filter(ts.isInterfaceDeclaration);
+  const types = sourceFile.statements.filter(ts.isTypeAliasDeclaration);
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+  it('should correctly generate typeguards for required and optional properties (array of strings) of an interface', () => {
+    const result = generateInterfaceTypeGuard(interfaces);
+    const expectedResult =
+      removeWhitespace(`export function isArrayInterface(value: any): value is ArrayInterface {
           return (
             typeof value === "object" &&
             value !== null &&
@@ -38,12 +39,12 @@ describe('Enum types', () => {
               (Array.isArray(value.arrayOptional) &&
                 value.arrayOptional.every((item: any) => typeof item === 'string')))
           )
-        }`)
-        expect(removeWhitespace(result)).toEqual(expectedResult);
-    });
-    it('should correctly generate typeguards for TypeLiteral with required array of TypeLiterals and optional TypeLiteral properties with nested required string and number array properties', () => {
-        const result = generateTypeTypeGuard(types, []);
-        const expectedResult = removeWhitespace(`
+        }`);
+    expect(removeWhitespace(result)).toEqual(expectedResult);
+  });
+  it('should correctly generate typeguards for TypeLiteral with required array of TypeLiterals and optional TypeLiteral properties with nested required string and number array properties', () => {
+    const result = generateTypeTypeGuard(types, []);
+    const expectedResult = removeWhitespace(`
         export function isArrayType(value: any): value is ArrayType {
           return (
             typeof value === "object" &&
@@ -65,6 +66,6 @@ describe('Enum types', () => {
               (item: any) => typeof item === 'number'
             )))))
         }`);
-        expect(removeWhitespace(result)).toEqual(expectedResult);
-    });
+    expect(removeWhitespace(result)).toEqual(expectedResult);
+  });
 });
