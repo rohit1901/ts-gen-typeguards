@@ -1,3 +1,4 @@
+/*
 export interface Point {
   required: string;
   optional?: string;
@@ -172,4 +173,19 @@ export enum Month {
   January = 'JAN',
   February = 'FEB',
   March = 'MAR',
+}
+*/
+interface ArrayInterface {
+  arrayProperty: string[];
+  arrayOptional?: string[];
+}
+type ArrayType = {
+  arrayProperty: {
+    arrayProperty: string[];
+  }[];
+  arrayOptional: {
+    optionalTypeLiteralArray: {
+        x: number[];
+    };
+  }
 }

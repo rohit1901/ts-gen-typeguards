@@ -14,7 +14,7 @@ import {
 } from 'typescript';
 import { capitalize, getEscapedStringLiteral, isKeyword } from '../utils';
 import { generateTypeLiteralTypeGuardWithinUnion } from './generateUnionTypeGuardForIntersection';
-import { generateIntersectionTypeGuard } from './index';
+import {generateArrayTypeGuard, generateIntersectionTypeGuard} from './index';
 import { getQualifiedNameText } from './generateQualifiedNameTypeGuard';
 
 /**
@@ -39,9 +39,10 @@ import { getQualifiedNameText } from './generateQualifiedNameTypeGuard';
  * ```
  */
 export function generateOptionalPropertyTypeGuard(
-  { questionToken, name, type }: PropertySignature,
+  property: PropertySignature,
   parentName?: string,
 ): string[] {
+  const { questionToken, name, type } = property;
   if (!questionToken) return [];
   const typeGuardCode: string[] = [];
   // check if the type is a TypeReference
@@ -96,7 +97,8 @@ export function generateOptionalPropertyTypeGuard(
       ),
     );
   } else if (isArrayTypeNode(type)) {
-    // return typeguard for array type
+    typeGuardCode.push(createTypeguardString(name.getText(), generateArrayTypeGuard(property, name.getText())))
+
   } else if (isTupleTypeNode(type)) {
     // return typeguard for tuple type
   } else if (isTypeLiteralNode(type)) {

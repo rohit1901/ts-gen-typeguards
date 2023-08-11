@@ -13,7 +13,7 @@ import {
   getEscapedStringLiteral,
   isPrimitiveSyntaxKind,
   syntaxKindToType,
-} from '../utils/index';
+} from '../utils';
 import { generateUnionTypeGuardForProperty } from './generateUnionTypeGuardForIntersection';
 import { generateIntersectionTypeGuardForProperty } from './generateIntersectionTypeGuardForType';
 
