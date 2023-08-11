@@ -4,6 +4,10 @@
  * @param search - The string to search for.
  * @param replacement - The string to replace the occurences with.
  */
-export function replaceAll(input: string, search: string, replacement: string): string {
-    return input.replace(new RegExp(search, 'g'), replacement);
+export function replaceAll(
+  input: string,
+  search: string,
+  replacement: string,
+): string {
+  return input.replace(new RegExp(search, 'g'), replacement);
 }

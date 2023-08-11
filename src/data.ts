@@ -185,7 +185,7 @@ type ArrayType = {
   }[];
   arrayOptional: {
     optionalTypeLiteralArray: {
-        x: number[];
+      x: number[];
     };
-  }
-}
+  };
+};

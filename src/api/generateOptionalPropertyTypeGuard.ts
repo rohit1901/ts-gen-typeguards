@@ -14,7 +14,7 @@ import {
 } from 'typescript';
 import { capitalize, getEscapedStringLiteral, isKeyword } from '../utils';
 import { generateTypeLiteralTypeGuardWithinUnion } from './generateUnionTypeGuardForIntersection';
-import {generateArrayTypeGuard, generateIntersectionTypeGuard} from './index';
+import { generateArrayTypeGuard, generateIntersectionTypeGuard } from './index';
 import { getQualifiedNameText } from './generateQualifiedNameTypeGuard';
 
 /**
@@ -97,8 +97,12 @@ export function generateOptionalPropertyTypeGuard(
       ),
     );
   } else if (isArrayTypeNode(type)) {
-    typeGuardCode.push(createTypeguardString(name.getText(), generateArrayTypeGuard(property, name.getText())))
-
+    typeGuardCode.push(
+      createTypeguardString(
+        name.getText(),
+        generateArrayTypeGuard(property, name.getText()),
+      ),
+    );
   } else if (isTupleTypeNode(type)) {
     // return typeguard for tuple type
   } else if (isTypeLiteralNode(type)) {

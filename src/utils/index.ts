@@ -27,4 +27,4 @@ export {
   handleIntersectionTypesForTypeAlias,
   handleIntersectionTypesForTypeNode,
 } from './intersectionType';
-export * from "./arrays"
+export * from './arrays';
