@@ -173,28 +173,28 @@ export enum Month {
   February = 'FEB',
   March = 'MAR',
 }
-export type UnionTypeArrayType = string[] | number[]
-export type IntersectionTypeArrayType = bigint[] & number[]
+export type UnionTypeArrayType = string[] | number[];
+export type IntersectionTypeArrayType = bigint[] & number[];
 export interface InterfaceWithOptionalArrays {
-    requiredTypeLiteralProp: {
-        prop: bigint[];
-    };
-    requiredKeywordProp: string[];
-    optionalProp?: {
-        requiredSubProp: number[]
-        optionalSubProp?: number[];
-        optionalUnion?: UnionTypeArrayType;
-    }
+  requiredTypeLiteralProp: {
+    prop: bigint[];
+  };
+  requiredKeywordProp: string[];
+  optionalProp?: {
+    requiredSubProp: number[];
+    optionalSubProp?: number[];
+    optionalUnion?: UnionTypeArrayType;
+  };
 }
 export type InterfaceWithIntersectionArrays = {
-    requiredTypeLiteralProp: {
-        prop: IntersectionTypeArrayType[];
-    };
-    requiredKeywordProp: InterfaceWithOptionalArrays[];
-    optionalProp?: {
-        requiredSubProp: UnionTypeArrayType[]
-        optionalSubProp?: UnionTypeArrayType[];
-        optionalUnion?: IntersectionTypeArrayType;
-        optionalUnionArray?: IntersectionTypeArrayType[];
-    }
-}
+  requiredTypeLiteralProp: {
+    prop: IntersectionTypeArrayType[];
+  };
+  requiredKeywordProp: InterfaceWithOptionalArrays[];
+  optionalProp?: {
+    requiredSubProp: UnionTypeArrayType[];
+    optionalSubProp?: UnionTypeArrayType[];
+    optionalUnion?: IntersectionTypeArrayType;
+    optionalUnionArray?: IntersectionTypeArrayType[];
+  };
+};

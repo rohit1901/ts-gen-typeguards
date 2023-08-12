@@ -9,7 +9,8 @@ import {
 import {
   generateArrayTypeGuard,
   generateIntersectionTypeGuard,
-  generateKeywordGuard, generateKeywordGuardForType,
+  generateKeywordGuard,
+  generateKeywordGuardForType,
   generatePropertyGuard,
   generateTypeReferenceGuard,
 } from '../api';
@@ -40,8 +41,17 @@ export function generateUnionTypeGuard(
     typeGuard.push(
       ...generateTypeReferenceGuard(newMember, typeName, isProperty),
     );
-    if(isArrayTypeNode(newMember)) {
-      typeGuard.push(generateArrayTypeGuard(factory.createPropertySignature(undefined, undefined, undefined, newMember)));
+    if (isArrayTypeNode(newMember)) {
+      typeGuard.push(
+        generateArrayTypeGuard(
+          factory.createPropertySignature(
+            undefined,
+            undefined,
+            undefined,
+            newMember,
+          ),
+        ),
+      );
     }
     if (isTypeLiteralNode(newMember)) {
       for (const prop of newMember.members) {

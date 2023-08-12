@@ -27,7 +27,7 @@ export function generateArrayTypeGuard(
   propertyName?: string,
 ) {
   if (!isArrayTypeNode(property.type)) return '';
-  const arrayCheckName = propertyName ? `value.${propertyName}` : `value`
+  const arrayCheckName = propertyName ? `value.${propertyName}` : `value`;
   if (isLiteralType(property.type.elementType.kind))
     return `(Array.isArray(${arrayCheckName}) && ${arrayCheckName}.every((item: any) => item === ${property.type.elementType.getText()}))`;
   if (isTypeReferenceNode(property.type.elementType))

@@ -3,7 +3,8 @@ import {
   factory,
   isArrayTypeNode,
   isIntersectionTypeNode,
-  isLiteralTypeNode, isOptionalTypeNode,
+  isLiteralTypeNode,
+  isOptionalTypeNode,
   isQualifiedName,
   isTupleTypeNode,
   isTypeLiteralNode,
@@ -116,8 +117,7 @@ export function generateOptionalPropertyTypeGuard(
         false,
       ),
     );
-  }
-  else {
+  } else {
     console.error('Unsupported type', name.getText(), type.getText());
   }
   return typeGuardCode;

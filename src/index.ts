@@ -48,7 +48,10 @@ function loadConfig(dev?: boolean) {
     : jsonContent.production.inputFilePath;
 }
 function generateImports(objects: string[]) {
-  return `import {${objects.join(',')}} from '../${loadConfig(true).replace('.ts', '')}';`;
+  return `import {${objects.join(',')}} from '../${loadConfig(true).replace(
+    '.ts',
+    '',
+  )}';`;
 }
 function getObjectsNames(
   interfaceObjects: InterfaceDeclaration[],
