@@ -1,11 +1,16 @@
 import * as fs from 'fs';
 import * as prettier from 'prettier';
-import { Options } from 'prettier';
 import * as path from 'path';
+import {Options} from "prettier";
 
+export const extensionTS = 'ts';
+export const extensionDTS = `d.${extensionTS}`;
 export const defaultInputDir = 'input';
-export const defaultOutputTypeGuardsFilePath = 'out/typeGuards.ts';
-export const defaultOutputTypesFilePath = 'input/combinedTypeGuards.ts';
+export const defaultOutputTypesFileName = '/combinedTypeGuards';
+export const defaultOutputTypesFilePath = `${defaultInputDir}${defaultOutputTypesFileName}.${extensionTS}`;
+export const defaultOutputDir = 'out';
+export const defaultTypeGuardsFileName = '/typeGuards';
+export const defaultOutputTypeGuardsFilePath = `${defaultOutputDir}${defaultTypeGuardsFileName}.${extensionTS}`;
 const prettierRC: Options = {
   printWidth: 80,
   tabWidth: 2,
@@ -18,6 +23,9 @@ const prettierRC: Options = {
 /**
  * Generates a file with the given text
  * @param typeGuardsText
+ * @param isCombinedInput
+ * @param inputDir
+ * @param outputDir
  */
 export function generateTypeGuardsFile(
   typeGuardsText: string,
@@ -26,14 +34,13 @@ export function generateTypeGuardsFile(
   outputDir?: string,
 ): void {
   const inputPath =
-    inputDir + '/combinedTypeGuards.ts' ?? defaultOutputTypesFilePath;
-  const outputPath = outputDir.includes('/typeGuards.ts')
-    ? outputDir
-    : defaultOutputTypeGuardsFilePath;
+    inputDir + `${defaultOutputTypesFileName}.${extensionTS}` ?? defaultOutputTypesFilePath;
+  const outputPath = outputDir ? outputDir + `${defaultTypeGuardsFileName}.${extensionTS}` : defaultOutputTypeGuardsFilePath;
+  const path = isCombinedInput ? inputPath : outputPath
   prettify(typeGuardsText)
     .then(formattedText => {
       try {
-        if (fs.existsSync(isCombinedInput ? inputPath : outputPath)) {
+        if (fs.existsSync(path)) {
           // File exists, updating it by appending text
           appendText(formattedText, inputPath, outputPath, isCombinedInput);
         } else {
@@ -41,11 +48,11 @@ export function generateTypeGuardsFile(
           createFile(formattedText, inputPath, outputPath, isCombinedInput);
         }
       } catch (err) {
-        console.error('Error while processing the file:', err.message);
+        console.error(`ERROR: Error while processing the ${path}:`, err.message);
       }
     })
     .catch(err => {
-      console.error('Error while formatting the file:', err.message);
+      console.error(`ERROR: Error while formatting the ${path}:`, err.message);
     });
 }
 
@@ -54,9 +61,13 @@ export function generateTypeGuardsFile(
  * @param filePath
  */
 export function deleteFileIfExists(filePath: string) {
-  if (fs.existsSync(filePath)) {
-    fs.unlinkSync(filePath);
-    console.log('Existing file deleted successfully.');
+  try {
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+      console.info(`INFO: ${filePath} file deleted successfully.`);
+    }
+  } catch (err) {
+    console.error('ERROR: Error deleting file', filePath, err.message)
   }
 }
 
@@ -67,11 +78,11 @@ export function deleteFileIfExists(filePath: string) {
  */
 export function readFilesWithExtension(
   dir: string = `./${defaultInputDir}`,
-  extension: string = 'ts',
+  extension: string = extensionTS,
 ) {
   try {
-    if (extension !== 'ts') {
-      throw new Error('Only .ts files are supported');
+    if (extension !== extensionTS) {
+      throw new Error(`ERROR: ${extension} not supported.  Only '.ts' files are supported`);
     }
     const files = fs.readdirSync(dir);
     const filteredFiles = files.filter(file => {
@@ -84,35 +95,53 @@ export function readFilesWithExtension(
     for (const file of filteredFiles) {
       const filePath = './' + path.join(dir, file);
       if (
-        !filePath.includes('.d.ts') &&
-        !filePath.includes('combinedTypeGuards.ts')
+        !filePath.includes(`.${extensionDTS}`) &&
+        !filePath.includes(`${defaultOutputTypesFileName}.${extensionTS}`)
       ) {
-        console.log(`Reading file: ${filePath}`);
+        console.info(`INFO: Reading file: ${filePath}`);
         try {
           const content = fs.readFileSync(filePath, 'utf8');
           results.push(content);
         } catch (readError) {
-          console.error(`Error reading file: ${filePath}`);
+          console.error(`ERROR: Error reading file: ${filePath}`);
           console.error(readError.message);
         }
       }
     }
     createFile(
       results.join(''),
-      dir + '/combinedTypeGuards.ts',
+      dir + `${defaultOutputTypesFileName}.${extensionTS}`,
       undefined,
       true,
     );
     return results;
   } catch (dirReadError) {
-    console.error(`Error reading directory: ${dir}`);
-    console.error(dirReadError.message);
+    console.error(`ERROR: Error reading directory: ${dir}`, dirReadError.message);
     return [];
   }
 }
+
+/**
+ *
+ * @param folderPath
+ */
+export function createPath(folderPath: string) {
+  // Check if the folder exists, and create it if does not
+  if (!fs.existsSync(folderPath)) {
+    try {
+      fs.mkdirSync(folderPath, { recursive: true });
+      console.info(`INFO: Folder created: ${folderPath}`);
+    } catch (folderError) {
+      console.error(`ERROR: Error creating folder: ${folderPath}`, folderError.message);
+    }
+  }
+}
+
 /**
  * Creates a file with the given text
  * @param typeGuardsText - The text to be added to the file
+ * @param inputPath
+ * @param outputPath
  * @param isCombinedInput? - Whether the input is a combined file or not
  */
 function createFile(
@@ -123,15 +152,16 @@ function createFile(
 ) {
   const initialContent =
     '// Generated using ts-gen-typeguards\n // @ts-nocheck\n';
+  const filePath = isCombinedInput ? inputPath : outputPath;
   try {
     fs.writeFileSync(
-      isCombinedInput ? inputPath : outputPath,
+      filePath,
       `${initialContent}`,
     );
-    console.info('File created and initial content added successfully.');
+    console.info(`INFO: ${filePath} created and initial content added successfully.`);
     appendText(typeGuardsText, inputPath, outputPath, isCombinedInput);
   } catch (err) {
-    console.error('Error while creating the file:', err.message);
+    console.error('ERROR: Error while creating the file:', filePath, err.message);
   }
 }
 
@@ -148,14 +178,15 @@ function appendText(
   outputPath: string,
   isCombinedInput?: boolean,
 ) {
+  const filePath = isCombinedInput ? `./${inputPath}` : `./${outputPath}`
   try {
     fs.appendFileSync(
-      isCombinedInput ? `./${inputPath}` : `./${outputPath}`,
+      filePath,
       typeGuardsText,
     );
-    console.info('Text appended to the file successfully.');
+    console.info(`INFO: Text appended to the ${filePath} successfully.`);
   } catch (err) {
-    console.error('Error while appending text to the file:', err.message);
+    console.error(`ERROR: Error while appending text to the ${filePath}:`, err.message);
   }
 }
 
@@ -171,35 +202,4 @@ function prettify(input: string): Promise<string> {
     parser: 'typescript',
     ...prettierRC,
   });
-}
-
-function createPath() {
-  const folderPath = 'path/to/your/folder'; // Replace with the actual folder path
-  const filePath = path.join(folderPath, 'example.txt'); // Replace 'example.txt' with the desired file name
-
-  // Check if the folder exists, and create it if not
-  if (!fs.existsSync(folderPath)) {
-    try {
-      fs.mkdirSync(folderPath, { recursive: true });
-      console.log(`Folder created: ${folderPath}`);
-    } catch (folderError) {
-      console.error(`Error creating folder: ${folderPath}`);
-      console.error(folderError.message);
-    }
-  } else {
-    console.log(`Folder already exists: ${folderPath}`);
-  }
-
-  // Check if the file exists, and create it if not
-  if (!fs.existsSync(filePath)) {
-    try {
-      fs.writeFileSync(filePath, 'Hello, world!', 'utf8'); // You can provide initial content here
-      console.log(`File created: ${filePath}`);
-    } catch (fileError) {
-      console.error(`Error creating file: ${filePath}`);
-      console.error(fileError.message);
-    }
-  } else {
-    console.log(`File already exists: ${filePath}`);
-  }
 }

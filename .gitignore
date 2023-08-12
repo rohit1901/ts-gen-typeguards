@@ -10,3 +10,5 @@ coverage/
 src/out/**/*
 src/input/combinedTypeGuards.*
 src/inputNew/
+
+src/outputNew/
