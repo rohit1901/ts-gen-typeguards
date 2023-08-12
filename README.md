@@ -72,6 +72,10 @@ The provided functions in the `typeGuardsGenerator` module support generating ty
     - The utility will correctly handle type guards for optional properties.
 9. **Recursive Types**:
     - The utility will correctly handle type guards for recursive types.
+10. **Readonly Properties**:
+    - The utility will correctly handle type guards for ``readonly`` properties.
+11. **Any and Unknown Types**:
+    - The utility will correctly handle type guards for ``any`` and ``unknown`` types.
 
 In summary, the functions are designed to handle a wide range of type combinations and generate accurate type guards to validate data at runtime. The utility aims to provide comprehensive type safety for your TypeScript code by ensuring that the runtime data adheres to the defined TypeScript types.
 To generate type guards for interfaces, type aliases, and enums, you can utilize the provided functions `generateTypeGuards`, `generateTypeTypeGuards`, and `generateEnumTypeGuard`, respectively.
@@ -83,13 +87,10 @@ To generate type guards for interfaces, type aliases, and enums, you can utilize
 - Support for generating type guards for imported Interfaces/Types/Enums.
 - Support for generating type guards for classes.
 - Support for generating type guards for Mapped Types.
-- Support for generating type guards for Readonly Properties.
 - Support for generating type guards for Function Signatures.
 - Support for generating type guards for Optional Chaining and Nullish Coalescing.
-- Support for generating type guards for Any and Unknown Types.
 - Support for generating type guards for Type Assertions.
 - CLI to generate type guards for a given TypeScript file.
-- Linting and formatting the generated type guards using ESLint and Prettier.
 ## API Reference
 
 ### readObjects(path: string): ObjectsType
@@ -113,7 +114,7 @@ Generates type guards for the given enum declaration. It returns the generated t
 ```typescript
 import { generateTypeGuards } from "./type-guard-generator";
 
-const interfaceNode = /* interface declaration */;
+const interfaceNode = [] /* interface declaration */;
 const typeGuardCode = generateTypeGuards(interfaceNode);
 console.log(typeGuardCode);
 ```
