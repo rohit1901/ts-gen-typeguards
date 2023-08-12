@@ -3,7 +3,7 @@ import {
   factory,
   isArrayTypeNode,
   isIntersectionTypeNode,
-  isLiteralTypeNode,
+  isLiteralTypeNode, isOptionalTypeNode,
   isQualifiedName,
   isTupleTypeNode,
   isTypeLiteralNode,
@@ -99,8 +99,8 @@ export function generateOptionalPropertyTypeGuard(
   } else if (isArrayTypeNode(type)) {
     typeGuardCode.push(
       createTypeguardString(
-        name.getText(),
-        generateArrayTypeGuard(property, name.getText()),
+        parentName ?? name.getText(),
+        generateArrayTypeGuard(property, parentName ?? name.getText()),
       ),
     );
   } else if (isTupleTypeNode(type)) {
@@ -116,9 +116,9 @@ export function generateOptionalPropertyTypeGuard(
         false,
       ),
     );
-    // return typeguard for TypeLiteral
-  } else {
-    console.error('Unsupported type', name, type.getText());
+  }
+  else {
+    console.error('Unsupported type', name.getText(), type.getText());
   }
   return typeGuardCode;
 }

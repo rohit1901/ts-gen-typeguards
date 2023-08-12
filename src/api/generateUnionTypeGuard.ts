@@ -1,12 +1,15 @@
 import {
+  factory,
+  isArrayTypeNode,
   isTypeLiteralNode,
   isUnionTypeNode,
   TypeAliasDeclaration,
   TypeNode,
 } from 'typescript';
 import {
+  generateArrayTypeGuard,
   generateIntersectionTypeGuard,
-  generateKeywordGuard,
+  generateKeywordGuard, generateKeywordGuardForType,
   generatePropertyGuard,
   generateTypeReferenceGuard,
 } from '../api';
@@ -37,7 +40,9 @@ export function generateUnionTypeGuard(
     typeGuard.push(
       ...generateTypeReferenceGuard(newMember, typeName, isProperty),
     );
-    //TODO: if(isArrayTypeNode(newMember)) typeGuard.push(...generateArrayTypeGuard(factory.createPropertySignature(undefined, typeName, undefined, newMember), typeName));
+    if(isArrayTypeNode(newMember)) {
+      typeGuard.push(generateArrayTypeGuard(factory.createPropertySignature(undefined, undefined, undefined, newMember)));
+    }
     if (isTypeLiteralNode(newMember)) {
       for (const prop of newMember.members) {
         typeGuard.push(...generatePropertyGuard(prop));

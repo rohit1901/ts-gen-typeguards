@@ -1,4 +1,3 @@
-/*
 export interface Point {
   required: string;
   optional?: string;
@@ -174,18 +173,28 @@ export enum Month {
   February = 'FEB',
   March = 'MAR',
 }
-*/
-interface ArrayInterface {
-  arrayProperty: string[];
-  arrayOptional?: string[];
-}
-type ArrayType = {
-  arrayProperty: {
-    arrayProperty: string[];
-  }[];
-  arrayOptional: {
-    optionalTypeLiteralArray: {
-      x: number[];
+export type UnionTypeArrayType = string[] | number[]
+export type IntersectionTypeArrayType = bigint[] & number[]
+export interface InterfaceWithOptionalArrays {
+    requiredTypeLiteralProp: {
+        prop: bigint[];
     };
-  };
-};
+    requiredKeywordProp: string[];
+    optionalProp?: {
+        requiredSubProp: number[]
+        optionalSubProp?: number[];
+        optionalUnion?: UnionTypeArrayType;
+    }
+}
+export type InterfaceWithIntersectionArrays = {
+    requiredTypeLiteralProp: {
+        prop: IntersectionTypeArrayType[];
+    };
+    requiredKeywordProp: InterfaceWithOptionalArrays[];
+    optionalProp?: {
+        requiredSubProp: UnionTypeArrayType[]
+        optionalSubProp?: UnionTypeArrayType[];
+        optionalUnion?: IntersectionTypeArrayType;
+        optionalUnionArray?: IntersectionTypeArrayType[];
+    }
+}
