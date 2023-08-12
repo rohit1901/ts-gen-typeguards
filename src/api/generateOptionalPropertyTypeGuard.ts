@@ -13,7 +13,12 @@ import {
   PropertySignature,
   SyntaxKind,
 } from 'typescript';
-import {capitalize, getEscapedStringLiteral, isKeyword, syntaxKindToType} from '../utils';
+import {
+  capitalize,
+  getEscapedStringLiteral,
+  isKeyword,
+  syntaxKindToType,
+} from '../utils';
 import { generateTypeLiteralTypeGuardWithinUnion } from './generateUnionTypeGuardForIntersection';
 import { generateArrayTypeGuard, generateIntersectionTypeGuard } from './index';
 import { getQualifiedNameText } from './generateQualifiedNameTypeGuard';
@@ -71,9 +76,9 @@ export function generateOptionalPropertyTypeGuard(
     typeGuardCode.push(
       createTypeguardString(
         parentName ?? name.getText(),
-        `typeof value.${
-          parentName ?? name.getText()
-        } === '${syntaxKindToType(type.kind)}'`,
+        `typeof value.${parentName ?? name.getText()} === '${syntaxKindToType(
+          type.kind,
+        )}'`,
         false,
       ),
     );

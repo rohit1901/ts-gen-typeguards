@@ -76,7 +76,7 @@ export type InterfaceWithIntersectionArrays = {
   };
 };
 export type AnyType = any;
-export type UnknownType = unknown
+export type UnknownType = unknown;
 export type EmployeeOrHR = Employee | { department: 'HR' };
 
 export type PersonId = number;
