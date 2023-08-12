@@ -7,7 +7,7 @@ import {
   removeWhitespace,
 } from '../utils';
 
-describe('capitalize', () => {
+describe('Utils', () => {
   it('should capitalize a string', () => {
     const result = capitalize('hello');
     expect(result).toEqual('Hello');

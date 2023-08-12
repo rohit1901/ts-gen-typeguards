@@ -1,5 +1,6 @@
-import { isPropertySignature, TypeElement } from 'typescript';
+import { isArrayTypeNode, isPropertySignature, TypeElement } from 'typescript';
 import {
+  generateArrayTypeGuard,
   generateIntersectionTypeGuard,
   generateKeywordGuard,
   generateOptionalPropertyTypeGuard,
@@ -34,6 +35,8 @@ export function generatePropertyGuard(
   typeGuard.push(
     `${hasOwnPropertyString}.hasOwnProperty('${property.name.getText()}')`,
   );
+  if (isArrayTypeNode(property.type))
+    typeGuard.push(generateArrayTypeGuard(property, propertyName));
   typeGuard.push(
     ...generateTypeLiteralTypeGuardWithinUnion(property.type, propertyName),
   );

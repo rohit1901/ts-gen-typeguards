@@ -3,7 +3,7 @@ import { generateInterfaceTypeGuard } from '../api';
 import * as ts from 'typescript';
 import { createSourceFile } from 'typescript';
 
-describe('Interfaces', () => {
+describe('Generator', () => {
   const text = `
     export interface Point {
       x?: number;
