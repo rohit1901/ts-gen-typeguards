@@ -1,6 +1,10 @@
 export interface Point {
   required: string;
   optional?: string;
+  unknownOptional?: unknown;
+  anyOptional?: any;
+  unknownRequired: unknown;
+  anyRequired: any;
 }
 export interface Person {
   name?: string;
@@ -55,6 +59,24 @@ export interface Vehicle {
   type: 'car' | 'bike' | 'bus';
   wheels: number;
 }
+
+export type UnionTypeArrayType = string[] | number[];
+export type IntersectionTypeArrayType = bigint[] & number[];
+
+export type InterfaceWithIntersectionArrays = {
+  requiredTypeLiteralProp: {
+    prop: IntersectionTypeArrayType[];
+  };
+  requiredKeywordProp: InterfaceWithOptionalArrays[];
+  optionalProp?: {
+    requiredSubProp: UnionTypeArrayType[];
+    optionalSubProp?: UnionTypeArrayType[];
+    optionalUnion?: IntersectionTypeArrayType;
+    optionalUnionArray?: IntersectionTypeArrayType[];
+  };
+};
+export type AnyType = any;
+export type UnknownType = unknown
 export type EmployeeOrHR = Employee | { department: 'HR' };
 
 export type PersonId = number;
@@ -173,8 +195,6 @@ export enum Month {
   February = 'FEB',
   March = 'MAR',
 }
-export type UnionTypeArrayType = string[] | number[];
-export type IntersectionTypeArrayType = bigint[] & number[];
 export interface InterfaceWithOptionalArrays {
   requiredTypeLiteralProp: {
     prop: bigint[];
@@ -186,15 +206,3 @@ export interface InterfaceWithOptionalArrays {
     optionalUnion?: UnionTypeArrayType;
   };
 }
-export type InterfaceWithIntersectionArrays = {
-  requiredTypeLiteralProp: {
-    prop: IntersectionTypeArrayType[];
-  };
-  requiredKeywordProp: InterfaceWithOptionalArrays[];
-  optionalProp?: {
-    requiredSubProp: UnionTypeArrayType[];
-    optionalSubProp?: UnionTypeArrayType[];
-    optionalUnion?: IntersectionTypeArrayType;
-    optionalUnionArray?: IntersectionTypeArrayType[];
-  };
-};
