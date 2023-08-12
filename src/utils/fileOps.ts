@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as prettier from 'prettier';
 import * as path from 'path';
-import {Options} from "prettier";
+import { Options } from 'prettier';
 
 export const extensionTS = 'ts';
 export const extensionDTS = `d.${extensionTS}`;
@@ -34,9 +34,12 @@ export function generateTypeGuardsFile(
   outputDir?: string,
 ): void {
   const inputPath =
-    inputDir + `${defaultOutputTypesFileName}.${extensionTS}` ?? defaultOutputTypesFilePath;
-  const outputPath = outputDir ? outputDir + `${defaultTypeGuardsFileName}.${extensionTS}` : defaultOutputTypeGuardsFilePath;
-  const path = isCombinedInput ? inputPath : outputPath
+    inputDir + `${defaultOutputTypesFileName}.${extensionTS}` ??
+    defaultOutputTypesFilePath;
+  const outputPath = outputDir
+    ? outputDir + `${defaultTypeGuardsFileName}.${extensionTS}`
+    : defaultOutputTypeGuardsFilePath;
+  const path = isCombinedInput ? inputPath : outputPath;
   prettify(typeGuardsText)
     .then(formattedText => {
       try {
@@ -48,7 +51,10 @@ export function generateTypeGuardsFile(
           createFile(formattedText, inputPath, outputPath, isCombinedInput);
         }
       } catch (err) {
-        console.error(`ERROR: Error while processing the ${path}:`, err.message);
+        console.error(
+          `ERROR: Error while processing the ${path}:`,
+          err.message,
+        );
       }
     })
     .catch(err => {
@@ -67,7 +73,7 @@ export function deleteFileIfExists(filePath: string) {
       console.info(`INFO: ${filePath} file deleted successfully.`);
     }
   } catch (err) {
-    console.error('ERROR: Error deleting file', filePath, err.message)
+    console.error('ERROR: Error deleting file', filePath, err.message);
   }
 }
 
@@ -82,7 +88,9 @@ export function readFilesWithExtension(
 ) {
   try {
     if (extension !== extensionTS) {
-      throw new Error(`ERROR: ${extension} not supported.  Only '.ts' files are supported`);
+      throw new Error(
+        `ERROR: ${extension} not supported.  Only '.ts' files are supported`,
+      );
     }
     const files = fs.readdirSync(dir);
     const filteredFiles = files.filter(file => {
@@ -116,7 +124,10 @@ export function readFilesWithExtension(
     );
     return results;
   } catch (dirReadError) {
-    console.error(`ERROR: Error reading directory: ${dir}`, dirReadError.message);
+    console.error(
+      `ERROR: Error reading directory: ${dir}`,
+      dirReadError.message,
+    );
     return [];
   }
 }
@@ -132,7 +143,10 @@ export function createPath(folderPath: string) {
       fs.mkdirSync(folderPath, { recursive: true });
       console.info(`INFO: Folder created: ${folderPath}`);
     } catch (folderError) {
-      console.error(`ERROR: Error creating folder: ${folderPath}`, folderError.message);
+      console.error(
+        `ERROR: Error creating folder: ${folderPath}`,
+        folderError.message,
+      );
     }
   }
 }
@@ -154,14 +168,17 @@ function createFile(
     '// Generated using ts-gen-typeguards\n // @ts-nocheck\n';
   const filePath = isCombinedInput ? inputPath : outputPath;
   try {
-    fs.writeFileSync(
-      filePath,
-      `${initialContent}`,
+    fs.writeFileSync(filePath, `${initialContent}`);
+    console.info(
+      `INFO: ${filePath} created and initial content added successfully.`,
     );
-    console.info(`INFO: ${filePath} created and initial content added successfully.`);
     appendText(typeGuardsText, inputPath, outputPath, isCombinedInput);
   } catch (err) {
-    console.error('ERROR: Error while creating the file:', filePath, err.message);
+    console.error(
+      'ERROR: Error while creating the file:',
+      filePath,
+      err.message,
+    );
   }
 }
 
@@ -178,15 +195,15 @@ function appendText(
   outputPath: string,
   isCombinedInput?: boolean,
 ) {
-  const filePath = isCombinedInput ? `./${inputPath}` : `./${outputPath}`
+  const filePath = isCombinedInput ? `./${inputPath}` : `./${outputPath}`;
   try {
-    fs.appendFileSync(
-      filePath,
-      typeGuardsText,
-    );
+    fs.appendFileSync(filePath, typeGuardsText);
     console.info(`INFO: Text appended to the ${filePath} successfully.`);
   } catch (err) {
-    console.error(`ERROR: Error while appending text to the ${filePath}:`, err.message);
+    console.error(
+      `ERROR: Error while appending text to the ${filePath}:`,
+      err.message,
+    );
   }
 }
 
