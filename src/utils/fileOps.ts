@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as prettier from 'prettier';
 import { Options } from 'prettier';
-import * as path from "path";
+import * as path from 'path';
 
 export const defaultInputDir = 'input';
 export const defaultOutputTypeGuardsFilePath = 'out/typeGuards.ts';
@@ -19,9 +19,17 @@ const prettierRC: Options = {
  * Generates a file with the given text
  * @param typeGuardsText
  */
-export function generateTypeGuardsFile(typeGuardsText: string, isCombinedInput?: boolean, inputDir?: string, outputDir?: string): void {
-  const inputPath = inputDir + '/combinedTypeGuards.ts' ?? defaultOutputTypesFilePath
-  const outputPath = outputDir.includes('/typeGuards.ts') ? outputDir : defaultOutputTypeGuardsFilePath
+export function generateTypeGuardsFile(
+  typeGuardsText: string,
+  isCombinedInput?: boolean,
+  inputDir?: string,
+  outputDir?: string,
+): void {
+  const inputPath =
+    inputDir + '/combinedTypeGuards.ts' ?? defaultOutputTypesFilePath;
+  const outputPath = outputDir.includes('/typeGuards.ts')
+    ? outputDir
+    : defaultOutputTypeGuardsFilePath;
   prettify(typeGuardsText)
     .then(formattedText => {
       try {
@@ -57,9 +65,12 @@ export function deleteFileIfExists(filePath: string) {
  * @param dir - Optional directory to read files from (defaults to ./out)
  * @param extension - Optional extension to filter files by (defaults to .ts)
  */
-export function readFilesWithExtension(dir: string = `./${defaultInputDir}`, extension: string = 'ts') {
+export function readFilesWithExtension(
+  dir: string = `./${defaultInputDir}`,
+  extension: string = 'ts',
+) {
   try {
-    if(extension !== 'ts') {
+    if (extension !== 'ts') {
       throw new Error('Only .ts files are supported');
     }
     const files = fs.readdirSync(dir);
@@ -72,7 +83,10 @@ export function readFilesWithExtension(dir: string = `./${defaultInputDir}`, ext
     const results = [];
     for (const file of filteredFiles) {
       const filePath = './' + path.join(dir, file);
-      if(!filePath.includes('.d.ts') && !filePath.includes('combinedTypeGuards.ts')) {
+      if (
+        !filePath.includes('.d.ts') &&
+        !filePath.includes('combinedTypeGuards.ts')
+      ) {
         console.log(`Reading file: ${filePath}`);
         try {
           const content = fs.readFileSync(filePath, 'utf8');
@@ -83,7 +97,12 @@ export function readFilesWithExtension(dir: string = `./${defaultInputDir}`, ext
         }
       }
     }
-    createFile(results.join(''), dir + '/combinedTypeGuards.ts', undefined, true);
+    createFile(
+      results.join(''),
+      dir + '/combinedTypeGuards.ts',
+      undefined,
+      true,
+    );
     return results;
   } catch (dirReadError) {
     console.error(`Error reading directory: ${dir}`);
@@ -96,11 +115,19 @@ export function readFilesWithExtension(dir: string = `./${defaultInputDir}`, ext
  * @param typeGuardsText - The text to be added to the file
  * @param isCombinedInput? - Whether the input is a combined file or not
  */
-function createFile(typeGuardsText: string, inputPath: string, outputPath: string, isCombinedInput?: boolean,) {
+function createFile(
+  typeGuardsText: string,
+  inputPath: string,
+  outputPath: string,
+  isCombinedInput?: boolean,
+) {
   const initialContent =
     '// Generated using ts-gen-typeguards\n // @ts-nocheck\n';
   try {
-    fs.writeFileSync(isCombinedInput ? inputPath : outputPath, `${initialContent}`);
+    fs.writeFileSync(
+      isCombinedInput ? inputPath : outputPath,
+      `${initialContent}`,
+    );
     console.info('File created and initial content added successfully.');
     appendText(typeGuardsText, inputPath, outputPath, isCombinedInput);
   } catch (err) {
@@ -115,9 +142,17 @@ function createFile(typeGuardsText: string, inputPath: string, outputPath: strin
  * @param outputPath
  * @param isCombinedInput? - Whether the input is a combined file or not
  */
-function appendText(typeGuardsText: string, inputPath: string, outputPath: string, isCombinedInput?: boolean) {
+function appendText(
+  typeGuardsText: string,
+  inputPath: string,
+  outputPath: string,
+  isCombinedInput?: boolean,
+) {
   try {
-    fs.appendFileSync(isCombinedInput ? `./${inputPath}` : `./${outputPath}`, typeGuardsText);
+    fs.appendFileSync(
+      isCombinedInput ? `./${inputPath}` : `./${outputPath}`,
+      typeGuardsText,
+    );
     console.info('Text appended to the file successfully.');
   } catch (err) {
     console.error('Error while appending text to the file:', err.message);
@@ -142,7 +177,7 @@ function createPath() {
   const folderPath = 'path/to/your/folder'; // Replace with the actual folder path
   const filePath = path.join(folderPath, 'example.txt'); // Replace 'example.txt' with the desired file name
 
-// Check if the folder exists, and create it if not
+  // Check if the folder exists, and create it if not
   if (!fs.existsSync(folderPath)) {
     try {
       fs.mkdirSync(folderPath, { recursive: true });
@@ -155,7 +190,7 @@ function createPath() {
     console.log(`Folder already exists: ${folderPath}`);
   }
 
-// Check if the file exists, and create it if not
+  // Check if the file exists, and create it if not
   if (!fs.existsSync(filePath)) {
     try {
       fs.writeFileSync(filePath, 'Hello, world!', 'utf8'); // You can provide initial content here
