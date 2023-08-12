@@ -8,3 +8,5 @@ coverage/
 *.js
 *.d.ts
 src/out/**/*
+src/input/combinedTypeGuards.*
+src/inputNew/
