@@ -5,5 +5,9 @@ node_modules/
 .github/
 coverage/
 src/**/*
+#Files
+.prettierrc
+package-lock.json
+tsconfig.json
 
 
