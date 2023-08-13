@@ -1,0 +1,9 @@
+#Folders
+node_modules/
+.idea/
+.run/
+.github/
+coverage/
+src/**/*
+
+
