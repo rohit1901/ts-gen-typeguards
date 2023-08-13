@@ -5,7 +5,8 @@
     "declaration": true,
     "rootDir": "src",
     // NOTE: add to produce production build
-    //"outDir": "dist",
+    "outDir": "lib",
+    "sourceMap": true,
   },
   "include": [
     "src/**/*.ts"
@@ -14,6 +15,8 @@
   "exclude": [
     "node_modules",
     "src/out/**/*",
-    "src/__tests__/**/*.ts"
+    "src/__tests__/**/*.ts",
+    "lib",
+    "lib-esm"
   ]
 }

@@ -4,7 +4,14 @@ node_modules/
 .idea/
 .run/
 coverage/
+lib/
+lib-esm/
+src/inputNew/**/*
+src/outputNew/**/*
+src/out/**/*
 #Files
 *.js
 *.d.ts
-src/out/**/*
+src/input/combinedTypeGuards.*
+.DS_Store
+

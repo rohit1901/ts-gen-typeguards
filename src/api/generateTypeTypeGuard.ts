@@ -1,40 +1,17 @@
 import {
   EnumDeclaration,
-  factory,
   Identifier,
-  InterfaceDeclaration,
-  isEnumDeclaration,
-  isIntersectionTypeNode,
-  isLiteralTypeNode,
-  isPropertySignature,
   isTypeLiteralNode,
-  isTypeReferenceNode,
-  isUnionTypeNode,
-  KeywordSyntaxKind,
-  SyntaxKind,
   TypeAliasDeclaration,
-  TypeElement,
 } from 'typescript';
 import {
   generateIntersectionTypeGuard,
   generateKeywordGuard,
-  generateKeywordGuardForType,
   generatePropertyGuard,
-  generateTypeReferenceGuard,
   generateUnionTypeGuard,
   handleEnumIntersection,
 } from '../api';
-import {
-  capitalize,
-  getEscapedCapitalizedStringLiteral,
-  handleIntersectionTypesForTypeAlias,
-  isLiteralType,
-} from '../utils';
-import {
-  generateTypeAliasGuardExpression,
-  generateTypeReferenceTypeGuard,
-} from './generateUnionTypeGuardForIntersection';
-import { generateQualifiedNameTypeGuard } from '../api';
+import { getEscapedCapitalizedStringLiteral } from '../utils';
 
 /**
  * Generate a set of type guard functions based on provided TypeAliasDeclarations.

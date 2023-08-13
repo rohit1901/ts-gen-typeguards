@@ -2,12 +2,14 @@
   "name": "ts-gen-typeguards",
   "version": "1.0.0",
   "description": "A utility to generate typeguards",
-  "main": "index.ts",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && tsc -m es6 --outDir lib-esm && npm publish",
+    "build-dry-run": "tsc && npm pack --dry-run",
     "watch-mode": "tsc -w -p tsconfig.json",
     "start": "cd src && node index.js",
-    "start-prod": "node dist/ts-gen-typeguards.min.js",
+    "start-prod": "node dist/index.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
     "prettify": "prettier --write \"src/**/*.ts\""
