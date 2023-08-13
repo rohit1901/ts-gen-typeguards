@@ -5,7 +5,8 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "build": "tsc && tsc -m es6 --outDir lib-esm",
+    "build": "tsc && tsc -m es6 --outDir lib-esm && npm publish",
+    "build-dry-run": "tsc && npm pack --dry-run",
     "watch-mode": "tsc -w -p tsconfig.json",
     "start": "cd src && node index.js",
     "start-prod": "node dist/index.js",
