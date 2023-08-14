@@ -2,28 +2,10 @@ name: CI
 on:
   push:
     branches:
-      - 'feature/*'
       - 'main'
 jobs:
   format_test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [ 20.x ]
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-      - run: npm install
-      - run: npm test
-      - run: npm run build-dry-run --if-present
-      # Prettify code only if the previous steps pass
-      - name: Prettify code
-        if: ${{ success() }}
-        uses: creyD/prettier_action@v4.3
-        with:
-          prettier_options: --write src/**/*.ts !src/out/**/*
+    uses: rohit1901/ts-gen-typeguards/.github/workflows/test_format.yml@main
   build:
     # Requires the format_test job to pass
     needs: format_test
@@ -34,7 +16,7 @@ jobs:
       matrix:
         node-version: [ 20.x ]
     # Only run on push to main and when the format_test job passes
-    if: ${{ success() }} && github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: ${{ success() }} && github.event_name == 'push'
     steps:
       # Checkout the repo
       - uses: actions/checkout@v3
