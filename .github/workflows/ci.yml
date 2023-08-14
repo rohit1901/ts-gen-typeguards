@@ -5,7 +5,7 @@ on:
       - 'main'
 jobs:
   format_test:
-    uses: rohit1901/ts-gen-typeguards/.github/workflows/test_format.yml@main
+    uses: ./.github/workflows/test_format.yml
   build:
     # Requires the format_test job to pass
     needs: format_test
