@@ -13,22 +13,19 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       # Build steps
+      - name: Node Install
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Node Install
-        run: npm install
+      - run: npm install
+      - run: npm test
+      - run: npm run build-dry-run --if-present
       - name: Prettify code
         if: ${{ success() }}
         uses: creyD/prettier_action@v4.3
         with:
           prettier_options: --write src/**/*.ts !src/out/**/*
-      - name: Test
-        if: ${{ success() }}
-        run: npm test
-      - name: Build (Dry Run)
-        if: ${{ success() }}
-        run: npm run build-dry-run --if-present
+
   build:
     needs: format_test
     runs-on: ubuntu-latest
@@ -39,15 +36,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+      - name: Node Install and Build
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Node Install
-        run: npm install
+      - run: npm install
+      - run: npm run build
       - name: Bump version and push tag
         uses: RueLaLa/auto-tagger@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_PR_NUMBER: ${{ github.event.number }}
-      - name: Build
-        run: npm run build
