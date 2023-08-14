@@ -7,8 +7,6 @@ jobs:
   # Run the format_test job only on push to feature/*
   format_test:
     uses: ./.github/workflows/test_format.yml
-    with:
-      ref: ${{ github.ref }}
   build:
     # Requires the format_test job to pass
     needs: format_test
