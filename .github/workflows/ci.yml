@@ -4,7 +4,6 @@ on:
     branches:
       - 'main'
 jobs:
-  # Run the format_test job only on push to feature/*
   format_test:
     uses: ./.github/workflows/test_format.yml
   build:
@@ -20,52 +19,48 @@ jobs:
     if: ${{ success() }} && github.event_name == 'push'
     steps:
       # Checkout the repo
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          # Fetch all history for all tags and branches
-          fetch-depth: 0
-          ref: ${{ github.ref }}
+      - uses: actions/checkout@v3
       # Setup node
-      - name: "Setup node"
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           # Add the registry URL to publish to NPM (optional)
           registry-url: 'https://registry.npmjs.org'
           # Add the scope of the package to publish to NPM (optional)
           scope: '@rohit1901'
-      # Get the current version from package.json
-#      - name: get-npm-version
-#        id: package-version
-#        uses: martinbeentjes/npm-get-version-action@v1.3.1
-#      - run: echo "The current version is ${{ steps.package-version.outputs.current-version }}"
-#      # Bump version and push tag
-#      - name: Bump version and push tag
-#        if: ${{ success() }}
-#        uses: anothrNick/github-tag-action@1.64.0
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#          WITH_V: true
-#          # DRY_RUN: true
-#          INITIAL_VERSION: ${{ steps.package-version.outputs.current-version }}
       # Install dependencies
-      - name: Install dependencies
-        run: npm install
-      # Bump version
-      - name: "Automated Version Bump"
-        uses: "phips28/gh-action-bump-version@master"
-        with:
-          tag-prefix: 'v'
-          target-branch: 'main'
+      - run: npm install
+      # Create a new version and Changelog
+      - run: npm run version
+      # Get the current version from package.json
+      - name: get-npm-version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@v1.3.1
+      - run: echo "The current version is ${{ steps.package-version.outputs.current-version }}"
+      # Bump version and push tag
+      - name: Bump version and push tag
+        id: version-bump
+        if: ${{ success() }}
+        uses: anothrNick/github-tag-action@1.64.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#      # Modify package.json
-#      - name: "cat package.json"
-#        run: cat ./package.json
+          # DRY_RUN: true
+          INITIAL_VERSION: ${{ steps.package-version.outputs.current-version }}
+      # Update package.json with the new version
+      - name: package.json info
+        id: info
+        uses: jaywcjlove/github-action-package@main
+        with:
+          version: ${{ steps.version-bump.outputs.new_tag }}
+      # Commit changes
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          author_name: Rohit Khanduri
+          author_email: rohit.khanduri@hotmail.com
+          message: version bumped to ${{ steps.version-bump.outputs.new_tag }}
       # Build the project
-      - name: Build
-        run: npm run build
+      - run: npm run build
       # Publish to NPM
       - name: Publish to NPM
         run: npm publish --access public
