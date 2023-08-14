@@ -4,9 +4,11 @@ on:
     branches:
       - 'main'
 jobs:
+  # Run the format_test job only on push to feature/*
   format_test:
-    if: ${{github.ref}} != 'refs/heads/main'
     uses: ./.github/workflows/test_format.yml
+    with:
+      ref: ${{ github.ref }}
   build:
     # Requires the format_test job to pass
     needs: format_test
@@ -20,35 +22,54 @@ jobs:
     if: ${{ success() }} && github.event_name == 'push'
     steps:
       # Checkout the repo
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          # Fetch all history for all tags and branches
+          fetch-depth: 0
+          ref: ${{ github.ref }}
       # Setup node
-      - uses: actions/setup-node@v3
+      - name: "cat package.json"
+        run: cat ./package.json
+      - name: "Setup node"
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           # Add the registry URL to publish to NPM (optional)
           registry-url: 'https://registry.npmjs.org'
           # Add the scope of the package to publish to NPM (optional)
           scope: '@rohit1901'
-      # Install dependencies
-      - run: npm install
-      # Create a new version and Changelog
-      - run: npm run version
-      # Build the project
-      - run: npm run build
       # Get the current version from package.json
-      - name: get-npm-version
-        id: package-version
-        uses: martinbeentjes/npm-get-version-action@v1.3.1
-      - run: echo "The current version is ${{ steps.package-version.outputs.current-version }}"
-      # Bump version and push tag
-      - name: Bump version and push tag
-        if: ${{ success() }}
-        uses: anothrNick/github-tag-action@1.64.0
+#      - name: get-npm-version
+#        id: package-version
+#        uses: martinbeentjes/npm-get-version-action@v1.3.1
+#      - run: echo "The current version is ${{ steps.package-version.outputs.current-version }}"
+#      # Bump version and push tag
+#      - name: Bump version and push tag
+#        if: ${{ success() }}
+#        uses: anothrNick/github-tag-action@1.64.0
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          WITH_V: true
+#          # DRY_RUN: true
+#          INITIAL_VERSION: ${{ steps.package-version.outputs.current-version }}
+      # Install dependencies
+      - name: Install dependencies
+        run: npm install
+      # Bump version
+      - name: "Automated Version Bump"
+        uses: "phips28/gh-action-bump-version@master"
+        with:
+          tag-prefix: 'v'
+          target-branch: 'main'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          WITH_V: true
-          # DRY_RUN: true
-          INITIAL_VERSION: ${{ steps.package-version.outputs.current-version }}
+#      # Modify package.json
+#      - name: "cat package.json"
+#        run: cat ./package.json
+      # Build the project
+      - name: Build
+        run: npm run build
       # Publish to NPM
       - name: Publish to NPM
         run: npm publish --access public
