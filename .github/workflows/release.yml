@@ -2,10 +2,21 @@ name: Release
 
 on:
   pull_request:
-    types:
-      - closed
+    types: [opened, closed]
 
 jobs:
+  if_opened:
+    if: github.event.pull_request.opened == true && github.event.pull_request.merged == false && github.event.pull_request.closed == false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Bump version and push tag
+        uses: RueLaLa/auto-tagger@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_PR_NUMBER: ${{ github.event.number }}
   if_merged:
     if: github.event.pull_request.merged == true && ${{ github.event.label.name == 'minor-release' }}
     runs-on: ubuntu-latest
