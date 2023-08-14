@@ -1,19 +1,19 @@
-#name: Format Code (Prettier)
-#on:
-#  push:
-#    branches:
-#      - 'feature/*'
-#      - 'main'
-#jobs:
-#  format:
-#    runs-on: ubuntu-latest
-#    env:
-#      CI_COMMIT_MESSAGE: Continuous Integration Format Artifacts
-#      CI_COMMIT_AUTHOR: Continuous Integration
-#    steps:
-#      - uses: actions/checkout@v3
-#
-#      # Build steps
+name: Format Code (Prettier)
+on:
+  push:
+    branches:
+      - 'feature/*'
+      - 'main'
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    env:
+      CI_COMMIT_MESSAGE: Continuous Integration Format Artifacts
+      CI_COMMIT_AUTHOR: Continuous Integration
+    steps:
+      - uses: actions/checkout@v3
+
+      # Build steps
 #      - uses: actions/setup-node@v3
 #        with:
 #          node-version: 20.x
