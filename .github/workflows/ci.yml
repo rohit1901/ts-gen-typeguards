@@ -25,24 +25,3 @@ jobs:
         uses: creyD/prettier_action@v4.3
         with:
           prettier_options: --write src/**/*.ts !src/out/**/*
-
-  build:
-    needs: format_test
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [20.x]
-    if: ${{ success() }} && github.event_name == 'push' && ${{ github.ref == 'refs/heads/main' }}
-    steps:
-      - uses: actions/checkout@v3
-      - name: Node Install and Build
-      - uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-      - run: npm install
-      - run: npm run build
-      - name: Bump version and push tag
-        uses: RueLaLa/auto-tagger@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_PR_NUMBER: ${{ github.event.number }}
