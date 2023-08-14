@@ -1,26 +1,55 @@
-name: Tests
-
+name: CI
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
+    branches:
+      - 'main'
 jobs:
+  format_test:
+    uses: rohit1901/ts-gen-typeguards/.github/workflows/test_format.yml@main
   build:
-
+    # Requires the format_test job to pass
+    needs: format_test
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: write
     strategy:
       matrix:
-        node-version: [20.x]
-
+        node-version: [ 20.x ]
+    # Only run on push to main and when the format_test job passes
+    if: ${{ success() }} && github.event_name == 'push'
     steps:
+      # Checkout the repo
       - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+      # Setup node
+      - uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+          # Add the registry URL to publish to NPM (optional)
+          registry-url: 'https://registry.npmjs.org'
+          # Add the scope of the package to publish to NPM (optional)
+          scope: '@rohit1901'
+      # Install dependencies
       - run: npm install
-      - run: npm test
-      - run: npm run build-dry-run --if-present
+      # Create a new version and Changelog
+      - run: npm run version
+      # Build the project
+      - run: npm run build
+      # Get the current version from package.json
+      - name: get-npm-version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@v1.3.1
+      - run: echo "The current version is ${{ steps.package-version.outputs.current-version }}"
+      # Bump version and push tag
+      - name: Bump version and push tag
+        if: ${{ success() }}
+        uses: anothrNick/github-tag-action@1.64.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+          # DRY_RUN: true
+          INITIAL_VERSION: ${{ steps.package-version.outputs.current-version }}
+      # Publish to NPM
+      - name: Publish to NPM
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_PUBLISH_TOKEN}}
