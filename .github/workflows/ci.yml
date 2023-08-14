@@ -27,8 +27,6 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.ref }}
       # Setup node
-      - name: "cat package.json"
-        run: cat ./package.json
       - name: "Setup node"
         uses: actions/setup-node@v3
         with:
