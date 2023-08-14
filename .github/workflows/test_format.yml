@@ -3,6 +3,14 @@ on:
   push:
     branches:
       - 'feature/*'
+  workflow_call:
+    inputs:
+      config-path:
+        required: true
+        type: string
+    secrets:
+      token:
+        required: true
 jobs:
   format_test:
     runs-on: ubuntu-latest
