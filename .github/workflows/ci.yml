@@ -12,8 +12,6 @@ jobs:
         node-version: [ 20.x ]
     steps:
       - uses: actions/checkout@v3
-      # Build steps
-      - name: Node Install, Test and Build
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
