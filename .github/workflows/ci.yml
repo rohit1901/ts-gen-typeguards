@@ -23,3 +23,27 @@ jobs:
         uses: creyD/prettier_action@v4.3
         with:
           prettier_options: --write src/**/*.ts !src/out/**/*
+  build:
+    needs: format_test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    strategy:
+      matrix:
+        node-version: [ 20.x ]
+    if: ${{ success() }} && github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          # setting a registry enables the NODE_AUTH_TOKEN env variable where we can set an npm token.  REQUIRED
+          registry-url: 'https://registry.npmjs.org'
+      - run: npm install
+      - run: npm run build
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@1.64.0 # Don't use @master or @v1 unless you're happy to test the latest version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # if you don't want to set write permissions use a PAT token
+          WITH_V: true
+          DRY_RUN: true
