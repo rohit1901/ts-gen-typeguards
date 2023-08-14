@@ -54,11 +54,9 @@ jobs:
           version: ${{ steps.version-bump.outputs.new_tag }}
       # Commit changes
       - name: Commit changes
-        uses: EndBug/add-and-commit@v9
+        uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          author_name: Rohit Khanduri
-          author_email: rohit.khanduri@hotmail.com
-          message: version bumped to ${{ steps.version-bump.outputs.new_tag }}
+          commit_message: Apply php-cs-fixer changes
       # Build the project
       - run: npm run build
       # Publish to NPM
