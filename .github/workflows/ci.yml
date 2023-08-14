@@ -21,7 +21,7 @@ jobs:
       # Checkout the repo
       - uses: actions/checkout@v3
         with :
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_FORCE_PUSH_TOKEN }}
       # Setup node
       - uses: actions/setup-node@v3
         with:
