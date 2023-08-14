@@ -5,11 +5,8 @@ on:
       - 'main'
 jobs:
   format_test:
+    if: ${{github.ref}} != 'refs/heads/main'
     uses: ./.github/workflows/test_format.yml
-  echo_test:
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo ${{github.ref}}
   build:
     # Requires the format_test job to pass
     needs: format_test
