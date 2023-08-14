@@ -41,9 +41,15 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - run: npm install
       - run: npm run build
+      - name: get-npm-version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@v1.3.1
+        run: echo "The current version is ${{ steps.package-version.outputs.current-version }}"
       - name: Bump version and push tag
+        if: ${{ success() }}
         uses: anothrNick/github-tag-action@1.64.0 # Don't use @master or @v1 unless you're happy to test the latest version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # if you don't want to set write permissions use a PAT token
           WITH_V: true
           DRY_RUN: true
+          INITIAL_VERSION: ${{ steps.package-version.outputs.current-version }}
