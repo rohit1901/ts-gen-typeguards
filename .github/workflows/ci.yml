@@ -5,8 +5,10 @@ on:
       - 'main'
 jobs:
   format_test:
+    uses: ./.github/workflows/test_format.yml
+  echo_test:
+    runs-on: ubuntu-latest
     steps:
-      - uses: ./.github/workflows/test_format.yml
       - run: echo ${{github.ref}}
   build:
     # Requires the format_test job to pass
