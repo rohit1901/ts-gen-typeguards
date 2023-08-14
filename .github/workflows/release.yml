@@ -6,7 +6,7 @@ on:
 
 jobs:
   if_opened:
-    if: github.event.pull_request.opened == true && github.event.pull_request.merged == false && github.event.pull_request.closed == false
+    if: github.event_name == 'pull_request' && github.event.action == 'opened' && github.event.pull_request.merged == false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -18,7 +18,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_PR_NUMBER: ${{ github.event.number }}
   if_merged:
-    if: github.event.pull_request.merged == true && ${{ github.event.label.name == 'minor-release' }}
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - run: |
