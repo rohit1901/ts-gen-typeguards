@@ -38,6 +38,7 @@ jobs:
         uses: anothrNick/github-tag-action@1.64.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: patch
           DRY_RUN: true
           INITIAL_VERSION: ${{ steps.package-version.outputs.current-version }}
       # Update package.json with the new version
@@ -56,6 +57,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           INITIAL_VERSION: ${{ steps.package-version.outputs.current-version }}
+          DEFAULT_BUMP: patch
       # Commit changes
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4
