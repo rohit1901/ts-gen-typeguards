@@ -33,7 +33,7 @@ jobs:
       - run: echo "The current version is ${{ steps.package-version.outputs.current-version }}"
       # Bump version and provide new version as output
       - name: Bump version (Dry run)
-        id: version-bump
+        id: version-bump-dry-run
         if: ${{ success() }}
         uses: anothrNick/github-tag-action@1.64.0
         env:
@@ -45,7 +45,7 @@ jobs:
         id: info
         uses: jaywcjlove/github-action-package@main
         with:
-          version: ${{ steps.version-bump.outputs.new_tag }}
+          version: ${{ steps.version-bump-dry-run.outputs.new_tag }}
       # Create a new Changelog
       - run: npm run version
       # Bump version and push tag
