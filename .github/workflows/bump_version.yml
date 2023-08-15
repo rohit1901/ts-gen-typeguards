@@ -1,8 +1,7 @@
 name: Bump version, commit and push tag
 on:
   pull_request:
-    branches:
-      - 'feature/*'
+    types: [opened, reopened]
   workflow_call:
 jobs:
   format_test:
