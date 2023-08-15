@@ -20,6 +20,8 @@ jobs:
     steps:
       # Checkout the repo
       - uses: actions/checkout@v3
+        with :
+          token: ${{ secrets.GITHUB_FORCE_PUSH_TOKEN }}
       # Setup node
       - uses: actions/setup-node@v3
         with:
@@ -32,8 +34,6 @@ jobs:
       - run: npm install
       # Create a new version and Changelog
       - run: npm run version
-      # Build the project
-      - run: npm run build
       # Get the current version from package.json
       - name: get-npm-version
         id: package-version
@@ -41,13 +41,26 @@ jobs:
       - run: echo "The current version is ${{ steps.package-version.outputs.current-version }}"
       # Bump version and push tag
       - name: Bump version and push tag
+        id: version-bump
         if: ${{ success() }}
         uses: anothrNick/github-tag-action@1.64.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          WITH_V: true
           # DRY_RUN: true
           INITIAL_VERSION: ${{ steps.package-version.outputs.current-version }}
+      # Update package.json with the new version
+      - name: package.json info
+        id: info
+        uses: jaywcjlove/github-action-package@main
+        with:
+          version: ${{ steps.version-bump.outputs.new_tag }}
+      # Commit changes
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Apply php-cs-fixer changes
+      # Build the project
+      - run: npm run build
       # Publish to NPM
       - name: Publish to NPM
         run: npm publish --access public
