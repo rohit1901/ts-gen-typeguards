@@ -16,7 +16,7 @@ jobs:
       matrix:
         node-version: [ 20.x ]
     # Only run when the target is main and the format_test job has passed
-    if: github.base_ref == 'refs/heads/main' && (github.event.pull_request.action == 'opened' || github.event.pull_request.action == 'reopened')
+    if: github.event.pull_request.base.ref == 'refs/heads/main' && (github.event.pull_request.action == 'opened' || github.event.pull_request.action == 'reopened')
     steps:
       # Checkout the repo
       - uses: actions/checkout@v3
