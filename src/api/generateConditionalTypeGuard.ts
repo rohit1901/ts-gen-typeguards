@@ -1,5 +1,5 @@
 // Generate type guards for conditional types
-import {TypeNode} from "typescript";
+import { TypeNode } from 'typescript';
 
 export function generateConditionalTypeGuard(
   definition: TypeNode,

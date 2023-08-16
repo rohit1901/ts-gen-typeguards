@@ -3,7 +3,7 @@ import {
   generatePropertyGuard,
   generateTypeParametersTypeGuard,
   generateTypeParameterTypeGuard,
-  handleHeritageClauses
+  handleHeritageClauses,
 } from '../api';
 import { getEscapedCapitalizedStringLiteral } from '../utils';
 
@@ -25,7 +25,9 @@ export function generateSingleInterfaceTypeGuard(
   const updatedDefinition = handleHeritageClauses(definition, definitions);
   typeGuardStrings.push(`export function is${getEscapedCapitalizedStringLiteral(
     interfaceName,
-  )}(value: any): value is ${interfaceName} { ${generateTypeParametersTypeGuard(updatedDefinition.typeParameters)} return(typeof value === "object" &&
+  )}(value: any): value is ${interfaceName} { ${generateTypeParametersTypeGuard(
+    updatedDefinition.typeParameters,
+  )} return(typeof value === "object" &&
     value !== null`);
   for (const property of updatedDefinition.members) {
     typeGuardStrings.push(...generatePropertyGuard(property));

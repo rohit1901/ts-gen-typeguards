@@ -140,7 +140,7 @@ export function tsGenTypeguards(
     outputFilePath,
   );
 }
-tsGenTypeguards()
+tsGenTypeguards();
 // Usage Examples
 // 1. using default values --> tsGenTypeguards();
 // 2. using custom values --> tsGenTypeguards(undefined, 'inputNew', 'outputNew');
