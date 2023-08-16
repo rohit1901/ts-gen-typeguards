@@ -1,4 +1,5 @@
 # ts-gen-typeguards
+![Typescript](https://shields.io/badge/TypeScript-3178C6?logo=TypeScript&logoColor=FFF&style=flat-square)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Build Status](https://github.com/rohit1901/ts-gen-typeguards/actions/workflows/ci.yml/badge.svg)

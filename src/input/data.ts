@@ -1,3 +1,4 @@
+/*
 export interface Point {
   required: string;
   optional?: string;
@@ -205,4 +206,8 @@ export interface InterfaceWithOptionalArrays {
     optionalSubProp?: number[];
     optionalUnion?: UnionTypeArrayType;
   };
+}
+*/
+export interface Box<T> {
+  value: T;
 }

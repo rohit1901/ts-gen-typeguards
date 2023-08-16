@@ -21,3 +21,4 @@ export * from './generateArrayTypeGuard';
 export * from './generateUnionTypeGuardForIntersection';
 
 export * from './generateTypeTypeGuard';
+export * from './generateTypeParameterTypeGuard';

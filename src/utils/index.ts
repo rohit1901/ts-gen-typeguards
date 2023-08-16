@@ -13,3 +13,4 @@ export * from './isLiteral';
 
 export * from './intersectionType';
 export * from './arrays';
+export * from './typeParameter';

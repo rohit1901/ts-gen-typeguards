@@ -15,3 +15,5 @@ src/out/**/*
 src/input/combinedTypeGuards.*
 .DS_Store
 
+
+*.map

@@ -1,4 +1,4 @@
-import { isArrayTypeNode, isPropertySignature, TypeElement } from 'typescript';
+import {isArrayTypeNode, isPropertySignature, isTypeParameterDeclaration, TypeElement} from 'typescript';
 import {
   generateArrayTypeGuard,
   generateIntersectionTypeGuard,
@@ -8,6 +8,7 @@ import {
   generateUnionTypeGuard,
 } from '../api';
 import { generateTypeLiteralTypeGuardWithinUnion } from './generateUnionTypeGuardForIntersection';
+import {isTypeParameter, syntaxKindToType} from "../utils";
 
 /**
  * Function to generate a type guard for a TypeElement. Used to generate type guard string for properties.
