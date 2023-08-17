@@ -7,7 +7,14 @@ import {
 import { buildHasOwnPropertyString, getPropertyName } from '../utils';
 
 /**
- * Generate a generic type guard for a given property.
+ * Generate a generic type guard for a given property. This is used for nested properties as well.
+ * @example
+ * //for a type Type<T>
+ * export function isType<T>(val: any, guard: (val: any) => val is T): value is Type<T>{return(typeof value === "object" && value !== null
+ * //for a property name
+ * property.hasOwnProperty('name') && guard(value.name)
+ * //for a nested property name
+ * property.hasOwnProperty('name') && property.name.hasOwnProperty('nested') && guard(value.name.nested)
  * @param property - The property to generate the type guard for.
  * @param parentName - The computed name of the property.
  */
@@ -16,8 +23,6 @@ export function generateGenericPropertyGuard(
   parentName?: string,
 ) {
   if (!isPropertySignature(property)) return [];
-  /*if(parentName) return [buildHasOwnPropertyString(property, parentName), `guard(value.${getPropertyName(property, parentName)})`];
-    return [buildHasOwnPropertyString(property), `guard(value.${getPropertyName(property)})`];*/
   return [
     buildHasOwnPropertyString(property, parentName),
     `guard(value.${getPropertyName(property, parentName)})`,

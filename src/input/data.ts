@@ -206,12 +206,3 @@ export interface InterfaceWithOptionalArrays {
     optionalUnion?: UnionTypeArrayType;
   };
 }
-export interface Box<T> {
-  propWithGen: {
-    prop: T;
-  };
-  propNormal: T;
-}
-export interface normalGeneric<T> {
-  prop: T;
-}

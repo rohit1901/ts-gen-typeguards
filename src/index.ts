@@ -109,16 +109,16 @@ export function tsGenTypeguards(
   const types: TypeAliasDeclaration[] = [];
   const enums: EnumDeclaration[] = [];
   createPath(`./${outputFilePath ?? defaultOutputDir}`);
-  createPath(`./${inputFilePath ?? defaultInputDir}`);
-  deleteFileIfExists(
-    inputFilePath + `${defaultOutputTypesFileName}.${extensionTS}`,
-  );
   if (inputString) {
     const res = readObjects('', inputString);
     interfaces.push(...res.interfaces);
     types.push(...res.types);
     enums.push(...res.enums);
   } else {
+    createPath(`./${inputFilePath ?? defaultInputDir}`);
+    deleteFileIfExists(
+        inputFilePath + `${defaultOutputTypesFileName}.${extensionTS}`,
+    );
     const res = readObjects(inputFilePath);
     interfaces.push(...res.interfaces);
     types.push(...res.types);
@@ -140,9 +140,9 @@ export function tsGenTypeguards(
     outputFilePath,
   );
 }
-tsGenTypeguards();
 // Usage Examples
 // 1. using default values --> tsGenTypeguards();
 // 2. using custom values --> tsGenTypeguards(undefined, 'inputNew', 'outputNew');
 // 3. using custom input and default output values --> tsGenTypeguards(undefined, 'inputNew');
 // 4. using default input and custom output values tsGenTypeguards(undefined, undefined, 'outputNew');
+// 5. using input string and default output values --> tsGenTypeguards('export interface User {name: string; age: number;}');

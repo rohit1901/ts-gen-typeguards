@@ -41,6 +41,8 @@ tsGenTypeguards(undefined, 'inputNew', 'outputNew');
 tsGenTypeguards(undefined, 'inputNew');
 // using default input and custom output values 
 tsGenTypeguards(undefined, undefined, 'outputNew');
+// using custom input string and default output values
+tsGenTypeguards('export interface User {name: string; age: number;}');
 ```
 ## Suppported combinations
 The provided functions in the `typeGuardsGenerator` module support generating type guards for various combinations of TypeScript types, interfaces, and enums. Here's a summary of the supported combinations:
@@ -75,13 +77,15 @@ The provided functions in the `typeGuardsGenerator` module support generating ty
     - The utility will correctly handle type guards for ``readonly`` properties.
 11. **Any and Unknown Types**:
     - The utility will correctly handle type guards for ``any`` and ``unknown`` types.
+12. **Generic Types**:
+    - The utility will correctly handle type guards for generic types as well as nested generic types as long as the generic type is not a conditional type.
+    - Does not support generating type guards for conditional types, union types, or intersection types.
 
 In summary, the functions are designed to handle a wide range of type combinations and generate accurate type guards to validate data at runtime. The utility aims to provide comprehensive type safety for your TypeScript code by ensuring that the runtime data adheres to the defined TypeScript types.
 To generate type guards for interfaces, type aliases, and enums, you can utilize the provided functions `generateTypeGuards`, `generateTypeTypeGuards`, and `generateEnumTypeGuard`, respectively.
 
 ## Coming soon: 
 - Support for generating type guards for conditional types.
-- Support for generating type guards for generic types.
 - Support for generating type guards for Indexed Access types.
 - Support for generating type guards for imported Interfaces/Types/Enums.
 - Support for generating type guards for classes.
@@ -175,7 +179,18 @@ Generate a set of type guard functions based on provided TypeAliasDeclarations.
 Generates a type guard for a union type.
 ### generateUnionTypeGuardForIntersection({ type }: TypeAliasDeclaration, typeAliases: TypeAliasDeclaration[], name?: PropertyName,)
 Generate a union type guard for a given TypeScript type alias.
-## Examples
+### generateGenericPropertyGuard(property: TypeElement, parentName?: string,)
+Generate a generic type guard for a given property.
+```typescript
+export function isType<T>(value: any, guard: (val: any) => val is T): value is Type<T>{return(typeof value === "object" && value !== null
+&& guard(value));}
+//for a property name
+   property.hasOwnProperty('name') && guard(value.name)
+//for a nested property name
+   property.hasOwnProperty('name') && property.name.hasOwnProperty('nested') && guard(value.name.nested)
+//for a type Type<T>
+```
+## Usage Examples
 
 ```typescript
 import{ tsGenTypeguards } from 'ts-gen-typeguards/lib';
@@ -188,6 +203,8 @@ tsGenTypeguards(undefined, 'inputNew', 'outputNew');
 tsGenTypeguards(undefined, 'inputNew');
 // using default input and custom output values 
 tsGenTypeguards(undefined, undefined, 'outputNew');
+// using custom input string and default output values
+tsGenTypeguards('export interface User {name: string; age: number;}');
 ```
 
 The above code generates type guards for the provided interface declaration and logs the generated code to the console.
