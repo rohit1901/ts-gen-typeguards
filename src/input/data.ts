@@ -209,9 +209,9 @@ export interface InterfaceWithOptionalArrays {
 export interface Box<T> {
   propWithGen: {
     prop: T;
-  },
+  };
   propNormal: T;
 }
 export interface normalGeneric<T> {
-    prop: T;
+  prop: T;
 }

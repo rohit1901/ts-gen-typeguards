@@ -1,4 +1,8 @@
-import {InterfaceDeclaration, TypeElement, TypeParameterDeclaration} from "typescript";
+import {
+  InterfaceDeclaration,
+  TypeElement,
+  TypeParameterDeclaration,
+} from 'typescript';
 
 /**
  * Check if value is a string and is equal to "type"
@@ -12,8 +16,12 @@ export function strings(value: any): value is 'type' {
  * Get the type name from the type parameter of an interface definition
  * @param definition - An interface definition
  */
-export function getTypeNameFromTypeParameter(definition: InterfaceDeclaration ): string | undefined {
-  return definition.typeParameters && definition.typeParameters.length > 0 ? definition.typeParameters[0].name.escapedText.toString() : undefined;
+export function getTypeNameFromTypeParameter(
+  definition: InterfaceDeclaration,
+): string | undefined {
+  return definition.typeParameters && definition.typeParameters.length > 0
+    ? definition.typeParameters[0].name.escapedText.toString()
+    : undefined;
 }
 
 /**
@@ -21,10 +29,13 @@ export function getTypeNameFromTypeParameter(definition: InterfaceDeclaration ):
  * @param property - A TypeElement representing a property
  * @param parentName - Optional. The name of the parent property.
  */
-export function getPropertyName(property: TypeElement, parentName?: string): string {
+export function getPropertyName(
+  property: TypeElement,
+  parentName?: string,
+): string {
   return parentName
-      ? `${parentName}.${property.name.getText()}`
-      : property.name.getText();
+    ? `${parentName}.${property.name.getText()}`
+    : property.name.getText();
 }
 
 /**
@@ -34,7 +45,10 @@ export function getPropertyName(property: TypeElement, parentName?: string): str
  * @param property - A TypeElement representing a property
  * @param parentName - Optional. The name of the parent property.
  */
-export function buildHasOwnPropertyString(property: TypeElement, parentName?: string): string {
+export function buildHasOwnPropertyString(
+  property: TypeElement,
+  parentName?: string,
+): string {
   const hasOwnPropertyString = parentName ? `value.${parentName}` : `value`;
   return `${hasOwnPropertyString}.hasOwnProperty('${property.name.getText()}')`;
 }

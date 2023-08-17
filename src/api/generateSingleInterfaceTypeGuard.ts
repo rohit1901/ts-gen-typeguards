@@ -4,7 +4,10 @@ import {
   generatePropertyGuard,
   handleHeritageClauses,
 } from '../api';
-import {getEscapedCapitalizedStringLiteral, getTypeNameFromTypeParameter} from '../utils';
+import {
+  getEscapedCapitalizedStringLiteral,
+  getTypeNameFromTypeParameter,
+} from '../utils';
 
 /**
  * Generates a type guard for a single interface definition.
@@ -24,16 +27,25 @@ export function generateSingleInterfaceTypeGuard(
   const typeParameterName = getTypeNameFromTypeParameter(definition);
   typeGuardStrings.push(buildInterfaceGuardSignature(definition));
   for (const property of updatedDefinition.members) {
-    typeGuardStrings.push(...generatePropertyGuard(property, undefined, typeParameterName));
+    typeGuardStrings.push(
+      ...generatePropertyGuard(property, undefined, typeParameterName),
+    );
   }
   return typeGuardStrings.join('&&') + `)}`;
 }
-function buildInterfaceGuardSignature(definition: InterfaceDeclaration): string {
-  const isGeneric = definition.typeParameters && definition.typeParameters.length > 0;
+function buildInterfaceGuardSignature(
+  definition: InterfaceDeclaration,
+): string {
+  const isGeneric =
+    definition.typeParameters && definition.typeParameters.length > 0;
   const interfaceName: string = definition.name.escapedText.toString();
-  if(isGeneric) return buildGenericFunctionSignature(interfaceName, definition.typeParameters);
-  return `export function is${getEscapedCapitalizedStringLiteral(
+  if (isGeneric)
+    return buildGenericFunctionSignature(
       interfaceName,
+      definition.typeParameters,
+    );
+  return `export function is${getEscapedCapitalizedStringLiteral(
+    interfaceName,
   )}(value: any): value is ${interfaceName} {return(typeof value === "object" &&
     value !== null`;
 }

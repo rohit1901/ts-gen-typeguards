@@ -129,7 +129,9 @@ export function generateTypeLiteralTypeGuardWithinUnion(
   const propertyGuards: string[] = [];
   for (const member of typeLiteral.members) {
     if (isPropertySignature(member)) {
-      propertyGuards.push(...generatePropertyGuard(member, parentName, typeParameterName));
+      propertyGuards.push(
+        ...generatePropertyGuard(member, parentName, typeParameterName),
+      );
     }
   }
 
