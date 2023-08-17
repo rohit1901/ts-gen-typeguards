@@ -1,4 +1,3 @@
-/*
 export interface Point {
   required: string;
   optional?: string;
@@ -207,7 +206,12 @@ export interface InterfaceWithOptionalArrays {
     optionalUnion?: UnionTypeArrayType;
   };
 }
-*/
 export interface Box<T> {
-  value: T;
+  propWithGen: {
+    prop: T;
+  },
+  propNormal: T;
+}
+export interface normalGeneric<T> {
+    prop: T;
 }

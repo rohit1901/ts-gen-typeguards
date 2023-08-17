@@ -3,7 +3,7 @@ import {
   isEnumString,
   isInterfaceString,
   isObject,
-  isTypeString,
+  strings,
   removeWhitespace,
 } from '../utils';
 
@@ -25,7 +25,7 @@ describe('Utils', () => {
     expect(result).toEqual(false);
   });
   it('should test Type String', () => {
-    const result = isTypeString('hello world');
+    const result = strings('hello world');
     expect(result).toEqual(false);
   });
   it('should test Object', () => {
