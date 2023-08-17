@@ -117,7 +117,7 @@ export function tsGenTypeguards(
   } else {
     createPath(`./${inputFilePath ?? defaultInputDir}`);
     deleteFileIfExists(
-        inputFilePath + `${defaultOutputTypesFileName}.${extensionTS}`,
+      inputFilePath + `${defaultOutputTypesFileName}.${extensionTS}`,
     );
     const res = readObjects(inputFilePath);
     interfaces.push(...res.interfaces);
