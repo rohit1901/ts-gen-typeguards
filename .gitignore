@@ -6,6 +6,8 @@ node_modules/
 coverage/
 lib/
 lib-esm/
+input/
+out/
 src/inputNew/**/*
 src/outputNew/**/*
 src/out/**/*
@@ -14,6 +16,4 @@ src/out/**/*
 *.d.ts
 src/input/combinedTypeGuards.*
 .DS_Store
-
-
 *.map

@@ -9,7 +9,7 @@
     "build-dry-run": "tsc && npm pack --dry-run",
     "watch-mode": "tsc -w -p tsconfig.json",
     "start": "cd src && node index.js",
-    "start-prod": "node dist/index.js",
+    "start-prod": "node lib/index.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
     "prettify": "prettier --write \"src/**/*.ts\"",
