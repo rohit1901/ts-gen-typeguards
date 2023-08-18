@@ -6,7 +6,6 @@ on:
       - 'main'
 jobs:
   bump_version:
-    needs: format_test
     runs-on: ubuntu-latest
     permissions:
       contents: write
