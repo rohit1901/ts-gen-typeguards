@@ -21,16 +21,16 @@ describe('Generator', () => {
       removeWhitespace(`
         export function isGenericInterface<T>(
           val: any,
-          guard: (val: any) => val is T
+          isT: (val: any) => val is T
         ): value is GenericInterface<T> {
           return (
             typeof value === "object" &&
             value !== null &&
             value.hasOwnProperty('property') &&
-            guard(value.property) &&
+            isT(value.property) &&
             value.hasOwnProperty('nestedProp') &&
             (value.nestedProp.hasOwnProperty('nested') &&
-            guard(value.nestedProp.nested))
+            isT(value.nestedProp.nested))
           )
         }`),
     );
