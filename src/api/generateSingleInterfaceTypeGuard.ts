@@ -33,6 +33,13 @@ export function generateSingleInterfaceTypeGuard(
   }
   return typeGuardStrings.join('&&') + `)}`;
 }
+
+/**
+ * Build the type guard signature for an interface. This includes the type guard function name and the type guard parameter.
+ * @example
+ * export function isInterfaceName(value: any): value is InterfaceName {return(typeof value === "object" && value !== null
+ * @param definition - The interface definition to process.
+ */
 function buildInterfaceGuardSignature(
   definition: InterfaceDeclaration,
 ): string {

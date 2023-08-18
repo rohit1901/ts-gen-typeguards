@@ -1,9 +1,6 @@
+import {EnumDeclaration, InterfaceDeclaration, isTypeLiteralNode, TypeAliasDeclaration,} from 'typescript';
 import {
-  EnumDeclaration,
-  isTypeLiteralNode,
-  TypeAliasDeclaration,
-} from 'typescript';
-import {
+  buildGenericFunctionSignature,
   generateIntersectionTypeGuard,
   generateKeywordGuard,
   generatePropertyGuard,
@@ -27,18 +24,11 @@ export function generateTypeTypeGuard(
     const typeGuardStrings: string[] = [];
     const { name, type } = definition;
     const typeName = getName(name);
-    const typeGuardName = getEscapedCapitalizedStringLiteral(typeName);
-    typeGuardStrings.push(`export function is${getEscapedCapitalizedStringLiteral(
-      typeGuardName,
-    )}(value: any): value is ${typeName} {return(typeof value === "object" &&
-    value !== null`);
-    typeGuardStrings.push(
-      ...generateIntersectionTypeGuard(type, typeName),
-      ...generateTypeWithinTypeLiteralTypeGuard(definition),
-      ...generateUnionTypeGuard(type, typeName, undefined, definitions),
-      ...generateKeywordGuard(type),
-      ...handleEnumIntersection(definition, enums),
-    );
+    typeGuardStrings.push(buildTypeTypeGuardSignature(definition), ...generateIntersectionTypeGuard(type, typeName),
+        ...generateTypeWithinTypeLiteralTypeGuard(definition),
+        ...generateUnionTypeGuard(type, typeName, undefined, definitions),
+        ...generateKeywordGuard(type),
+        ...handleEnumIntersection(definition, enums));
     typeGuard.push(typeGuardStrings.join('&&') + `)}`);
   }
   return typeGuard.join('\n');
@@ -52,8 +42,7 @@ export function generateTypeTypeGuard(
 export function generateTypeWithinTypeLiteralTypeGuard(
   definition: TypeAliasDeclaration,
 ) {
-  const { name, type } = definition;
-  const parentName = getName(name);
+  const { type } = definition;
   const typeGuardStrings: string[] = [];
   if (!isTypeLiteralNode(type)) {
     return '';
@@ -63,4 +52,27 @@ export function generateTypeWithinTypeLiteralTypeGuard(
     typeGuardStrings.push(...generatePropertyGuard(property));
   }
   return typeGuardStrings;
+}
+
+/**
+ * Build the type guard signature for a type. This includes the type guard function name and the type guard parameter.
+ * @example
+ * export function isTypeName(value: any): value is TypeName {return(typeof value === "object" && value !== null
+ * @param definition - The type definition to process.
+ */
+function buildTypeTypeGuardSignature(
+    definition: TypeAliasDeclaration,
+): string {
+  const isGeneric =
+      definition.typeParameters && definition.typeParameters.length > 0;
+  const typeName: string = definition.name.escapedText.toString();
+  if (isGeneric)
+    return buildGenericFunctionSignature(
+        typeName,
+        definition.typeParameters,
+    );
+  return `export function is${getEscapedCapitalizedStringLiteral(
+      typeName,
+  )}(value: any): value is ${typeName} {return(typeof value === "object" &&
+    value !== null`;
 }
