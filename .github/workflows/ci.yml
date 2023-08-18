@@ -7,7 +7,7 @@ jobs:
   update_version:
     uses: ./.github/workflows/bump_version.yml
     secrets:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      token: ${{ secrets.GITHUB_TOKEN }}
   build:
     # Requires the format_test job to pass
     needs: update_version
