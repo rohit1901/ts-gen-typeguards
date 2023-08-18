@@ -9,31 +9,50 @@
 
 ## Description
 
-The Type Guard generator is a TypeScript project that provides utility functions to generate type guards for interfaces, type aliases, and enums. It enables runtime type checking for objects based on their defined types.
+The Type Guards Generator is a utility for automatically generating TypeScript type guards based on interfaces, types, and enums defined in your code. This tool simplifies the process of ensuring type safety and data validation in your TypeScript projects.
 
 ## Installation
 ```bash
 npm install ts-gen-typeguards
 ```
+### Usage
 
-## Usage
+You can use the Type Guards Generator in various ways depending on your requirements. Here are a few usage examples:
 
-The main functionality of the Type Guard Generator is located in the `tsGenTypeguards` function, which Generates type guards for the given input file path and writes them to the output file path (defaults to ``./out/typeGuards.ts``).
+1. Using default values:
+   ```typescript
+   tsGenTypeguards();
+   ```
 
-```typescript
-import{ tsGenTypeguards } from 'ts-gen-typeguards/lib';
-// Usage Examples
-// using default values 
-tsGenTypeguards();
-// using custom values
-tsGenTypeguards(undefined, 'inputNew', 'outputNew');
-// using custom input and default output values
-tsGenTypeguards(undefined, 'inputNew');
-// using default input and custom output values 
-tsGenTypeguards(undefined, undefined, 'outputNew');
-// using custom input string and default output values
-tsGenTypeguards('export interface User {name: string; age: number;}');
-```
+2. Using custom values for input and output paths:
+   ```typescript
+   tsGenTypeguards(undefined, 'inputNew', 'outputNew');
+   ```
+
+3. Using custom input and default output paths:
+   ```typescript
+   tsGenTypeguards(undefined, 'inputNew');
+   ```
+
+4. Using default input and custom output paths:
+   ```typescript
+   tsGenTypeguards(undefined, undefined, 'outputNew');
+   ```
+
+5. Using an input string and default output paths:
+   ```typescript
+   tsGenTypeguards('export interface User {name: string; age: number;}');
+   ```
+
+### Getting Started
+
+To get started, follow these steps:
+
+1. Install the Type Guards Generator as described in the **Installation** section.
+2. Modify the generator's input files or provide input strings as needed.
+3. Run your TypeScript code to generate type guards automatically.
+
+For detailed information on how to use and customize the Type Guards Generator, refer to the code comments and documentation.
 ## Suppported combinations
 The provided functions in the `typeGuardsGenerator` module support generating type guards for various combinations of TypeScript types, interfaces, and enums. Here's a summary of the supported combinations:
 
@@ -69,7 +88,6 @@ The provided functions in the `typeGuardsGenerator` module support generating ty
     - The utility will correctly handle type guards for ``any`` and ``unknown`` types.
 12. **Generic Types**:
     - The utility will correctly handle type guards for generic types as well as nested generic types as long as the generic type is not a conditional type.
-    - Does not support generating type guards for conditional types, union types, or intersection types.
 
 In summary, the functions are designed to handle a wide range of type combinations and generate accurate type guards to validate data at runtime. The utility aims to provide comprehensive type safety for your TypeScript code by ensuring that the runtime data adheres to the defined TypeScript types.
 To generate type guards for interfaces, type aliases, and enums, you can utilize the provided functions `generateTypeGuards`, `generateTypeTypeGuards`, and `generateEnumTypeGuard`, respectively.
@@ -185,7 +203,7 @@ The above code generates type guards for the provided interface declaration and 
 
 ## Contributing
 
-Contributions are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a pull request on the [GitHub repository](https://github.com/rohit1901/type-guard-generator).
+Contributions are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a pull request on the [GitHub repository](https://github.com/rohit1901/ts-gen-typeguards).
 
 ## License
 
