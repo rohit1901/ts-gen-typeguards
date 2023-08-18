@@ -1,6 +1,6 @@
 {
   "name": "ts-gen-typeguards",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A utility to generate typeguards",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
