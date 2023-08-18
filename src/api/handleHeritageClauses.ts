@@ -5,6 +5,13 @@ import {
   SyntaxKind,
 } from 'typescript';
 
+/**
+ * Handle the heritage clauses of an interface definition and update its properties.
+ * A heritage clause is an 'extends' clause that extends another interface.
+ * The function is called recursively to handle the heritage clauses of the extended interface.
+ * @param definition - The interface definition to handle
+ * @param definitions - The array of all interface definitions used for the current generation
+ */
 export function handleHeritageClauses(
   definition: InterfaceDeclaration,
   definitions: InterfaceDeclaration[],
@@ -22,8 +29,8 @@ export function handleHeritageClauses(
 
 /**
  * Merge the properties of the source interface into the target interface
- * @param target
- * @param source
+ * @param target - The target interface to merge into
+ * @param source - The source interface to merge from
  */
 function mergeInterfaceProperties(
   target: InterfaceDeclaration,
@@ -41,9 +48,9 @@ function mergeInterfaceProperties(
 
 /**
  * Process an 'extends' heritage clause and update the properties of the current definition (InterfaceDeclaration)
- * @param clause
- * @param definitions
- * @param currentDefinition
+ * @param clause - The heritage clause to process
+ * @param definitions - The array of all interface definitions used for the current generation
+ * @param currentDefinition - The current interface definition to update
  */
 function processHeritageClause(
   clause: HeritageClause,

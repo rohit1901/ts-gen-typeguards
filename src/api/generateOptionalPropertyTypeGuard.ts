@@ -44,6 +44,7 @@ import { getQualifiedNameText } from './generateQualifiedNameTypeGuard';
  * (value.person === 'undefined' || isPerson(value.person))
  * ```
  */
+//TODO: Refactor this function
 export function generateOptionalPropertyTypeGuard(
   property: PropertySignature,
   parentName?: string,

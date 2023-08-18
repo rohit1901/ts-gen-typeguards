@@ -10,11 +10,25 @@ import {
   generateArrayTypeGuard,
   generateIntersectionTypeGuard,
   generateKeywordGuard,
-  generateKeywordGuardForType,
   generatePropertyGuard,
   generateTypeReferenceGuard,
 } from '../api';
 import { handleIntersectionTypesForTypeNode } from '../utils';
+
+/**
+ * Generates a type guard for a property based on its TypeScript PropertySignature.
+ * @param newMember
+ * @param typeGuard
+ */
+function generatePropertyTypeGuard(newMember: TypeNode, typeGuard: string[]) {
+  const typeGuardCode: string[] = [];
+  if (isTypeLiteralNode(newMember)) {
+    for (const prop of newMember.members) {
+      typeGuard.push(...generatePropertyGuard(prop));
+    }
+  }
+  return typeGuardCode;
+}
 
 /**
  * Generates a type guard for a union type.
@@ -36,9 +50,7 @@ export function generateUnionTypeGuard(
     const newMember = handleIntersectionTypesForTypeNode(member, definitions);
     typeGuard.push(
       ...generateIntersectionTypeGuard(newMember, typeName, isProperty),
-    );
-    typeGuard.push(...generateKeywordGuard(newMember, typeName, isProperty));
-    typeGuard.push(
+      ...generateKeywordGuard(newMember, typeName, isProperty),
       ...generateTypeReferenceGuard(newMember, typeName, isProperty),
     );
     if (isArrayTypeNode(newMember)) {
@@ -53,11 +65,7 @@ export function generateUnionTypeGuard(
         ),
       );
     }
-    if (isTypeLiteralNode(newMember)) {
-      for (const prop of newMember.members) {
-        typeGuard.push(...generatePropertyGuard(prop));
-      }
-    }
+    typeGuard.push(...generatePropertyTypeGuard(newMember, typeGuard));
   }
   return [`(${typeGuard.join('||')})`];
 }

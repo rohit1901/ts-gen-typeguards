@@ -95,6 +95,7 @@ export function generateTypeReferenceTypeGuard(
  *
  * @param typeLiteral - The TypeLiteralNode representing the union member type literal.
  * @param parentName - An optional name of the parent type for better error reporting.
+ * @param typeParameterName
  * @returns An array containing a single string element representing the generated type guard.
  * If no properties are found, an empty array is returned.
  *
@@ -122,12 +123,15 @@ export function generateTypeReferenceTypeGuard(
 export function generateTypeLiteralTypeGuardWithinUnion(
   typeLiteral: TypeNode,
   parentName?: string,
+  typeParameterName?: string,
 ): string[] {
   if (!isTypeLiteralNode(typeLiteral)) return [];
   const propertyGuards: string[] = [];
   for (const member of typeLiteral.members) {
     if (isPropertySignature(member)) {
-      propertyGuards.push(...generatePropertyGuard(member, parentName));
+      propertyGuards.push(
+        ...generatePropertyGuard(member, parentName, typeParameterName),
+      );
     }
   }
 
