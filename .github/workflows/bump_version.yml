@@ -9,8 +9,6 @@ jobs:
     strategy:
       matrix:
         node-version: [ 20.x ]
-    # Only run when the target is main and the format_test job has passed
-    if: github.event.pull_request.base.ref == 'main'
     steps:
       # Checkout the repo
       - uses: actions/checkout@v3
