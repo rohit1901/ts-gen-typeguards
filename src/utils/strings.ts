@@ -1,4 +1,4 @@
-import {Identifier, InterfaceDeclaration, TypeElement,} from 'typescript';
+import { Identifier, InterfaceDeclaration, TypeElement } from 'typescript';
 
 /**
  * Check if value is a string and is equal to "type"
@@ -57,9 +57,9 @@ export function buildHasOwnPropertyString(
  * @param name - The Identifier object to extract the name from.
  */
 export function getName(name: Identifier): string {
-    if (!name) return;
-    if (name.hasOwnProperty('escapedText')) {
-        return name.escapedText.toString();
-    }
-    return name.getText();
+  if (!name) return;
+  if (name.hasOwnProperty('escapedText')) {
+    return name.escapedText.toString();
+  }
+  return name.getText();
 }

@@ -1,19 +1,19 @@
 import {
-    factory,
-    isArrayTypeNode,
-    isTypeLiteralNode,
-    isUnionTypeNode,
-    TypeAliasDeclaration,
-    TypeNode,
+  factory,
+  isArrayTypeNode,
+  isTypeLiteralNode,
+  isUnionTypeNode,
+  TypeAliasDeclaration,
+  TypeNode,
 } from 'typescript';
 import {
-    generateArrayTypeGuard,
-    generateIntersectionTypeGuard,
-    generateKeywordGuard,
-    generatePropertyGuard,
-    generateTypeReferenceGuard,
+  generateArrayTypeGuard,
+  generateIntersectionTypeGuard,
+  generateKeywordGuard,
+  generatePropertyGuard,
+  generateTypeReferenceGuard,
 } from '../api';
-import {handleIntersectionTypesForTypeNode} from '../utils';
+import { handleIntersectionTypesForTypeNode } from '../utils';
 
 /**
  * Generates a type guard for a property based on its TypeScript PropertySignature.
@@ -21,13 +21,13 @@ import {handleIntersectionTypesForTypeNode} from '../utils';
  * @param typeGuard
  */
 function generatePropertyTypeGuard(newMember: TypeNode, typeGuard: string[]) {
-    const typeGuardCode: string[] = [];
-    if (isTypeLiteralNode(newMember)) {
-        for (const prop of newMember.members) {
-            typeGuard.push(...generatePropertyGuard(prop));
-        }
+  const typeGuardCode: string[] = [];
+  if (isTypeLiteralNode(newMember)) {
+    for (const prop of newMember.members) {
+      typeGuard.push(...generatePropertyGuard(prop));
     }
-    return typeGuardCode;
+  }
+  return typeGuardCode;
 }
 
 /**
@@ -38,34 +38,34 @@ function generatePropertyTypeGuard(newMember: TypeNode, typeGuard: string[]) {
  * @param isProperty - Optional. Whether the type is a property.
  */
 export function generateUnionTypeGuard(
-    type: TypeNode,
-    typeName: string,
-    isProperty?: boolean,
-    definitions?: TypeAliasDeclaration[],
+  type: TypeNode,
+  typeName: string,
+  isProperty?: boolean,
+  definitions?: TypeAliasDeclaration[],
 ) {
-    const typeGuard: string[] = [];
-    if (!isUnionTypeNode(type)) return typeGuard;
-    if (!type.types) return typeGuard;
-    for (const member of type.types) {
-        const newMember = handleIntersectionTypesForTypeNode(member, definitions);
-        typeGuard.push(
-            ...generateIntersectionTypeGuard(newMember, typeName, isProperty),
-            ...generateKeywordGuard(newMember, typeName, isProperty),
-            ...generateTypeReferenceGuard(newMember, typeName, isProperty),
-        );
-        if (isArrayTypeNode(newMember)) {
-            typeGuard.push(
-                generateArrayTypeGuard(
-                    factory.createPropertySignature(
-                        undefined,
-                        undefined,
-                        undefined,
-                        newMember,
-                    ),
-                ),
-            );
-        }
-        typeGuard.push(...generatePropertyTypeGuard(newMember, typeGuard));
+  const typeGuard: string[] = [];
+  if (!isUnionTypeNode(type)) return typeGuard;
+  if (!type.types) return typeGuard;
+  for (const member of type.types) {
+    const newMember = handleIntersectionTypesForTypeNode(member, definitions);
+    typeGuard.push(
+      ...generateIntersectionTypeGuard(newMember, typeName, isProperty),
+      ...generateKeywordGuard(newMember, typeName, isProperty),
+      ...generateTypeReferenceGuard(newMember, typeName, isProperty),
+    );
+    if (isArrayTypeNode(newMember)) {
+      typeGuard.push(
+        generateArrayTypeGuard(
+          factory.createPropertySignature(
+            undefined,
+            undefined,
+            undefined,
+            newMember,
+          ),
+        ),
+      );
     }
-    return [`(${typeGuard.join('||')})`];
+    typeGuard.push(...generatePropertyTypeGuard(newMember, typeGuard));
+  }
+  return [`(${typeGuard.join('||')})`];
 }

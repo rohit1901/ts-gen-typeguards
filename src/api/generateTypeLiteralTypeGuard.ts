@@ -54,12 +54,12 @@ export function generatePropertyTypeGuard(
     typeGuardCode.push(`}\n`);
   }
   typeGuardCode.push(
-      generateUnionTypeGuardForProperty(type, typeAliases, name?.getText()),
-      generateIntersectionTypeGuardForProperty(
-          type,
-          typeAliases,
-          name?.getText(),
-      ),
+    generateUnionTypeGuardForProperty(type, typeAliases, name?.getText()),
+    generateIntersectionTypeGuardForProperty(
+      type,
+      typeAliases,
+      name?.getText(),
+    ),
   );
   return typeGuardCode.join('');
 }

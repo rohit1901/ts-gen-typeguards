@@ -39,7 +39,11 @@ export function generatePropertyGuard(
   // handle required properties in a different way
   typeGuard.push(buildHasOwnPropertyString(property, parentName));
   if (isGenericProperty(property, typeParameterName))
-    return generateGenericPropertyGuard(property, parentName, typeParameterName);
+    return generateGenericPropertyGuard(
+      property,
+      parentName,
+      typeParameterName,
+    );
   if (isArrayTypeNode(property.type))
     typeGuard.push(generateArrayTypeGuard(property, propertyName));
   typeGuard.push(

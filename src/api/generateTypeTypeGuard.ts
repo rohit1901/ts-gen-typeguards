@@ -1,4 +1,8 @@
-import {EnumDeclaration, isTypeLiteralNode, TypeAliasDeclaration,} from 'typescript';
+import {
+  EnumDeclaration,
+  isTypeLiteralNode,
+  TypeAliasDeclaration,
+} from 'typescript';
 import {
   generateIntersectionTypeGuard,
   generateKeywordGuard,
@@ -6,7 +10,7 @@ import {
   generateUnionTypeGuard,
   handleEnumIntersection,
 } from '../api';
-import {getEscapedCapitalizedStringLiteral, getName} from '../utils';
+import { getEscapedCapitalizedStringLiteral, getName } from '../utils';
 
 /**
  * Generate a set of type guard functions based on provided TypeAliasDeclarations.
@@ -28,11 +32,13 @@ export function generateTypeTypeGuard(
       typeGuardName,
     )}(value: any): value is ${typeName} {return(typeof value === "object" &&
     value !== null`);
-    typeGuardStrings.push(...generateIntersectionTypeGuard(type, typeName),
-        ...generateTypeWithinTypeLiteralTypeGuard(definition),
-        ...generateUnionTypeGuard(type, typeName, undefined, definitions),
-        ...generateKeywordGuard(type),
-        ...handleEnumIntersection(definition, enums));
+    typeGuardStrings.push(
+      ...generateIntersectionTypeGuard(type, typeName),
+      ...generateTypeWithinTypeLiteralTypeGuard(definition),
+      ...generateUnionTypeGuard(type, typeName, undefined, definitions),
+      ...generateKeywordGuard(type),
+      ...handleEnumIntersection(definition, enums),
+    );
     typeGuard.push(typeGuardStrings.join('&&') + `)}`);
   }
   return typeGuard.join('\n');
