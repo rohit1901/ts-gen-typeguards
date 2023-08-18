@@ -1,6 +1,5 @@
 import {
   EnumDeclaration,
-  InterfaceDeclaration,
   isTypeLiteralNode,
   TypeAliasDeclaration,
 } from 'typescript';

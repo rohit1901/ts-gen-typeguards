@@ -13,8 +13,8 @@
     "coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
     "prettify": "prettier --write \"src/**/*.ts\"",
     "prepublishOnly": "git push --follow-tags && gh-release -y",
-    "version-dry-run": "auto-changelog -p --template keepachangelog auto-changelog --breaking-pattern 'BREAKING CHANGE:'",
-    "version": "auto-changelog -p --template keepachangelog auto-changelog --breaking-pattern 'BREAKING CHANGE:' && git add CHANGELOG.md"
+    "changelog-dry-run": "auto-changelog -p --template keepachangelog auto-changelog --breaking-pattern 'BREAKING CHANGE:'",
+    "changelog": "auto-changelog -p --template keepachangelog auto-changelog --breaking-pattern 'BREAKING CHANGE:' && git add CHANGELOG.md"
   },
   "repository": {
     "type": "git",

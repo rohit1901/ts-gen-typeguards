@@ -1,10 +1,8 @@
 // Generate type guards for optional properties
 import {
-  factory,
   isArrayTypeNode,
   isIntersectionTypeNode,
   isLiteralTypeNode,
-  isOptionalTypeNode,
   isQualifiedName,
   isTupleTypeNode,
   isTypeLiteralNode,
@@ -13,12 +11,7 @@ import {
   PropertySignature,
   SyntaxKind,
 } from 'typescript';
-import {
-  capitalize,
-  getEscapedStringLiteral,
-  isKeyword,
-  syntaxKindToType,
-} from '../utils';
+import { capitalize, isKeyword, syntaxKindToType } from '../utils';
 import { generateTypeLiteralTypeGuardWithinUnion } from './generateUnionTypeGuardForIntersection';
 import { generateArrayTypeGuard, generateIntersectionTypeGuard } from './index';
 import { getQualifiedNameText } from './generateQualifiedNameTypeGuard';
