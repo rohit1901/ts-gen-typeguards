@@ -1,9 +1,4 @@
-import {
-  EnumDeclaration,
-  Identifier,
-  isTypeLiteralNode,
-  TypeAliasDeclaration,
-} from 'typescript';
+import {EnumDeclaration, isTypeLiteralNode, TypeAliasDeclaration,} from 'typescript';
 import {
   generateIntersectionTypeGuard,
   generateKeywordGuard,
@@ -11,7 +6,7 @@ import {
   generateUnionTypeGuard,
   handleEnumIntersection,
 } from '../api';
-import { getEscapedCapitalizedStringLiteral } from '../utils';
+import {getEscapedCapitalizedStringLiteral, getName} from '../utils';
 
 /**
  * Generate a set of type guard functions based on provided TypeAliasDeclarations.
@@ -27,21 +22,17 @@ export function generateTypeTypeGuard(
   for (const definition of definitions) {
     const typeGuardStrings: string[] = [];
     const { name, type } = definition;
-    const typeName = name ? name.getText() : undefined;
+    const typeName = getName(name);
     const typeGuardName = getEscapedCapitalizedStringLiteral(typeName);
     typeGuardStrings.push(`export function is${getEscapedCapitalizedStringLiteral(
       typeGuardName,
     )}(value: any): value is ${typeName} {return(typeof value === "object" &&
     value !== null`);
-    typeGuardStrings.push(...generateIntersectionTypeGuard(type, typeName));
-    typeGuardStrings.push(
-      ...generateTypeWithinTypeLiteralTypeGuard(definition),
-    );
-    typeGuardStrings.push(
-      ...generateUnionTypeGuard(type, typeName, undefined, definitions),
-    );
-    typeGuardStrings.push(...generateKeywordGuard(type));
-    typeGuardStrings.push(...handleEnumIntersection(definition, enums));
+    typeGuardStrings.push(...generateIntersectionTypeGuard(type, typeName),
+        ...generateTypeWithinTypeLiteralTypeGuard(definition),
+        ...generateUnionTypeGuard(type, typeName, undefined, definitions),
+        ...generateKeywordGuard(type),
+        ...handleEnumIntersection(definition, enums));
     typeGuard.push(typeGuardStrings.join('&&') + `)}`);
   }
   return typeGuard.join('\n');
@@ -66,19 +57,4 @@ export function generateTypeWithinTypeLiteralTypeGuard(
     typeGuardStrings.push(...generatePropertyGuard(property));
   }
   return typeGuardStrings;
-}
-
-/**
- * Gets the name from an Identifier object.
- * This function takes an Identifier object and extracts the name
- * from it. An Identifier can represent a variable, function,
- * class, or other named entity in TypeScript code.
- * @param name - The Identifier object to extract the name from.
- */
-function getName(name: Identifier): string {
-  if (!name) return;
-  if (name.hasOwnProperty('escapedText')) {
-    return name.escapedText.toString();
-  }
-  return name.getText();
 }
