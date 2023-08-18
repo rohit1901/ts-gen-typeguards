@@ -8,7 +8,7 @@ jobs:
     uses: ./.github/workflows/bump_version.yml
   build:
     # Requires the format_test job to pass
-    # needs: bump_version
+    needs: bump_version
     runs-on: ubuntu-latest
     permissions:
       contents: write
