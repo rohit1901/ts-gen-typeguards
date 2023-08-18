@@ -1,0 +1,3 @@
+import {tsGenTypeguards} from './';
+
+tsGenTypeguards()

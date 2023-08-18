@@ -1,14 +1,10 @@
-import {
-  InterfaceDeclaration,
-  TypeElement,
-  TypeParameterDeclaration,
-} from 'typescript';
+import {Identifier, InterfaceDeclaration, TypeElement,} from 'typescript';
 
 /**
  * Check if value is a string and is equal to "type"
  * @param value - A value to check
  */
-export function strings(value: any): value is 'type' {
+export function isString(value: any): value is 'type' {
   return typeof value === 'string' && value === 'type';
 }
 
@@ -51,4 +47,19 @@ export function buildHasOwnPropertyString(
 ): string {
   const hasOwnPropertyString = parentName ? `value.${parentName}` : `value`;
   return `${hasOwnPropertyString}.hasOwnProperty('${property.name.getText()}')`;
+}
+
+/**
+ * Gets the name from an Identifier object.
+ * This function takes an Identifier object and extracts the name
+ * from it. An Identifier can represent a variable, function,
+ * class, or other named entity in TypeScript code.
+ * @param name - The Identifier object to extract the name from.
+ */
+export function getName(name: Identifier): string {
+    if (!name) return;
+    if (name.hasOwnProperty('escapedText')) {
+        return name.escapedText.toString();
+    }
+    return name.getText();
 }
