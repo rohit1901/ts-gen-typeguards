@@ -1,5 +1,8 @@
 import { isQualifiedName, isTypeReferenceNode, TypeNode } from 'typescript';
-import {getEscapedCapitalizedStringLiteral, getTernaryOperatorResult} from '../utils';
+import {
+  getEscapedCapitalizedStringLiteral,
+  getTernaryOperatorResult,
+} from '../utils';
 import { generateQualifiedNameTypeGuard } from '../api';
 
 /**

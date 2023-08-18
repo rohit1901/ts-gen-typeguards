@@ -1,5 +1,5 @@
 import { QualifiedName } from 'typescript';
-import {getTernaryOperatorResult} from "../utils";
+import { getTernaryOperatorResult } from '../utils';
 
 /**
  * Function to generate a type guard for a QualifiedName.
