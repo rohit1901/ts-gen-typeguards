@@ -43,7 +43,7 @@ jobs:
         with:
           version: ${{ steps.version-bump-dry-run.outputs.new_tag }}
       # Create a new Changelog
-      - run: npm run version
+      - run: npm run changelog
       # Bump version and push tag
       - name: Bump version and push tag
         id: version-bump
