@@ -48,8 +48,10 @@ export function buildGenericFunctionSignature(
   objectName: string,
   typeParameters: NodeArray<TypeParameterDeclaration>,
 ) {
-  const genericNames = typeParameters.map(p => p.name.getText()).join(',')
-  return `export function is${objectName}<${genericNames}>(val: any, ${getGenericFunctionParameters(typeParameters)}): value is ${objectName}<${genericNames}>{return(typeof value === "object" &&
+  const genericNames = typeParameters.map(p => p.name.getText()).join(',');
+  return `export function is${objectName}<${genericNames}>(val: any, ${getGenericFunctionParameters(
+    typeParameters,
+  )}): value is ${objectName}<${genericNames}>{return(typeof value === "object" &&
     value !== null`;
 }
 
@@ -61,8 +63,15 @@ export function buildGenericFunctionSignature(
  * @param typeParameters - The type parameters of the object.
  * @returns A string of generic function parameters like isT: (val: any) => val is T.
  */
-function getGenericFunctionParameters(typeParameters: NodeArray<TypeParameterDeclaration>) {
-  return typeParameters.map(parameter => `is${capitalize(
-      parameter.name.getText(),
-  )}: (val: any) => val is ${parameter.name.getText()}`).join(',');
+function getGenericFunctionParameters(
+  typeParameters: NodeArray<TypeParameterDeclaration>,
+) {
+  return typeParameters
+    .map(
+      parameter =>
+        `is${capitalize(
+          parameter.name.getText(),
+        )}: (val: any) => val is ${parameter.name.getText()}`,
+    )
+    .join(',');
 }
