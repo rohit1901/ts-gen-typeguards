@@ -1,12 +1,10 @@
 import {
   KeywordTypeSyntaxKind,
-  LiteralSyntaxKind,
   LiteralTypeNode,
   SourceFile,
   SyntaxKind,
   TypeElement,
 } from 'typescript';
-import { isKeywordTypeSyntaxKind } from './isKeyword';
 /**
  * Creates a fake TypeElement with the given `brand` representing a KeywordTypeSyntaxKind property.
  * The `_typeElementBrand` property is set to 'fake' to indicate it is a KeywordTypeSyntaxKind.

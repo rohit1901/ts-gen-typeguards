@@ -52,19 +52,15 @@ export function generatePropertyTypeGuard(
     typeGuardCode.push(`    return false;\n`);
 
     typeGuardCode.push(`}\n`);
-  } else if (isUnionTypeNode(type)) {
-    typeGuardCode.push(
-      generateUnionTypeGuardForProperty(type, typeAliases, name?.getText()),
-    );
-  } else if (isIntersectionTypeNode(type)) {
-    typeGuardCode.push(
-      generateIntersectionTypeGuardForProperty(
-        type,
-        typeAliases,
-        name?.getText(),
-      ),
-    );
   }
+  typeGuardCode.push(
+    generateUnionTypeGuardForProperty(type, typeAliases, name?.getText()),
+    generateIntersectionTypeGuardForProperty(
+      type,
+      typeAliases,
+      name?.getText(),
+    ),
+  );
   return typeGuardCode.join('');
 }
 /**

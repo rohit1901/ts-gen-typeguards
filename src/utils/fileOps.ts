@@ -22,10 +22,10 @@ const prettierRC: Options = {
 };
 /**
  * Generates a file with the given text
- * @param typeGuardsText
- * @param isCombinedInput
- * @param inputDir
- * @param outputDir
+ * @param typeGuardsText - The text to be added to the file
+ * @param isCombinedInput - Whether the input is a combined file or not
+ * @param inputDir - The directory to read the input from
+ * @param outputDir - The directory to write the output to
  */
 export function generateTypeGuardsFile(
   typeGuardsText: string,
@@ -64,7 +64,7 @@ export function generateTypeGuardsFile(
 
 /**
  * Deletes the file if it exists
- * @param filePath
+ * @param filePath - The path of the file to be deleted
  */
 export function deleteFileIfExists(filePath: string) {
   try {
@@ -117,7 +117,7 @@ export function readFilesWithExtension(
       }
     }
     createFile(
-      results.join(''),
+      results.join('\n'),
       dir + `${defaultOutputTypesFileName}.${extensionTS}`,
       undefined,
       true,
@@ -133,11 +133,11 @@ export function readFilesWithExtension(
 }
 
 /**
- *
- * @param folderPath
+ * Creates a folder at the given path if it does not exist already
+ * @param folderPath - The path of the folder to be created
  */
 export function createPath(folderPath: string) {
-  // Check if the folder exists, and create it if does not
+  // Check if the folder exists, and create it if it does not exist
   if (!fs.existsSync(folderPath)) {
     try {
       fs.mkdirSync(folderPath, { recursive: true });

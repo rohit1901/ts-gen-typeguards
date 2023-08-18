@@ -33,9 +33,9 @@ type ObjectsType = {
 };
 
 /**
- *
- * @param path
- * @param content
+ * Reads the given file path and returns the interfaces, types, and enums as an ObjectsType object.
+ * @param path - Path to read the file from (defaults to the 'input/' directory). If no path is provided, the content must be provided.
+ * @param content - Optional content to read the objects from. If this is provided, the path is ignored.
  */
 function readObjects(path: string, content?: string): ObjectsType {
   try {
@@ -61,12 +61,28 @@ function readObjects(path: string, content?: string): ObjectsType {
   }
 }
 
+/**
+ * Generates the import statement for the given objects and path.
+ * If no path is provided, the default path is used. (defaults to '../combinedTypeGuards')
+ * @example
+ * import {User, Car} from '../combinedTypeGuards'
+ * @param objects
+ * @param path
+ */
 function generateImports(objects: string[], path?: string) {
   return `import {${objects.join(
     ',',
   )}} from '../${path}${defaultOutputTypesFileName}'`;
 }
 
+/**
+ * Returns the names of the given objects (which can be interfaces, types, or enums) as an array of strings.
+ * @example
+ * ['User', 'Car']
+ * @param interfaceObjects
+ * @param typeObjects
+ * @param enumObjects
+ */
 function getObjectsNames(
   interfaceObjects: InterfaceDeclaration[],
   typeObjects: TypeAliasDeclaration[],
@@ -93,16 +109,16 @@ export function tsGenTypeguards(
   const types: TypeAliasDeclaration[] = [];
   const enums: EnumDeclaration[] = [];
   createPath(`./${outputFilePath ?? defaultOutputDir}`);
-  createPath(`./${inputFilePath ?? defaultInputDir}`);
-  deleteFileIfExists(
-    inputFilePath + `${defaultOutputTypesFileName}.${extensionTS}`,
-  );
   if (inputString) {
     const res = readObjects('', inputString);
     interfaces.push(...res.interfaces);
     types.push(...res.types);
     enums.push(...res.enums);
   } else {
+    createPath(`./${inputFilePath ?? defaultInputDir}`);
+    deleteFileIfExists(
+      inputFilePath + `${defaultOutputTypesFileName}.${extensionTS}`,
+    );
     const res = readObjects(inputFilePath);
     interfaces.push(...res.interfaces);
     types.push(...res.types);
@@ -129,3 +145,4 @@ export function tsGenTypeguards(
 // 2. using custom values --> tsGenTypeguards(undefined, 'inputNew', 'outputNew');
 // 3. using custom input and default output values --> tsGenTypeguards(undefined, 'inputNew');
 // 4. using default input and custom output values tsGenTypeguards(undefined, undefined, 'outputNew');
+// 5. using input string and default output values --> tsGenTypeguards('export interface User {name: string; age: number;}');
