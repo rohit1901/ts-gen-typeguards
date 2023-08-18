@@ -4,11 +4,11 @@ on:
     branches:
       - 'main'
 jobs:
-  bump_version:
+  update_version:
     uses: ./.github/workflows/bump_version.yml
   build:
     # Requires the format_test job to pass
-    needs: bump_version
+    needs: update_version
     runs-on: ubuntu-latest
     permissions:
       contents: write
