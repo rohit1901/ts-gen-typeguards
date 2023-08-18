@@ -1,4 +1,5 @@
 import { QualifiedName } from 'typescript';
+import {getTernaryOperatorResult} from "../utils";
 
 /**
  * Function to generate a type guard for a QualifiedName.
@@ -23,7 +24,7 @@ export function generateQualifiedNameTypeGuard(
   type: QualifiedName,
   typeName?: string,
 ) {
-  const v = typeName ? `value.${typeName}` : 'value';
+  const v = getTernaryOperatorResult(!!typeName, `value.${typeName}`, 'value');
   return `${v} === ${type.left.getText()}.${type.right.getText()}`;
 }
 

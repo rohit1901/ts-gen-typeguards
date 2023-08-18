@@ -1,10 +1,8 @@
 // Generate type guards for optional properties
 import {
-  factory,
   isArrayTypeNode,
   isIntersectionTypeNode,
   isLiteralTypeNode,
-  isOptionalTypeNode,
   isQualifiedName,
   isTupleTypeNode,
   isTypeLiteralNode,
@@ -15,7 +13,6 @@ import {
 } from 'typescript';
 import {
   capitalize,
-  getEscapedStringLiteral,
   isKeyword,
   syntaxKindToType,
 } from '../utils';
