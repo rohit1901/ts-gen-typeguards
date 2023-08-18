@@ -1,11 +1,12 @@
 name: Bump version, commit and push tag
 on:
-  workflow_call:
-    secrets:
-      token:
-        required: true
+  pull_request:
+    types: [opened, reopened]
+    branches:
+      - 'main'
 jobs:
   bump_version:
+    needs: format_test
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -51,7 +52,7 @@ jobs:
         if: ${{ success() }}
         uses: anothrNick/github-tag-action@1.64.0
         env:
-          GITHUB_TOKEN: ${{ secrets.token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           INITIAL_VERSION: ${{ steps.package-version.outputs.current-version }}
           DEFAULT_BUMP: patch
       # Commit changes
