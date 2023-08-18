@@ -36,7 +36,11 @@ export function generateTypeGuardsFile(
   const inputPath =
     inputDir + `${defaultOutputTypesFileName}.${extensionTS}` ??
     defaultOutputTypesFilePath;
-  const outputPath = getTernaryOperatorResult(!!outputDir, outputDir + `${defaultTypeGuardsFileName}.${extensionTS}`, defaultOutputTypeGuardsFilePath);
+  const outputPath = getTernaryOperatorResult(
+    !!outputDir,
+    outputDir + `${defaultTypeGuardsFileName}.${extensionTS}`,
+    defaultOutputTypeGuardsFilePath,
+  );
   const path = getTernaryOperatorResult(isCombinedInput, inputPath, outputPath);
   prettify(typeGuardsText)
     .then(formattedText => {
@@ -155,7 +159,11 @@ export function createPath(folderPath: string) {
  * @param left - The part to be returned if the condition is true
  * @param right - The part to be returned if the condition is false
  */
-export function getTernaryOperatorResult(condition: boolean, left: string, right?: string) {
+export function getTernaryOperatorResult(
+  condition: boolean,
+  left: string,
+  right?: string,
+) {
   return condition ? left : right;
 }
 /**
@@ -173,7 +181,11 @@ function createFile(
 ) {
   const initialContent =
     '// Generated using ts-gen-typeguards\n // @ts-nocheck\n';
-  const filePath = getTernaryOperatorResult(isCombinedInput, inputPath, outputPath);
+  const filePath = getTernaryOperatorResult(
+    isCombinedInput,
+    inputPath,
+    outputPath,
+  );
   try {
     fs.writeFileSync(filePath, `${initialContent}`);
     console.info(
@@ -202,7 +214,11 @@ function appendText(
   outputPath: string,
   isCombinedInput?: boolean,
 ) {
-  const filePath = getTernaryOperatorResult(isCombinedInput, `./${inputPath}`, `./${outputPath}`);
+  const filePath = getTernaryOperatorResult(
+    isCombinedInput,
+    `./${inputPath}`,
+    `./${outputPath}`,
+  );
   try {
     fs.appendFileSync(filePath, typeGuardsText);
     console.info(`INFO: Text appended to the ${filePath} successfully.`);
@@ -227,4 +243,3 @@ function prettify(input: string): Promise<string> {
     ...prettierRC,
   });
 }
-
