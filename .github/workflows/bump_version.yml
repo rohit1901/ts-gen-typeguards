@@ -1,13 +1,8 @@
 name: Bump version, commit and push tag
 on:
-  pull_request:
-    types: [opened, reopened]
   workflow_call:
 jobs:
-  format_test:
-    uses: ./.github/workflows/test_format.yml
   bump_version:
-    needs: format_test
     runs-on: ubuntu-latest
     permissions:
       contents: write

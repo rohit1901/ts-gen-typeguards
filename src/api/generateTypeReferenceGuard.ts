@@ -1,5 +1,8 @@
 import { isQualifiedName, isTypeReferenceNode, TypeNode } from 'typescript';
-import { getEscapedCapitalizedStringLiteral } from '../utils';
+import {
+  getEscapedCapitalizedStringLiteral,
+  getTernaryOperatorResult,
+} from '../utils';
 import { generateQualifiedNameTypeGuard } from '../api';
 
 /**
@@ -35,7 +38,7 @@ export function generateTypeReferenceGuard(
     typeGuard.push(
       generateQualifiedNameTypeGuard(
         type.typeName,
-        isProperty ? typeName : undefined,
+        getTernaryOperatorResult(isProperty, typeName),
       ),
     );
     return typeGuard;

@@ -1,9 +1,7 @@
 // Generate type guards for literal types
 import {
-  isIntersectionTypeNode,
   isPropertySignature,
   isTypeReferenceNode,
-  isUnionTypeNode,
   PropertySignature,
   TypeAliasDeclaration,
   TypeLiteralNode,
@@ -14,8 +12,8 @@ import {
   isPrimitiveSyntaxKind,
   syntaxKindToType,
 } from '../utils';
-import { generateUnionTypeGuardForProperty } from './generateUnionTypeGuardForIntersection';
-import { generateIntersectionTypeGuardForProperty } from './generateIntersectionTypeGuardForType';
+import { generateUnionTypeGuardForProperty } from '../api';
+import { generateIntersectionTypeGuardForProperty } from '../api';
 
 /**
  * Generates a type guard for a property based on its TypeScript PropertySignature.
