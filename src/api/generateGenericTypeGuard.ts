@@ -13,7 +13,7 @@ import {
 /**
  * Generate a generic type guard for a given property. This is used for nested properties as well.
  * @example
- * //for a type Type<T>
+ * //for a TypeAliasDeclaration like Type<T>
  * export function isType<T>(val: any, guard: (val: any) => val is T): value is Type<T>{return(typeof value === "object" && value !== null
  * //for a property name
  * property.hasOwnProperty('name') && guard(value.name)
@@ -42,15 +42,27 @@ export function generateGenericPropertyGuard(
  * //for a type Type<T>
  * @param objectName - The name of the object to generate the type guard for.
  * @param typeParameters - The type parameters of the object.
+ * @returns A string of the generic function signature like export function isType<T>(val: any, guard: (val: any) => val is T): value is Type<T>.
  */
 export function buildGenericFunctionSignature(
   objectName: string,
   typeParameters: NodeArray<TypeParameterDeclaration>,
 ) {
-  const parameter = typeParameters[0];
-  const genericName = parameter.name.getText();
-  return `export function is${objectName}<${genericName}>(val: any, is${capitalize(
-    genericName,
-  )}: (val: any) => val is ${genericName}): value is ${objectName}<${genericName}>{return(typeof value === "object" &&
+  const genericNames = typeParameters.map(p => p.name.getText()).join(',')
+  return `export function is${objectName}<${genericNames}>(val: any, ${getGenericFunctionParameters(typeParameters)}): value is ${objectName}<${genericNames}>{return(typeof value === "object" &&
     value !== null`;
+}
+
+/**
+ * Build the generic function parameters for a generic type guard. This is used to generate the type guard signature.
+ * @example
+ * //for a type Type<T, K>
+ * isT: (val: any) => val is T, isK: (val: any) => val is K
+ * @param typeParameters - The type parameters of the object.
+ * @returns A string of generic function parameters like isT: (val: any) => val is T.
+ */
+function getGenericFunctionParameters(typeParameters: NodeArray<TypeParameterDeclaration>) {
+  return typeParameters.map(parameter => `is${capitalize(
+      parameter.name.getText(),
+  )}: (val: any) => val is ${parameter.name.getText()}`).join(',');
 }
