@@ -2,7 +2,7 @@ name: Bump version, commit and push tag
 on:
   workflow_call:
     secrets:
-      GITHUB_TOKEN:
+      token:
         required: true
 jobs:
   bump_version:
@@ -51,7 +51,7 @@ jobs:
         if: ${{ success() }}
         uses: anothrNick/github-tag-action@1.64.0
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.token }}
           INITIAL_VERSION: ${{ steps.package-version.outputs.current-version }}
           DEFAULT_BUMP: patch
       # Commit changes
