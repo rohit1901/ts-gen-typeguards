@@ -13,7 +13,9 @@ src/outputNew/**/*
 src/out/**/*
 #Files
 *.js
+!*.config.js
 *.d.ts
 src/input/combinedTypeGuards.*
 .DS_Store
 *.map
+meta.json
