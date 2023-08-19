@@ -1,22 +1,20 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "module": "ESNext",
+    "module": "commonjs",
     "declaration": true,
     "rootDir": "src",
-    // NOTE: add to produce production build
-    "outDir": "lib",
     "sourceMap": true,
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.json",
+    "src/**/*.ts"
   ],
+  "start": "node src/index.js",
   "exclude": [
     "node_modules",
     "src/out/**/*",
     "src/__tests__/**/*.ts",
     "lib",
-    "lib-esm"
+    "src/dry-run.ts"
   ]
 }
