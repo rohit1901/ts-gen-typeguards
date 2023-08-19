@@ -3,13 +3,10 @@
     "target": "es6",
     "module": "ESNext",
     "declaration": true,
-    "moduleResolution": "Node",
-    "outDir": "dist/",
-    "baseUrl": "./src",
-    "paths": {
-      "@utils/*": ["utils/*"],
-      "@generator/*": ["generator/*"]
-    }
+    "rootDir": "src",
+    // NOTE: add to produce production build
+    "outDir": "lib",
+    "sourceMap": true,
   },
   "include": [
     "src/**/*.ts",
@@ -17,7 +14,9 @@
   ],
   "exclude": [
     "node_modules",
-    "src/out/",
-    "src/**/*.spec.ts"
+    "src/out/**/*",
+    "src/__tests__/**/*.ts",
+    "lib",
+    "lib-esm"
   ]
 }

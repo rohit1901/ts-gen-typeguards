@@ -16,8 +16,8 @@ import {
   TypeElement,
   TypeNode,
   UnionTypeNode,
-} from "typescript";
-import { syntaxKindToType } from "./syntaxKindToType";
+} from 'typescript';
+import { syntaxKindToType } from './syntaxKindToType';
 
 /**
  * Gets the members from a type alias
@@ -37,8 +37,6 @@ export function getMembersFromTypeAlias(
     return getTypesFromUnionTypeNode(alias.type, typeAliases);
   } else if (isConditionalTypeNode(alias.type)) {
     return getTypesFromConditionalTypeNode(alias.type, typeAliases);
-  } else if (isUnionTypeNode(alias.type)) {
-    return getTypesFromUnionTypeNode(alias.type, typeAliases);
   }
   return [];
 }
@@ -54,7 +52,7 @@ function getMatchingLiteralForReferences(
 ): TypeAliasDeclaration | undefined {
   if (isTypeReferenceNode(typeReference)) {
     return typeAliases.find(
-      (typeAlias) =>
+      typeAlias =>
         typeAlias.name.getText() === typeReference.typeName.getText(),
     );
   }
@@ -161,7 +159,7 @@ function getTypesFromTypeNodeArray(
   typeNodes: NodeArray<TypeNode> | TypeNode[],
   typeAliases: TypeAliasDeclaration[],
 ): TypeElement[] {
-  return typeNodes.flatMap((typeNode) =>
+  return typeNodes.flatMap(typeNode =>
     getTypesFromTypeNode(typeNode, typeAliases),
   );
 }
@@ -248,7 +246,7 @@ function createPropertySignatureFromLiteralType(
       typeNode._typeNodeBrand = syntaxKindToType(SyntaxKind.UndefinedKeyword);
       break;
     default:
-      throw new Error("Unsupported literal type.");
+      throw new Error('Unsupported literal type.');
   }
   return factory.createPropertySignature(
     undefined,

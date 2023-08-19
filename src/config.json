@@ -1,8 +1,0 @@
-{
-  "production": {
-    "inputFilePath": "./data.d.ts"
-  },
-  "development": {
-    "inputFilePath": "./data.ts"
-  }
-}

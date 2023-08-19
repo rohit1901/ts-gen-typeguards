@@ -4,5 +4,5 @@
  */
 export function removeWhitespace(input: string): string {
   // Remove spaces, tabs, and line breaks using regular expressions
-  return input.replace(/\s/g, "");
+  return input.replace(/\s/g, '');
 }

@@ -1,165 +1,148 @@
-import * as fs from "fs";
-import * as ts from "typescript";
-import * as process from "process";
 import {
-  EnumDeclaration,
-  EnumMember,
-  factory,
-  InterfaceDeclaration,
-  isEnumMember,
-  isPropertySignature,
-  isTypeLiteralNode,
-  isTypeReferenceNode,
-  LiteralType,
-  NodeArray,
-  SyntaxKind,
-  TypeAliasDeclaration,
-  TypeElement,
-  TypeLiteralNode,
-  TypeNode,
-} from "typescript";
-import {
-  capitalize,
+  createPath,
+  defaultInputDir,
+  defaultOutputDir,
+  defaultOutputTypesFileName,
+  defaultTypeGuardsFileName,
   deleteFileIfExists,
+  extensionTS,
   generateTypeGuardsFile,
-  getEscapedCapitalizedStringLiteral,
-  getEscapedStringLiteral,
-  getMembersFromTypeAlias,
-} from "./utils";
-import { generateTypeGuards } from "./generator";
+  readFilesWithExtension,
+} from './utils';
+
+import {
+  generateEnumTypeGuards,
+  generateInterfaceTypeGuard,
+  generateTypeTypeGuard,
+} from './api';
+import {
+  createSourceFile,
+  EnumDeclaration,
+  InterfaceDeclaration,
+  isEnumDeclaration,
+  isInterfaceDeclaration,
+  isTypeAliasDeclaration,
+  ScriptTarget,
+  TypeAliasDeclaration,
+} from 'typescript';
 
 type ObjectsType = {
-  interfaces: ts.InterfaceDeclaration[];
-  types: ts.TypeAliasDeclaration[];
-  enums: ts.EnumDeclaration[];
+  interfaces: InterfaceDeclaration[];
+  types: TypeAliasDeclaration[];
+  enums: EnumDeclaration[];
 };
 
-export function readObjects(path: string): ObjectsType {
-  // Read the file
-  const fileContent = fs.readFileSync(path, "utf8");
-  // Parse the file
-  const parsedFile = ts.createSourceFile(
-    path,
-    fileContent,
-    ts.ScriptTarget.ES2015,
-    true,
+/**
+ * Reads the given file path and returns the interfaces, types, and enums as an ObjectsType object.
+ * @param path - Path to read the file from (defaults to the 'input/' directory). If no path is provided, the content must be provided.
+ * @param content - Optional content to read the objects from. If this is provided, the path is ignored.
+ */
+function readObjects(path: string, content?: string): ObjectsType {
+  try {
+    const sourceText =
+      path === '' ? content : readFilesWithExtension(path).join('');
+    // Parse the file
+    const parsedFile = createSourceFile(
+      path,
+      sourceText,
+      ScriptTarget.ES2015,
+      true,
+    );
+    // Find all interface declarations
+    const interfaces = parsedFile.statements.filter(isInterfaceDeclaration);
+    // Find all type alias declarations
+    const types = parsedFile.statements.filter(isTypeAliasDeclaration);
+    // Find all enum declarations
+    const enums = parsedFile.statements.filter(isEnumDeclaration);
+    // Return the interfaces, types, and enums
+    return { interfaces, types, enums };
+  } catch (err) {
+    console.error('ERROR: Error while reading the file:', path, err.message);
+  }
+}
+
+/**
+ * Generates the import statement for the given objects and path.
+ * If no path is provided, the default path is used. (defaults to '../combinedTypeGuards')
+ * @example
+ * import {User, Car} from '../combinedTypeGuards'
+ * @param objects
+ * @param path
+ */
+function generateImports(objects: string[], path?: string) {
+  return `import {${objects.join(
+    ',',
+  )}} from '../${path}${defaultOutputTypesFileName}'`;
+}
+
+/**
+ * Returns the names of the given objects (which can be interfaces, types, or enums) as an array of strings.
+ * @example
+ * ['User', 'Car']
+ * @param interfaceObjects
+ * @param typeObjects
+ * @param enumObjects
+ */
+function getObjectsNames(
+  interfaceObjects: InterfaceDeclaration[],
+  typeObjects: TypeAliasDeclaration[],
+  enumObjects: EnumDeclaration[],
+) {
+  const interfaceNames = interfaceObjects.map(object => object.name.getText());
+  const typeNames = typeObjects.map(object => object.name.getText());
+  const enumNames = enumObjects.map(object => object.name.getText());
+  return [...interfaceNames, ...typeNames, ...enumNames];
+}
+
+/**
+ * Generates type guards for the given input file path and writes them to the output file path (defaults to ./out/typeGuards.ts)
+ * @param inputString - Optional input string to generate type guards from. If this is provided, the inputFilePath is ignored
+ * @param inputFilePath - Optional input file path to generate type guards from (defaults to the 'input/' directory)
+ * @param outputFilePath - Optional output file path to write the generated type guards to (defaults to ./out/typeGuards.ts)
+ */
+export function tsGenTypeguards(
+  inputString?: string,
+  inputFilePath: string = defaultInputDir,
+  outputFilePath: string = defaultOutputDir,
+) {
+  const interfaces: InterfaceDeclaration[] = [];
+  const types: TypeAliasDeclaration[] = [];
+  const enums: EnumDeclaration[] = [];
+  createPath(`./${outputFilePath ?? defaultOutputDir}`);
+  if (inputString) {
+    const res = readObjects('', inputString);
+    interfaces.push(...res.interfaces);
+    types.push(...res.types);
+    enums.push(...res.enums);
+  } else {
+    createPath(`./${inputFilePath ?? defaultInputDir}`);
+    deleteFileIfExists(
+      inputFilePath + `${defaultOutputTypesFileName}.${extensionTS}`,
+    );
+    const res = readObjects(inputFilePath);
+    interfaces.push(...res.interfaces);
+    types.push(...res.types);
+    enums.push(...res.enums);
+  }
+  deleteFileIfExists(
+    outputFilePath + `${defaultTypeGuardsFileName}.${extensionTS}`,
   );
-  // Find all interface declarations
-  const interfaces = parsedFile.statements.filter(ts.isInterfaceDeclaration);
-  // Find all type alias declarations
-  const types = parsedFile.statements.filter(ts.isTypeAliasDeclaration);
-  // Find all enum declarations
-  const enums = parsedFile.statements.filter(ts.isEnumDeclaration);
-  // Return the interfaces, types, and enums
-  return { interfaces, types, enums };
+  generateTypeGuardsFile(
+    `${generateImports(
+      getObjectsNames(interfaces, types, enums),
+      inputFilePath,
+    )}\n${generateInterfaceTypeGuard(interfaces)}\n${generateTypeTypeGuard(
+      types,
+      enums,
+    )}\n${generateEnumTypeGuards(enums)}`,
+    undefined,
+    inputFilePath,
+    outputFilePath,
+  );
 }
-
-/**
- * Generates the type guard header for the type guard function
- * @param typeName
- */
-function generateTypeGuardHeader(typeName: string): string {
-  return [
-    `export function is${typeName}(value: any): value is ${typeName} {`,
-    `    if (typeof value !== 'object' || value === null) {`,
-    `        return false;`,
-    `    }\n`,
-  ].join("\n");
-}
-
-/**
- * Create a type guard for a property signature
- * @param propertyName
- * @param propertyType
- */
-function createPropertyTypeGuard(
-  propertyName: string,
-  propertyType: TypeNode,
-): string {
-  const typeGuardName = `is${getEscapedCapitalizedStringLiteral(
-    propertyType._typeNodeBrand ?? propertyType.getText(),
-  )}`;
-  return `    if (!value.hasOwnProperty('${getEscapedStringLiteral(
-    propertyName,
-  )}') || !${typeGuardName}(value.${getEscapedStringLiteral(propertyName)})) {`;
-}
-
-/**
- * Create a type guard for an enum member
- * @param propertyName
- */
-function createEnumTypeGuard(propertyName: string): string {
-  return `    if (!value.hasOwnProperty('${getEscapedStringLiteral(
-    propertyName,
-  )}') || !value === "${propertyName}") {`;
-}
-
-/**
- * Generates the type guards for the interfaces, types, and enums
- * @param typeName
- * @param properties
- */
-const buildTypeGuards = (
-  typeName: string,
-  properties:
-    | NodeArray<TypeElement>
-    | TypeElement[]
-    | NodeArray<EnumMember>
-    | LiteralType[],
-) => {
-  const typeGuardFunctions: string[] = [];
-  typeGuardFunctions.push(generateTypeGuardHeader(typeName));
-
-  properties.forEach((property) => {
-    const propertyName = property.name.escapedText;
-    if (isPropertySignature(property) && property.type) {
-      typeGuardFunctions.push(
-        createPropertyTypeGuard(propertyName, property.type),
-      );
-    } else if (isEnumMember(property)) {
-      typeGuardFunctions.push(createEnumTypeGuard(propertyName));
-    }
-
-    typeGuardFunctions.push(`        return false;`);
-    typeGuardFunctions.push(`    }`);
-  });
-
-  typeGuardFunctions.push(`\n    return true;`);
-  typeGuardFunctions.push(`}\n`);
-
-  return typeGuardFunctions.join("\n");
-};
-
-/**
- * Generates the type guards for the interfaces
- * @param interfaceNode
- */
-function generateTypeGuards2(interfaceNode: InterfaceDeclaration): string {
-  const properties = interfaceNode.members;
-  const interfaceName = capitalize(interfaceNode.name.text);
-  return buildTypeGuards(interfaceName, properties);
-}
-
-/**
- * Generates the type guards for the enums
- * @param typeNode
- */
-function generateEnumTypeGuard(typeNode: EnumDeclaration): string {
-  const enumName = typeNode.name.text;
-  const enumProperties = typeNode.members;
-  return buildTypeGuards(enumName, enumProperties);
-}
-function loadConfig() {
-  const fileContent = fs.readFileSync("./config.json", "utf8");
-  const jsonContent = JSON.parse(fileContent);
-  return jsonContent.production.inputFilePath;
-}
-function getParams() {
-  const commandLineArgs = process.argv;
-  console.log("Command-line arguments:", commandLineArgs);
-}
-//Implementation
-getParams();
-const { interfaces, types, enums } = readObjects(loadConfig());
-deleteFileIfExists("out/typeguards.ts");
-generateTypeGuardsFile(generateTypeGuards(types));
+// Usage Examples
+// 1. using default values --> tsGenTypeguards();
+// 2. using custom values --> tsGenTypeguards(undefined, 'inputNew', 'outputNew');
+// 3. using custom input and default output values --> tsGenTypeguards(undefined, 'inputNew');
+// 4. using default input and custom output values tsGenTypeguards(undefined, undefined, 'outputNew');
+// 5. using input string and default output values --> tsGenTypeguards('export interface User {name: string; age: number;}');
