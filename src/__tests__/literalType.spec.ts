@@ -1,4 +1,4 @@
-import { removeWhitespace } from '../utils';
+import { removeWhitespace } from 'ts-raw-utils';
 import { generateTypeTypeGuard } from '../api';
 import * as ts from 'typescript';
 import { createSourceFile } from 'typescript';

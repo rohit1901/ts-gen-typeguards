@@ -11,7 +11,8 @@ import {
   generateUnionTypeGuard,
   handleEnumIntersection,
 } from '../api';
-import { getEscapedCapitalizedStringLiteral, getName } from '../utils';
+import { getEscapedCapitalizedStringLiteral } from 'ts-raw-utils';
+import { getName } from '../utils';
 
 /**
  * Generate a set of type guard functions based on provided TypeAliasDeclarations.

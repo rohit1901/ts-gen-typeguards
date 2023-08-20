@@ -5,14 +5,13 @@ import {
   PropertySignature,
 } from 'typescript';
 import {
-  capitalize,
   getTernaryOperatorResult,
   isKeyword,
   isKeywordTypeSyntaxKind,
   isLiteralType,
-  replaceAll,
   syntaxKindToType,
 } from '../utils';
+import { capitalize, replaceAll } from 'ts-raw-utils';
 import { generatePropertyGuard } from '../api';
 
 /**

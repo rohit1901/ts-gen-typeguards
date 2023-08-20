@@ -1,12 +1,11 @@
 import { isLiteralTypeNode, SyntaxKind, TypeNode } from 'typescript';
 import {
-  getEscapedStringLiteral,
   getLiteralType,
   isKeyword,
   isLiteral,
   syntaxKindToType,
 } from '../utils';
-
+import { getEscapedStringLiteral } from 'ts-raw-utils';
 /**
  * Generates type guards for the given TypeScript TypeNode, which can be a keyword or a literal Type.
  * If the property propertyName is not provided, the type looks as follows:

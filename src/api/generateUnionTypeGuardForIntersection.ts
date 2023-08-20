@@ -13,7 +13,6 @@ import {
 } from 'typescript';
 import { generateLiteralTypeTypeGuard } from './generateLiteralTypeTypeGuard';
 import {
-  capitalize,
   isAnyKeyword,
   isBigIntKeyword,
   isBooleanKeyword,
@@ -38,8 +37,8 @@ import {
   generateVoidKeywordTypeGuard,
 } from './generateKeywordTypeGuardsForUnion';
 import { generateIntersectionTypeGuardForType } from './generateIntersectionTypeGuardForType';
-import { generatePropertyGuard } from './index';
-
+import { generatePropertyGuard } from '../api';
+import { capitalize } from 'ts-raw-utils';
 /**
  * Generate a union type guard for a given TypeScript type alias.
  *

@@ -1,13 +1,14 @@
-#Folders
+# Folders
 node_modules/
 .idea/
 .run/
 .github/
 coverage/
 src/**/*
-#Files
+# Files
 .prettierrc
 package-lock.json
 tsconfig.json
+esbuild.config.js
 
 
