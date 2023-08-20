@@ -11,11 +11,11 @@ import {
   PropertySignature,
   SyntaxKind,
 } from 'typescript';
-import { capitalize, isKeyword, syntaxKindToType } from '../utils';
+import { isKeyword, syntaxKindToType } from '../utils';
 import { generateTypeLiteralTypeGuardWithinUnion } from './generateUnionTypeGuardForIntersection';
 import { generateArrayTypeGuard, generateIntersectionTypeGuard } from './index';
 import { getQualifiedNameText } from './generateQualifiedNameTypeGuard';
-
+import { capitalize } from 'ts-raw-utils';
 /**
  * Generates Typeguards for an Optional property which could be of the following types:
  * - LiteralType

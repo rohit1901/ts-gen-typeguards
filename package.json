@@ -61,5 +61,8 @@
       "json",
       "node"
     ]
+  },
+  "dependencies": {
+    "ts-raw-utils": "^1.1.0"
   }
 }

@@ -6,14 +6,13 @@ import {
   TypeAliasDeclaration,
   TypeLiteralNode,
 } from 'typescript';
+import { isPrimitiveSyntaxKind, syntaxKindToType } from '../utils';
+import { generateUnionTypeGuardForProperty } from '../api';
+import { generateIntersectionTypeGuardForProperty } from '../api';
 import {
   getEscapedCapitalizedStringLiteral,
   getEscapedStringLiteral,
-  isPrimitiveSyntaxKind,
-  syntaxKindToType,
-} from '../utils';
-import { generateUnionTypeGuardForProperty } from '../api';
-import { generateIntersectionTypeGuardForProperty } from '../api';
+} from 'ts-raw-utils';
 
 /**
  * Generates a type guard for a property based on its TypeScript PropertySignature.

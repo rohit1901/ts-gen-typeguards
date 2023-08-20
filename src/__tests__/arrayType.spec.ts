@@ -1,7 +1,7 @@
 import { createSourceFile } from 'typescript';
 import * as ts from 'typescript';
 import { generateInterfaceTypeGuard, generateTypeTypeGuard } from '../api';
-import { removeWhitespace } from '../utils';
+import { removeWhitespace } from 'ts-raw-utils';
 
 describe('Generator', () => {
   const text = `interface ArrayInterface {
