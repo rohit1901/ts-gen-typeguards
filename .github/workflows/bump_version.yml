@@ -1,4 +1,5 @@
 name: Bump version, commit and push tag
+# This workflow is triggered when a PR is opened or reopened on the main branch
 on:
   pull_request:
     types: [opened, reopened]
@@ -6,6 +7,8 @@ on:
       - 'main'
 jobs:
   bump_version:
+    # Only run if the PR is from a release branch (release/patch, release/minor, release/major)
+    if: ${{ github.event.pull_request.head.ref }} == 'release/patch' || ${{ github.event.pull_request.head.ref }} == 'release/minor' || ${{ github.event.pull_request.head.ref }} == 'release/major'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -27,6 +30,17 @@ jobs:
         uses: martinbeentjes/npm-get-version-action@v1.3.1
       # Print the current version
       - run: echo "The current version is ${{ steps.package-version.outputs.current-version }}"
+      # Match branch name
+      - name: Match branch name
+        run: |
+          if ${{ github.event.pull_request.head.ref  == 'release/patch' }}; then
+            echo "RELEASE_TYPE=patch" >> $GITHUB_ENV
+          elif ${{ github.event.pull_request.head.ref == 'release/minor' }}; then
+            echo "RELEASE_TYPE=minor" >> $GITHUB_ENV
+          elif ${{ github.event.pull_request.head.ref == 'release/major' }}; then
+            echo "RELEASE_TYPE=major" >> $GITHUB_ENV
+          fi
+      - run: echo "The release type is ${{ env.RELEASE_TYPE }}"
       # Bump version and provide new version as output
       - name: Bump version (Dry run)
         id: version-bump-dry-run
@@ -34,7 +48,7 @@ jobs:
         uses: anothrNick/github-tag-action@1.64.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEFAULT_BUMP: patch
+          DEFAULT_BUMP: ${{ env.RELEASE_TYPE }}
           DRY_RUN: true
           INITIAL_VERSION: ${{ steps.package-version.outputs.current-version }}
       # Update package.json with the new version
@@ -53,7 +67,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           INITIAL_VERSION: ${{ steps.package-version.outputs.current-version }}
-          DEFAULT_BUMP: patch
+          DEFAULT_BUMP: ${{ env.RELEASE_TYPE }}
       # Commit changes
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4
