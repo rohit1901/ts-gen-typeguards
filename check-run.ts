@@ -1,138 +1,155 @@
+// index.ts
 import * as guards from './out/typeguards';
 
-// Usage Examples
-//tsGenTypeguards();
+const employeeData = {
+    name: 'John',
+    age: 30,
+    jobTitle: 'Developer',
+    address: {
+        street: '123 Main St',
+        city: 'Cityville',
+    },
+};
 
-console.log('isPersonWithId:', guards.isPersonWithId({
-    literalType: 2,
-    gender: "male",
-    id: 1,
-}));
-console.log('isPersonId:', guards.isPersonId(1));
+console.log('isEmployee', guards.isEmployee(employeeData));
 
-console.log('isPerson:', guards.isPerson({
-    literalType: 2,
-    gender: "male",
+const shapeData = {
+    type: 'circle',
+    radius: 5,
+};
+
+console.log('isCustomShape', guards.isCustomShape(shapeData));
+
+const carData = {
+    brand: 'Tesla',
+    model: 'Model S',
+    batteryCapacity: 75,
+};
+
+console.log('isElectricCar', guards.isElectricCar(carData));
+
+const dogData = {
+    name: 'Buddy',
+    breed: 'Labrador',
+};
+
+console.log('isDog', guards.isDog(dogData));
+
+const calculatorData = {
+    add: (x: number, y: number) => x + y,
+    subtract: (x: number, y: number) => x - y,
+};
+
+console.log('isCalculator', guards.isCalculator(calculatorData));
+
+const dictionaryData = {
+    apple: 'a fruit',
+    car: 'a vehicle',
+};
+
+console.log('isDictionary', guards.isDictionary(dictionaryData));
+
+const personWithOptionalAddress = {
+    name: 'Alice',
+    age: 25,
+};
+
+console.log('isPersonWithOptionalAddress', guards.isPersonWithOptionalAddress(personWithOptionalAddress));
+// ... Previous checks
+
+// Image and Video Enums
+/*console.log('isMediaType', guards.isMediaTypeInterface('image'));
+console.log('isMediaType', guards.isMediaTypeInterface('video'));*/
+
+// Type Aliases
+console.log('isDirection', guards.isDirection('up'));
+console.log('isEvenNumber', guards.isEvenNumbers(4));
+
+// Union Types
+console.log('isBooleanState', guards.isBooleanStates(true));
+console.log('isStatusCode', guards.isStatusCode(404));
+
+// Intersection Types
+//console.log('isStatusType', guards.isStatus('success'));
+console.log('isGreeting', guards.isGreeting('Hello, '));
+
+// Dictionary Interface
+console.log('isDictionary', guards.isDictionary({
+    apple: 'a fruit',
+    car: 'a vehicle',
 }));
-console.log('isUnionTypeArrayType:', guards.isUnionTypeArrayType(['1', '2']));
-console.log('isPersonId:', guards.isPersonId(1));
-console.log('isGender', guards.isGender('male'));
-console.log('isPoint', guards.isPoint({
-    required: '1',
-    unknownRequired: '1',
-    anyRequired: '1',
+
+// Additional Type Alias and Interfaces
+// ...
+
+// Nested Interface Checks
+console.log('isAddressInterface', guards.isAddressInterface({
+    street: '123 Main St',
+    city: 'Cityville',
 }));
+
+console.log('isPersonInterface', guards.isPersonInterface({
+    name: 'Alice',
+    age: 25,
+    address: {
+        street: '456 Elm St',
+        city: 'Townsville',
+    },
+}));
+
 console.log('isEmployee', guards.isEmployee({
-    literalType: 2,
-    gender: 'female',
-    employeeId: 1,
-}));
-console.log('isUser', guards.isUser({
-    id: 1,
-    name: '1',
-}));
-console.log('isCar', guards.isCar({
-    brand: 'Toyota',
-    color: 'red',
-}));
-console.log('isCity', guards.isCity({
-    name: '1',
-    population: 1,
-    typeLiteralType: {
-        x: {
-            size: 'Medium',
-        },
-    },
-    literalType: '2',
-}));
-console.log('isMediumCity', guards.isCoordinates({
-    latitude: 1,
-    longitude: 1,
-}));
-console.log('isDirection', guards.isDirection({
-    north: 'North',
-    south: 'South',
-    east: 'East',
-    west: 'West',
-}));
-console.log('isMove', guards.isMove({
-    direction: 'up',
-    distance: 1,
-    position: {
-        latitude: 1,
-        longitude: 1,
+    name: 'John',
+    age: 30,
+    jobTitle: 'Developer',
+    address: {
+        street: '789 Oak St',
+        city: 'Villageton',
     },
 }));
-console.log('isProduct', guards.isProduct({
-    name: '1',
-    price: 1,
+
+// CustomShape Interface Checks
+console.log('isCustomShape', guards.isCustomShape({
+    type: 'circle',
+    radius: 5,
 }));
-console.log('isVehicle', guards.isVehicle({
-    type: 'car',
-    wheels: 4,
+
+// ElectricCar Interface Checks
+console.log('isElectricCar', guards.isElectricCar({
+    brand: 'Tesla',
+    model: 'Model S',
+    batteryCapacity: 75,
 }));
-console.log('isUnionTypeArrayType', guards.isUnionTypeArrayType(['1', '2']));
-console.log('isUnionTypeArrayType', guards.isUnionTypeArrayType([1, 2]));
-//console.log('isIntersectionTypeArrayType', guards.isIntersectionTypeArrayType([1n, 2n, 3n, 4n, 5n]));
-//console.log('isAnyType', guards.isAnyType('1'));
-//console.log('isUnknownType', guards.isUnknownType('1'));
-console.log('isEmployeeOrHR', guards.isEmployeeOrHR({
-    employeeId: 2,
-    literalType: 2,
-    gender: "male",
+
+// Animal Interfaces Checks
+console.log('isDog', guards.isDog({
+    name: 'Buddy',
+    breed: 'Labrador',
 }));
-console.log('isEmployeeOrHR', guards.isEmployeeOrHR({
-    department: 'HR'
+
+console.log('isCat', guards.isCat({
+    name: 'Whiskers',
+    color: 'gray',
 }));
-// isMonthOrUndefined
-console.log('isMonthOrUndefined', guards.isMonthOrUndefined('JAN'));
-// ElectronicProduct
-console.log('isElectronicProduct', guards.isElectronicProduct({
-    name: '1',
-    price: 1,
-    category: 'ELECTRONICS',
+
+// Calculator Interface Checks
+console.log('isCalculator', guards.isCalculator({
+    add: (x, y) => x + y,
+    subtract: (x, y) => x - y,
 }));
-// NumberOrZero
-console.log('isNumberOrZero', guards.isNumberOrZero(0));
-// RedToyota
-console.log('isRedToyota', guards.isRedToyota({
-    brand: 'Toyota',
-    color: 'red',
-}));
-// MediumCity
-console.log('isMediumCity', guards.isMediumCity({
-    name: '1',
-    population: 1,
-    typeLiteralType: {
-        x: {
-            size: 'Medium',
-        },
-    },
-    literalType: '2',
-}));
-console.log('isMediumCity', guards.isMediumCity({
-    size: 'Medium',
-}));
-// ActiveUser
-console.log('isActiveUser', guards.isActiveUser({
-    id: 1,
-    name: '1',
-    status: 'ACTIVE',
-}));
-// PrimitiveTypes
-console.log('isPrimitiveTypes', guards.isPrimitiveTypes('string'));
-console.log('isPrimitiveTypes', guards.isPrimitiveTypes(2));
-console.log('isPrimitiveTypes', guards.isPrimitiveTypes(undefined));
-// Even Numbers
-console.log('isEvenNumbers', guards.isEvenNumbers(2));
-console.log('isEvenNumbers', guards.isEvenNumbers(4));
-// PointAndName
-console.log('isPointAndName', guards.isPointAndName({
-    required: '1',
-    unknownRequired: '1',
-    anyRequired: '1',
-    name: '1',
-}   ));
-// RedCircle
-console.log('isColorOrString', guards.isColorOrString('yellow'));
-console.log('isColorOrString', guards.isColorOrString('red'));
+
+// Image Interface Checks
+/*console.log('isImage', guards.isImage({
+    type: MediaTypeInterface.Image,
+    url: 'example.jpg',
+}));*/
+
+// Video Interface Checks
+/*console.log('isVideo', guards.isVideo({
+    type: MediaTypeInterface.Video,
+    source: 'example.mp4',
+}));*/
+
+// Additional Interface Checks
+// ...
+
+
