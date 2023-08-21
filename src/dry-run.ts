@@ -1,4 +1,4 @@
-import { tsGenTypeguards } from '../lib';
+import { tsGenTypeguards } from './';
 
 // Usage Examples
 tsGenTypeguards();
