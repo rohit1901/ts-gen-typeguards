@@ -22,7 +22,6 @@ describe('Generator', () => {
     expect(removeWhitespace(result)).toEqual(
       removeWhitespace(`export function isEvenNumbers(value: any): value is EvenNumbers {
           return (
-            typeof value === "object" &&
             value !== null &&
             value === 2 &&
             value === 4 &&
@@ -37,7 +36,6 @@ describe('Generator', () => {
     expect(removeWhitespace(result)).toEqual(
       removeWhitespace(`export function isEvenNumberStrings(value: any): value is EvenNumberStrings {
           return (
-            typeof value === "object" &&
             value !== null &&
             value === '2' &&
             value === '4' &&
@@ -54,7 +52,6 @@ describe('Generator', () => {
           value: any
         ): value is EvenNumberStringsCombi {
           return (
-            typeof value === "object" &&
             value !== null &&
             value === '2' &&
             value === 4 &&

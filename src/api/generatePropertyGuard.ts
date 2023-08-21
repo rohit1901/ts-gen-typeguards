@@ -23,7 +23,7 @@ import {
  * If the property is required, the type guard will be generated using the generateTypeLiteralTypeGuard function.
  * @param property - A TypeElement.
  * @param parentName - The name of the parent interface. Its presence signifies that the property is a nested property.
- * @param typeParameterName
+ * @param typeParameterName - The name of the type parameter. Its presence signifies that the property is a generic property.
  */
 export function generatePropertyGuard(
   property: TypeElement,
@@ -35,7 +35,11 @@ export function generatePropertyGuard(
   const propertyName = getPropertyName(property, parentName);
   // handle optional properties separately
   if (property.questionToken)
-    return generateOptionalPropertyTypeGuard(property, propertyName);
+    return generateOptionalPropertyTypeGuard(
+      property,
+      propertyName,
+      typeParameterName,
+    );
   // handle required properties in a different way
   typeGuard.push(buildHasOwnPropertyString(property, parentName));
   if (isGenericProperty(property, typeParameterName))

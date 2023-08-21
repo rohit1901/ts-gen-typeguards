@@ -24,6 +24,7 @@ export function syntaxKindToType(
       return 'symbol';
     case SyntaxKind.ObjectKeyword:
       return 'object';
+    //TODO: Remove, Any, Never, and Unknown parts after testing
     case SyntaxKind.AnyKeyword:
       return 'object';
     case SyntaxKind.UnknownKeyword:

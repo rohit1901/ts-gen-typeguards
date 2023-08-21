@@ -10,9 +10,10 @@ import {
   generatePropertyGuard,
   generateUnionTypeGuard,
   handleEnumIntersection,
+  isKeywordType,
 } from '../api';
 import { getEscapedCapitalizedStringLiteral } from 'ts-raw-utils';
-import { getName } from '../utils';
+import { getName, getTypeNameFromTypeParameter, isLiteralType } from '../utils';
 
 /**
  * Generate a set of type guard functions based on provided TypeAliasDeclarations.
@@ -51,13 +52,16 @@ export function generateTypeWithinTypeLiteralTypeGuard(
   definition: TypeAliasDeclaration,
 ) {
   const { type } = definition;
+  const typeParameterName = getTypeNameFromTypeParameter(definition);
   const typeGuardStrings: string[] = [];
   if (!isTypeLiteralNode(type)) {
     return '';
   }
   //NOTE: Return empty string if the definition is not a TypeLiteralNode
   for (const property of type.members) {
-    typeGuardStrings.push(...generatePropertyGuard(property));
+    typeGuardStrings.push(
+      ...generatePropertyGuard(property, undefined, typeParameterName),
+    );
   }
   return typeGuardStrings;
 }
@@ -76,6 +80,6 @@ function buildTypeTypeGuardSignature(definition: TypeAliasDeclaration): string {
     return buildGenericFunctionSignature(typeName, definition.typeParameters);
   return `export function is${getEscapedCapitalizedStringLiteral(
     typeName,
-  )}(value: any): value is ${typeName} {return(typeof value === "object" &&
-    value !== null`;
+  )}(value: any): value is ${typeName} {return(value !== null`;
 }
+//${isLiteralType(definition.type.kind) ? 'typeof value === "object" &&': ''}

@@ -1,13 +1,16 @@
 import { isLiteralTypeNode, SyntaxKind, TypeNode } from 'typescript';
 import {
   getLiteralType,
+  isAnyKeyword,
   isKeyword,
   isLiteral,
+  isNeverKeyword,
+  isUnknownKeyword,
   syntaxKindToType,
 } from '../utils';
-import { getEscapedStringLiteral } from 'ts-raw-utils';
 /**
  * Generates type guards for the given TypeScript TypeNode, which can be a keyword or a literal Type.
+ * In case of any, unknown or never keyword, the type guard condition is not generated as it is already checked using the hasOwnProperty check.
  * If the property propertyName is not provided, the type looks as follows:
  * @example
  * ```
@@ -41,6 +44,14 @@ export function generateKeywordGuard(
     );
     return typeGuard;
   }
+  //NOTE: In case of unknown, never or any keyword, we don't need to check the type as it is already checked using the hasOwnProperty check.
+  if (
+    isUnknownKeyword(type.kind) ||
+    isNeverKeyword(type.kind) ||
+    isAnyKeyword(type.kind)
+  )
+    return typeGuard;
+  //TODO: any gets through. Check
   typeGuard.push(generateKeywordTypeGuard(typeName, type.kind));
   return typeGuard;
 }
@@ -87,9 +98,15 @@ export function generateLiteralTypeGuard(
   literalKind: SyntaxKind,
   literalText?: string,
 ): string {
-  return `value.${propertyName} === '${
-    getEscapedStringLiteral(literalText) ?? getLiteralType(literalKind)
-  }'`;
+  function getText(literalText?: string) {
+    if (typeof literalText === 'string') {
+      return literalText;
+    }
+    return;
+  }
+  return `value.${propertyName} === ${
+    getText(literalText) ?? getLiteralType(literalKind)
+  }`;
 }
 
 /**

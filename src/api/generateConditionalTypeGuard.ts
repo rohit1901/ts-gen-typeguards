@@ -5,6 +5,7 @@ export function generateConditionalTypeGuard(
   definition: TypeNode,
   parentTypeName?: string,
 ) {
+  //TODO: Implement this function
   /*const typeGuard = generateInterfaceTypeGuard(typeName, definition);
 
   return typeGuard.replace(

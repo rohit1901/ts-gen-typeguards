@@ -47,7 +47,6 @@ describe('Generator', () => {
     const expectedResult = removeWhitespace(`
         export function isArrayType(value: any): value is ArrayType {
           return (
-            typeof value === "object" &&
             value !== null &&
             value.hasOwnProperty('arrayProperty') &&
             (Array.isArray(value.arrayProperty) &&

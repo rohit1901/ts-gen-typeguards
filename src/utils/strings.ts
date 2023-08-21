@@ -1,4 +1,9 @@
-import { Identifier, InterfaceDeclaration, TypeElement } from 'typescript';
+import {
+  Identifier,
+  InterfaceDeclaration,
+  TypeAliasDeclaration,
+  TypeElement,
+} from 'typescript';
 
 /**
  * Check if value is a string and is equal to "type"
@@ -13,7 +18,7 @@ export function isString(value: any): value is 'type' {
  * @param definition - An interface definition
  */
 export function getTypeNameFromTypeParameter(
-  definition: InterfaceDeclaration,
+  definition: InterfaceDeclaration | TypeAliasDeclaration,
 ): string | undefined {
   return definition.typeParameters && definition.typeParameters.length > 0
     ? definition.typeParameters[0].name.escapedText.toString()
