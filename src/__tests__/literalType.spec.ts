@@ -1,9 +1,9 @@
-import { removeWhitespace } from '../utils';
+import { removeWhitespace } from 'ts-raw-utils';
 import { generateTypeTypeGuard } from '../api';
 import * as ts from 'typescript';
 import { createSourceFile } from 'typescript';
 
-describe('Literal types', () => {
+describe('Generator', () => {
   const text = `export type EvenNumbers = 2 & 4 & 6 & 8;
     export type EvenNumberStrings = '2' & '4' & '6' & '8';
     export type EvenNumberStringsCombi = '2' & 4 & '6' & 8;`;
@@ -17,7 +17,7 @@ describe('Literal types', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-  it('should generate correct typeguard for even numbers', () => {
+  it('should generate correct typeguard for even numbers (Literal Types)', () => {
     const result = generateTypeTypeGuard([evenNumbersTypeAlias], []);
     expect(removeWhitespace(result)).toEqual(
       removeWhitespace(`export function isEvenNumbers(value: any): value is EvenNumbers {
@@ -32,7 +32,7 @@ describe('Literal types', () => {
         }`),
     );
   });
-  it('should generate correct typeguard for even numbers as strings', () => {
+  it('should generate correct typeguard for even numbers as strings (Literal Types)', () => {
     const result = generateTypeTypeGuard([evenNumberStringsTypeAlias], []);
     expect(removeWhitespace(result)).toEqual(
       removeWhitespace(`export function isEvenNumberStrings(value: any): value is EvenNumberStrings {
@@ -47,7 +47,7 @@ describe('Literal types', () => {
         }`),
     );
   });
-  it('should generate correct typeguard for even numbers as strings and numbers', () => {
+  it('should generate correct typeguard for even numbers as strings and numbers (Literal Types)', () => {
     const result = generateTypeTypeGuard([evenNumberStringsCombiTypeAlias], []);
     expect(removeWhitespace(result)).toEqual(
       removeWhitespace(`export function isEvenNumberStringsCombi(

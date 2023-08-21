@@ -27,7 +27,7 @@ export function syntaxKindToType(
     case SyntaxKind.AnyKeyword:
       return 'object';
     case SyntaxKind.UnknownKeyword:
-      return 'unknown';
+      return 'undefined';
     case SyntaxKind.NeverKeyword:
       return 'never';
     case SyntaxKind.VoidKeyword:

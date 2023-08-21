@@ -1,12 +1,11 @@
 import { isLiteralTypeNode, SyntaxKind, TypeNode } from 'typescript';
 import {
-  getEscapedStringLiteral,
   getLiteralType,
   isKeyword,
   isLiteral,
   syntaxKindToType,
 } from '../utils';
-
+import { getEscapedStringLiteral } from 'ts-raw-utils';
 /**
  * Generates type guards for the given TypeScript TypeNode, which can be a keyword or a literal Type.
  * If the property propertyName is not provided, the type looks as follows:
@@ -72,7 +71,7 @@ export function generateKeywordGuardForType(type: TypeNode): string {
  * @param {any} kind - The kind property of the TypeScript TypeNode.
  * @returns {boolean} Returns true if the type is a keyword type or a literal type, otherwise false.
  */
-function isKeywordType(kind: any): boolean {
+export function isKeywordType(kind: any): boolean {
   return isKeyword(kind) || isLiteralTypeNode(kind);
 }
 
@@ -83,7 +82,7 @@ function isKeywordType(kind: any): boolean {
  * @param literalText
  * @returns {string} The type guard condition as a string.
  */
-function generateLiteralTypeGuard(
+export function generateLiteralTypeGuard(
   propertyName: string,
   literalKind: SyntaxKind,
   literalText?: string,
@@ -99,7 +98,7 @@ function generateLiteralTypeGuard(
  * @param {SyntaxKind} keywordKind - The kind of the keyword type node.
  * @returns {string} The type guard condition as a string.
  */
-function generateKeywordTypeGuard(
+export function generateKeywordTypeGuard(
   propertyName: string,
   keywordKind: SyntaxKind,
 ): string {

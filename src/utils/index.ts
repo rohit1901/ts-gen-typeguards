@@ -1,29 +1,15 @@
-export { isObject } from './isObject';
-export { getMembersFromTypeAlias } from './getMembersFromTypeAlias';
-export { isEnumString } from './isEnumString';
-export { isTypeString } from './isTypeString';
-export { isInterfaceString } from './isInterfaceString';
-export {
-  capitalize,
-  getEscapedCapitalizedStringLiteral,
-  getEscapedStringLiteral,
-} from './capitalize';
-export {
-  syntaxKindToType,
-  isPrimitiveSyntaxKind,
-  isKeywordSyntaxKind,
-  PrimitiveSyntaxKind,
-} from './syntaxKindToType';
-export { generateTypeGuardsFile, deleteFileIfExists } from './fileOps';
-export { removeWhitespace } from './removeWhitespace';
-export {
-  removeDuplicateTypeElements,
-  createFakeTypeElement,
-} from './typeElementUtils';
+export * from './isObject';
+export * from './getMembersFromTypeAlias';
+export * from './isEnumString';
+export * from './strings';
+export * from './isInterfaceString';
+export * from './syntaxKindToType';
+export * from './fileOps';
+export * from './typeElementUtils';
 export * from './isKeyword';
 export * from './isLiteral';
 
-export {
-  handleIntersectionTypesForTypeAlias,
-  handleIntersectionTypesForTypeNode,
-} from './intersectionType';
+export * from './intersectionType';
+export * from './typeParameter';
+export * from './typeReferenceKind';
+export * from './generics';

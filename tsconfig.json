@@ -4,8 +4,7 @@
     "module": "commonjs",
     "declaration": true,
     "rootDir": "src",
-    // NOTE: add to produce production build
-    //"outDir": "dist",
+    "sourceMap": true,
   },
   "include": [
     "src/**/*.ts"
@@ -13,7 +12,9 @@
   "start": "node src/index.js",
   "exclude": [
     "node_modules",
-    "src/out/",
-    "src/__tests__/**/*.ts"
+    "src/out/**/*",
+    "src/__tests__/**/*.ts",
+    "lib",
+    "src/dry-run.ts"
   ]
 }

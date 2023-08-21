@@ -1,11 +1,4 @@
-import {
-  isLiteralTypeLiteral,
-  isLiteralTypeNode,
-  LiteralType,
-  LiteralTypeNode,
-  SyntaxKind,
-} from 'typescript';
-import { getEscapedStringLiteral } from './capitalize';
+import { LiteralTypeNode, SyntaxKind } from 'typescript';
 
 /**
  * Define an array of all literal types.

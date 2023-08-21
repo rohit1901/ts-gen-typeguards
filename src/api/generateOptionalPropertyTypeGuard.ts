@@ -1,6 +1,5 @@
 // Generate type guards for optional properties
 import {
-  factory,
   isArrayTypeNode,
   isIntersectionTypeNode,
   isLiteralTypeNode,
@@ -12,11 +11,11 @@ import {
   PropertySignature,
   SyntaxKind,
 } from 'typescript';
-import { capitalize, getEscapedStringLiteral, isKeyword } from '../utils';
+import { isKeyword, syntaxKindToType } from '../utils';
 import { generateTypeLiteralTypeGuardWithinUnion } from './generateUnionTypeGuardForIntersection';
-import { generateIntersectionTypeGuard } from './index';
+import { generateArrayTypeGuard, generateIntersectionTypeGuard } from './index';
 import { getQualifiedNameText } from './generateQualifiedNameTypeGuard';
-
+import { capitalize } from 'ts-raw-utils';
 /**
  * Generates Typeguards for an Optional property which could be of the following types:
  * - LiteralType
@@ -38,10 +37,12 @@ import { getQualifiedNameText } from './generateQualifiedNameTypeGuard';
  * (value.person === 'undefined' || isPerson(value.person))
  * ```
  */
+//TODO: Refactor this function
 export function generateOptionalPropertyTypeGuard(
-  { questionToken, name, type }: PropertySignature,
+  property: PropertySignature,
   parentName?: string,
 ): string[] {
+  const { questionToken, name, type } = property;
   if (!questionToken) return [];
   const typeGuardCode: string[] = [];
   // check if the type is a TypeReference
@@ -69,9 +70,9 @@ export function generateOptionalPropertyTypeGuard(
     typeGuardCode.push(
       createTypeguardString(
         parentName ?? name.getText(),
-        `typeof value.${
-          parentName ?? name.getText()
-        } === '${getEscapedStringLiteral(type.getText())}'`,
+        `typeof value.${parentName ?? name.getText()} === '${syntaxKindToType(
+          type.kind,
+        )}'`,
         false,
       ),
     );
@@ -96,7 +97,12 @@ export function generateOptionalPropertyTypeGuard(
       ),
     );
   } else if (isArrayTypeNode(type)) {
-    // return typeguard for array type
+    typeGuardCode.push(
+      createTypeguardString(
+        parentName ?? name.getText(),
+        generateArrayTypeGuard(property, parentName ?? name.getText()),
+      ),
+    );
   } else if (isTupleTypeNode(type)) {
     // return typeguard for tuple type
   } else if (isTypeLiteralNode(type)) {
@@ -110,9 +116,8 @@ export function generateOptionalPropertyTypeGuard(
         false,
       ),
     );
-    // return typeguard for TypeLiteral
   } else {
-    console.error('Unsupported type', name, type.getText());
+    console.error('Unsupported type', name.getText(), type.getText());
   }
   return typeGuardCode;
 }

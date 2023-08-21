@@ -1,5 +1,14 @@
-import { factory, isIntersectionTypeNode, TypeNode } from 'typescript';
-import { generateKeywordGuard, generateTypeReferenceGuard } from '../api';
+import {
+  factory,
+  isArrayTypeNode,
+  isIntersectionTypeNode,
+  TypeNode,
+} from 'typescript';
+import {
+  generateArrayTypeGuard,
+  generateKeywordGuard,
+  generateTypeReferenceGuard,
+} from '../api';
 import { generateTypeWithinTypeLiteralTypeGuard } from './generateTypeTypeGuard';
 
 /**
@@ -39,9 +48,21 @@ export function generateIntersectionTypeGuard(
   if (!isIntersectionTypeNode(type)) return typeGuard;
   if (!type.types) return typeGuard;
   for (const member of type.types) {
-    typeGuard.push(...generateKeywordGuard(member, typeName, isProperty));
-    typeGuard.push(...generateTypeReferenceGuard(member, typeName, isProperty));
+    if (isArrayTypeNode(member)) {
+      typeGuard.push(
+        generateArrayTypeGuard(
+          factory.createPropertySignature(
+            undefined,
+            undefined,
+            undefined,
+            member,
+          ),
+        ),
+      );
+    }
     typeGuard.push(
+      ...generateKeywordGuard(member, typeName, isProperty),
+      ...generateTypeReferenceGuard(member, typeName, isProperty),
       ...generateTypeWithinTypeLiteralTypeGuard(
         factory.createTypeAliasDeclaration(
           undefined,

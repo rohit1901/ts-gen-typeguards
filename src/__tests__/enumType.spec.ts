@@ -1,9 +1,9 @@
-import { capitalize, removeWhitespace } from '../utils';
+import { capitalize, removeWhitespace } from 'ts-raw-utils';
 import { generateEnumTypeGuards } from '../api';
 import { createSourceFile } from 'typescript';
 import * as ts from 'typescript';
 
-describe('Enum types', () => {
+describe('Generator', () => {
   const text = `export enum Fruit {
     Apple = 'APPLE',
     Banana = 'BANANA',
