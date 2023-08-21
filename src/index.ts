@@ -7,6 +7,7 @@ import {
   deleteFileIfExists,
   extensionTS,
   generateTypeGuardsFile,
+  getTernaryOperatorResult,
   readFilesWithExtension,
 } from './utils';
 
@@ -39,8 +40,11 @@ type ObjectsType = {
  */
 function readObjects(path: string, content?: string): ObjectsType {
   try {
-    const sourceText =
-      path === '' ? content : readFilesWithExtension(path).join('');
+    const sourceText = getTernaryOperatorResult(
+      path === '',
+      content,
+      readFilesWithExtension(undefined, path).join(''),
+    );
     // Parse the file
     const parsedFile = createSourceFile(
       path,
@@ -60,21 +64,6 @@ function readObjects(path: string, content?: string): ObjectsType {
     console.error('ERROR: Error while reading the file:', path, err.message);
   }
 }
-
-/**
- * Generates the import statement for the given objects and path.
- * If no path is provided, the default path is used. (defaults to '../combinedTypeGuards')
- * @example
- * import {User, Car} from '../combinedTypeGuards'
- * @param objects
- * @param path
- */
-function generateImports(objects: string[], path?: string) {
-  return `import {${objects.join(
-    ',',
-  )}} from '../${path}${defaultOutputTypesFileName}'`;
-}
-
 /**
  * Returns the names of the given objects (which can be interfaces, types, or enums) as an array of strings.
  * @example
@@ -93,11 +82,36 @@ function getObjectsNames(
   const enumNames = enumObjects.map(object => object.name.getText());
   return [...interfaceNames, ...typeNames, ...enumNames];
 }
+/**
+ * Generates the import statement for the given objects and path.
+ * If no path is provided, the default path is used. (defaults to '../combinedTypeGuards')
+ * @example
+ * import {User, Car} from '../combinedTypeGuards'
+ * @param objects
+ * @param path
+ */
+function generateImports(objects: string[], path?: string) {
+  return `import {${objects.join(
+    ',',
+  )}} from '../${path}${defaultOutputTypesFileName}'`;
+}
+
+/**
+ * Returns the import statement for the given objects and path. If no path is provided, the default path is used.
+ * @param objects - Objects to generate the import statement for
+ */
+function getImports(objects: string[], path?: string) {
+  return getTernaryOperatorResult(
+    objects.length > 0,
+    generateImports(objects, path),
+    '',
+  );
+}
 
 /**
  * Generates type guards for the given input file path and writes them to the output file path (defaults to ./out/typeGuards.ts)
- * @param inputString - Optional input string to generate type guards from. If this is provided, the inputFilePath is ignored
- * @param inputFilePath - Optional input file path to generate type guards from (defaults to the 'input/' directory)
+ * @param inputString - Optional input string to generate typeguards from. If this is provided, the inputFilePath is ignored
+ * @param inputFilePath - Optional input file path to generate typeguards from (defaults to the 'input/' directory.)
  * @param outputFilePath - Optional output file path to write the generated type guards to (defaults to ./out/typeGuards.ts)
  */
 export function tsGenTypeguards(
@@ -128,7 +142,7 @@ export function tsGenTypeguards(
     outputFilePath + `${defaultTypeGuardsFileName}.${extensionTS}`,
   );
   generateTypeGuardsFile(
-    `${generateImports(
+    `${getImports(
       getObjectsNames(interfaces, types, enums),
       inputFilePath,
     )}\n${generateInterfaceTypeGuard(interfaces)}\n${generateTypeTypeGuard(
