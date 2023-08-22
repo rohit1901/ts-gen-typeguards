@@ -1,6 +1,6 @@
-import { InterfaceDeclaration, isInterfaceDeclaration } from 'typescript';
+import {InterfaceDeclaration, isInterfaceDeclaration, isPropertySignature} from 'typescript';
 import {
-  buildGenericFunctionSignature,
+  buildGenericFunctionSignature, generateOptionalPropertyTypeGuard,
   generatePropertyGuard,
   handleHeritageClauses,
 } from '../api';
@@ -24,11 +24,20 @@ export function generateSingleInterfaceTypeGuard(
   const typeParameterName = getTypeNameFromTypeParameter(definition);
   typeGuardStrings.push(buildInterfaceGuardSignature(definition));
   for (const property of updatedDefinition.members) {
-    typeGuardStrings.push(
-      ...generatePropertyGuard(property, undefined, typeParameterName),
-    );
+    // handle optional properties separately
+    if (property.questionToken && isPropertySignature(property))
+      typeGuardStrings.push(...generateOptionalPropertyTypeGuard(
+          property,
+          undefined,
+          typeParameterName,
+      ));
+    else {
+      typeGuardStrings.push(
+          ...generatePropertyGuard(property, undefined, typeParameterName),
+      );
+    }
   }
-  return typeGuardStrings.join('&&') + `)}`;
+  return typeGuardStrings.filter(t => typeof t === 'string').join('&&') + `)}`;
 }
 
 /**

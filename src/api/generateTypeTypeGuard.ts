@@ -1,12 +1,12 @@
 import {
-  EnumDeclaration,
+  EnumDeclaration, isPropertySignature,
   isTypeLiteralNode,
   TypeAliasDeclaration,
 } from 'typescript';
 import {
   buildGenericFunctionSignature,
   generateIntersectionTypeGuard,
-  generateKeywordGuard,
+  generateKeywordGuard, generateOptionalPropertyTypeGuard,
   generatePropertyGuard,
   generateUnionTypeGuard,
   handleEnumIntersection,
@@ -60,9 +60,18 @@ export function generateTypeWithinTypeLiteralTypeGuard(
   }
   //NOTE: Return empty string if the definition is not a TypeLiteralNode
   for (const property of type.members) {
-    typeGuardStrings.push(
-      ...generatePropertyGuard(property, undefined, typeParameterName),
-    );
+    // handle optional properties separately
+    if (property.questionToken && isPropertySignature(property))
+      typeGuardStrings.push(...generateOptionalPropertyTypeGuard(
+          property,
+          undefined,
+          typeParameterName,
+      ));
+    else {
+      typeGuardStrings.push(
+          ...generatePropertyGuard(property, undefined, typeParameterName),
+      );
+    }
   }
   return typeGuardStrings;
 }

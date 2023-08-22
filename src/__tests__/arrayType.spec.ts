@@ -35,7 +35,7 @@ describe('Generator', () => {
             value.hasOwnProperty('arrayProperty') &&
             (Array.isArray(value.arrayProperty) &&
             value.arrayProperty.every((item: any) => typeof item === 'string')) &&
-            (typeof value.arrayOptional === 'undefined' ||
+            (typeof value.arrayOptional === 'undefined' ||value.hasOwnProperty('arrayOptional') ||
               (Array.isArray(value.arrayOptional) &&
                 value.arrayOptional.every((item: any) => typeof item === 'string')))
           )

@@ -1,9 +1,9 @@
-import { isLiteralTypeNode, SyntaxKind, TypeNode } from 'typescript';
+import {isLiteralTypeNode, PropertySignature, SyntaxKind, TypeNode} from 'typescript';
 import {
   getLiteralType,
   isAnyKeyword,
   isKeyword,
-  isLiteral,
+  isLiteral, isLiteralType,
   isNeverKeyword,
   isUnknownKeyword,
   syntaxKindToType,
@@ -61,8 +61,6 @@ export function generateKeywordGuard(
  * @returns {string} The type guard condition as a string.
  */
 export function generateKeywordGuardForType(type: TypeNode): string {
-  /*if (isLiteralTypeNode(type) && isLiteral(type.literal.kind))
-    return `value === ${type.literal.getText()}`;*/
   //NOTE: In case of unknown, never or any keyword, we don't need to check the type as it is already checked using the hasOwnProperty check.
   if (
       isUnknownKeyword(type.kind) ||
@@ -71,8 +69,8 @@ export function generateKeywordGuardForType(type: TypeNode): string {
   ) {
     console.info('INFO: Unknown, never or any keyword found. Skipping typeguard for', type.getText());
     return;
-    //return generateAnyUnknownNeverKeywordGuard(type);
   }
+  if(isLiteralType(type.kind)) return `value === ${type.getText()}`;
   return `typeof value === '${syntaxKindToType(type.kind)}'`;
 }
 
@@ -113,6 +111,7 @@ export function generateLiteralTypeGuard(
 
 /**
  * Generates a type guard condition for a keyword type node.
+ * @param type
  * @param {string} propertyName - The name of the property being type checked.
  * @param {SyntaxKind} keywordKind - The kind of the keyword type node.
  * @returns {string} The type guard condition as a string.
@@ -121,22 +120,15 @@ export function generateKeywordTypeGuard(
   propertyName: string,
   keywordKind: SyntaxKind,
 ): string {
-  return `typeof value.${propertyName} === '${syntaxKindToType(keywordKind)}'`;
-}
-
-/**
- * Generates a type guard condition for a KeywordTypeNode with a kind of any, unknown or never.
- * if typeName is not provided, the type looks as follows: `!!value`
- * if typeName is provided, the type looks as follows: `value.hasOwnProperty('${typeName}')`
- * @param type
- * @param typeName
- */
-function generateAnyUnknownNeverKeywordGuard(
-  type: TypeNode,
-  typeName?: string,
-): string {
-  if(!typeName) {
-    return `!!value`;
+  //NOTE: In case of unknown, never or any keyword, we don't need to check the type as it is already checked using the hasOwnProperty check.
+  if (
+      isUnknownKeyword(keywordKind) ||
+      isNeverKeyword(keywordKind) ||
+      isAnyKeyword(keywordKind)
+  ) {
+    console.info('INFO: Unknown, never or any keyword found. Skipping typeguard for', propertyName);
+    return;
+    //return generateAnyUnknownNeverKeywordGuard(type);
   }
-  return `value.hasOwnProperty('${typeName}')`;
+  return `typeof value.${propertyName} === '${syntaxKindToType(keywordKind)}'`;
 }

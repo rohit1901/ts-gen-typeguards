@@ -35,7 +35,7 @@ export function generateArrayTypeGuard(
   if (isLiteralType(property.type.elementType.kind))
     return `(Array.isArray(${arrayCheckName}) && ${arrayCheckName}.every((item: any) => item === ${property.type.elementType.getText()}))`;
   if (isTypeReferenceNode(property.type.elementType))
-    return `(Array.isArray(${arrayCheckName}) && ${arrayCheckName}.every((item: any) => item === is${capitalize(
+    return `(Array.isArray(${arrayCheckName}) && ${arrayCheckName}.every((item: any) => is${capitalize(
       property.type.elementType.getText(),
     )}(item)))`;
   if (isTypeLiteralNode(property.type.elementType)) {
