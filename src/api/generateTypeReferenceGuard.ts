@@ -4,9 +4,12 @@ import {
   NodeArray,
   TypeNode,
   TypeParameter,
-  TypeParameterDeclaration
+  TypeParameterDeclaration,
 } from 'typescript';
-import {getTernaryOperatorResult, getTypeNameFromTypeParameter} from '../utils';
+import {
+  getTernaryOperatorResult,
+  getTypeNameFromTypeParameter,
+} from '../utils';
 import {
   generateGenericParameterList,
   generateGenericPropertyGuard,
@@ -65,7 +68,9 @@ export function generateTypeReferenceGuard(
   }
   // Generate type guard for non-property
   typeGuard.push(
-    `is${getEscapedCapitalizedStringLiteral(type.typeName.getText())}${genericNames ? `<${genericNames}>` : ''}(value)`,
+    `is${getEscapedCapitalizedStringLiteral(type.typeName.getText())}${
+      genericNames ? `<${genericNames}>` : ''
+    }(value)`,
   );
   return typeGuard;
 }
