@@ -60,9 +60,9 @@ export function generateIntersectionTypeGuard(
         ),
       );
     }
-    typeGuard.push(...generateKeywordGuard(member, typeName, isProperty));
-    typeGuard.push(...generateTypeReferenceGuard(member, typeName, isProperty));
     typeGuard.push(
+      ...generateKeywordGuard(member, typeName, isProperty),
+      ...generateTypeReferenceGuard(member, typeName, isProperty),
       ...generateTypeWithinTypeLiteralTypeGuard(
         factory.createTypeAliasDeclaration(
           undefined,
@@ -73,5 +73,5 @@ export function generateIntersectionTypeGuard(
       ),
     );
   }
-  return typeGuard;
+  return typeGuard.filter(t => typeof t === 'string');
 }

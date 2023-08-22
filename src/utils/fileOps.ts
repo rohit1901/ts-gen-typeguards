@@ -36,10 +36,12 @@ export function generateTypeGuardsFile(
   const inputPath =
     inputDir + `${defaultOutputTypesFileName}.${extensionTS}` ??
     defaultOutputTypesFilePath;
-  const outputPath = outputDir
-    ? outputDir + `${defaultTypeGuardsFileName}.${extensionTS}`
-    : defaultOutputTypeGuardsFilePath;
-  const path = isCombinedInput ? inputPath : outputPath;
+  const outputPath = getTernaryOperatorResult(
+    !!outputDir,
+    outputDir + `${defaultTypeGuardsFileName}.${extensionTS}`,
+    defaultOutputTypeGuardsFilePath,
+  );
+  const path = getTernaryOperatorResult(isCombinedInput, inputPath, outputPath);
   prettify(typeGuardsText)
     .then(formattedText => {
       try {
@@ -78,12 +80,15 @@ export function deleteFileIfExists(filePath: string) {
 }
 
 /**
- * Function to recursively read files with a specific extension from a directory and return their content as a string
- * @param dir - Optional directory to read files from (defaults to ./out)
+ * Function to recursively read files with a specific extension from a directory and return their content as a string. The content can be optionally added to the output.
+ * If the content is not provided, the files are read from the directory otherwise the content is used.
+ * @param content - Optional content which will be added to the output
+ * @param dir - Optional directory to read files from (defaults to ./input)
  * @param extension - Optional extension to filter files by (defaults to .ts)
  */
 export function readFilesWithExtension(
-  dir: string = `./${defaultInputDir}`,
+  content?: string,
+  dir: string = `${defaultInputDir}`,
   extension: string = extensionTS,
 ) {
   try {
@@ -100,19 +105,22 @@ export function readFilesWithExtension(
     });
 
     const results = [];
-    for (const file of filteredFiles) {
-      const filePath = './' + path.join(dir, file);
-      if (
-        !filePath.includes(`.${extensionDTS}`) &&
-        !filePath.includes(`${defaultOutputTypesFileName}.${extensionTS}`)
-      ) {
-        console.info(`INFO: Reading file: ${filePath}`);
-        try {
-          const content = fs.readFileSync(filePath, 'utf8');
-          results.push(content);
-        } catch (readError) {
-          console.error(`ERROR: Error reading file: ${filePath}`);
-          console.error(readError.message);
+    if (content) results.push(content);
+    else {
+      for (const file of filteredFiles) {
+        const filePath = './' + path.join(dir, file);
+        if (
+          !filePath.includes(`.${extensionDTS}`) &&
+          !filePath.includes(`${defaultOutputTypesFileName}.${extensionTS}`)
+        ) {
+          console.info(`INFO: Reading file: ${filePath}`);
+          try {
+            const content = fs.readFileSync(filePath, 'utf8');
+            results.push(content);
+          } catch (readError) {
+            console.error(`ERROR: Error reading file: ${filePath}`);
+            console.error(readError.message);
+          }
         }
       }
     }
@@ -152,6 +160,19 @@ export function createPath(folderPath: string) {
 }
 
 /**
+ * Returns the left part if the condition is true, else returns the right part
+ * @param condition - The condition to be checked
+ * @param left - The part to be returned if the condition is true
+ * @param right - The part to be returned if the condition is false
+ */
+export function getTernaryOperatorResult(
+  condition: boolean,
+  left: string,
+  right?: string,
+) {
+  return condition ? left : right;
+}
+/**
  * Creates a file with the given text
  * @param typeGuardsText - The text to be added to the file
  * @param inputPath
@@ -166,7 +187,11 @@ function createFile(
 ) {
   const initialContent =
     '// Generated using ts-gen-typeguards\n // @ts-nocheck\n';
-  const filePath = isCombinedInput ? inputPath : outputPath;
+  const filePath = getTernaryOperatorResult(
+    isCombinedInput,
+    inputPath,
+    outputPath,
+  );
   try {
     fs.writeFileSync(filePath, `${initialContent}`);
     console.info(
@@ -195,7 +220,11 @@ function appendText(
   outputPath: string,
   isCombinedInput?: boolean,
 ) {
-  const filePath = isCombinedInput ? `./${inputPath}` : `./${outputPath}`;
+  const filePath = getTernaryOperatorResult(
+    isCombinedInput,
+    `${inputPath}`,
+    `${outputPath}`,
+  );
   try {
     fs.appendFileSync(filePath, typeGuardsText);
     console.info(`INFO: Text appended to the ${filePath} successfully.`);

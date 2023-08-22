@@ -1,28 +1,22 @@
 // Generate type guards for optional properties
-import {
-  factory,
-  isArrayTypeNode,
-  isIntersectionTypeNode,
-  isLiteralTypeNode,
-  isOptionalTypeNode,
-  isQualifiedName,
-  isTupleTypeNode,
-  isTypeLiteralNode,
-  isTypeReferenceNode,
-  isUnionTypeNode,
-  PropertySignature,
-  SyntaxKind,
-} from 'typescript';
-import {
-  capitalize,
-  getEscapedStringLiteral,
-  isKeyword,
-  syntaxKindToType,
-} from '../utils';
-import { generateTypeLiteralTypeGuardWithinUnion } from './generateUnionTypeGuardForIntersection';
-import { generateArrayTypeGuard, generateIntersectionTypeGuard } from './index';
-import { getQualifiedNameText } from './generateQualifiedNameTypeGuard';
+import { PropertySignature } from 'typescript';
+import { generatePropertyGuard } from './index';
 
+/**
+ * TODO: Add support for the following:
+ * export type OptionalUser<T> = {
+ *     k?: simple;
+ *     name?: string;
+ *     nested?: {
+ *         nestedName?: KeywordUser<T>;
+ *     }
+ *     nestedArray?: simple[];
+ *     nestedArrayKeyword?: string[];
+ * }
+ * Here the typeguard for the property nestedName should be:
+ * ```
+ * (typeof value.nested.nestedName === 'undefined' || isKeywordUser<T>(value.nested.nestedName, isT))
+ */
 /**
  * Generates Typeguards for an Optional property which could be of the following types:
  * - LiteralType
@@ -44,90 +38,74 @@ import { getQualifiedNameText } from './generateQualifiedNameTypeGuard';
  * (value.person === 'undefined' || isPerson(value.person))
  * ```
  */
-//TODO: Refactor this function
 export function generateOptionalPropertyTypeGuard(
   property: PropertySignature,
   parentName?: string,
+  typeParameterName?: string,
 ): string[] {
   const { questionToken, name, type } = property;
   if (!questionToken) return [];
   const typeGuardCode: string[] = [];
+  typeGuardCode.push(
+    createTypeguardString(
+      parentName ?? name.getText(),
+      generatePropertyGuard(property, parentName, typeParameterName)
+        .filter(value => typeof value === 'string')
+        .join('||'),
+    ),
+  );
   // check if the type is a TypeReference
-  if (isTypeReferenceNode(type)) {
-    if (isQualifiedName(type.typeName)) {
-      typeGuardCode.push(
-        createTypeguardString(
-          parentName ?? name.getText(),
-          `value.${parentName ?? name.getText()} === ${getQualifiedNameText(
-            type.typeName,
-          )}`,
-          false,
+  /*typeGuardCode.push(
+      createTypeguardString(
+        parentName ?? name.getText(),
+        generateTypeReferenceGuard(type, parentName ?? name.getText(), true).join(
+          '',
         ),
-      );
-    } else {
-      typeGuardCode.push(
-        createTypeguardString(
+      ),
+      createTypeguardString(
+        parentName ?? name.getText(),
+        generateKeywordGuard(
+          property.type,
           parentName ?? name.getText(),
-          capitalize(type.getText()),
           true,
-        ),
-      );
-    }
-  } else if (isKeyword(type.kind) && type.kind !== SyntaxKind.LiteralType) {
-    typeGuardCode.push(
-      createTypeguardString(
-        parentName ?? name.getText(),
-        `typeof value.${parentName ?? name.getText()} === '${syntaxKindToType(
-          type.kind,
-        )}'`,
-        false,
+        ).join(''),
       ),
-    );
-  } else if (isLiteralTypeNode(type)) {
-    typeGuardCode.push(
-      createTypeguardString(
-        parentName ?? name.getText(),
-        `value.${parentName ?? name.getText()} === ${type.getText()}`,
-        false,
-      ),
-    );
-  } else if (isUnionTypeNode(type)) {
-    for (const member of type.types) {
-      // push typeguard for each member of the union type
-    }
-  } else if (isIntersectionTypeNode(type)) {
-    typeGuardCode.push(
-      createTypeguardString(
-        name.getText(),
-        generateIntersectionTypeGuard(type, name.getText(), true).join(' && '),
-        false,
-      ),
-    );
-  } else if (isArrayTypeNode(type)) {
-    typeGuardCode.push(
-      createTypeguardString(
-        parentName ?? name.getText(),
-        generateArrayTypeGuard(property, parentName ?? name.getText()),
-      ),
-    );
-  } else if (isTupleTypeNode(type)) {
-    // return typeguard for tuple type
-  } else if (isTypeLiteralNode(type)) {
-    typeGuardCode.push(
       createTypeguardString(
         parentName ?? name.getText(),
         generateTypeLiteralTypeGuardWithinUnion(
           type,
           parentName ?? name.getText(),
+          typeParameterName,
         ).join(''),
-        false,
       ),
-    );
-  } else {
-    console.error('Unsupported type', name.getText(), type.getText());
-  }
-  return typeGuardCode;
+      createTypeguardString(
+        parentName ?? name.getText(),
+        generateLiteralTypeTypeGuard(property),
+      ),
+      createTypeguardString(
+        parentName ?? name.getText(),
+        generateArrayTypeGuard(property, parentName ?? name.getText()),
+      ),
+      createTypeguardString(
+        parentName ?? name.getText(),
+        generateIntersectionTypeGuard(
+          property.type,
+          parentName ?? name.getText(),
+          true,
+        ).join('&&'),
+      ),
+      createTypeguardString(
+        parentName ?? name.getText(),
+        generateUnionTypeGuard(
+          property.type,
+          parentName ?? name.getText(),
+          true,
+        ).join('&&'),
+      ),
+    )*/
+  return typeGuardCode.filter(value => value !== '');
 }
+
 /**
  * Creates a conditional expression string for a type guard based on a property's type check.
  *
@@ -141,6 +119,7 @@ function createTypeguardString(
   text: string,
   isTypeReference?: boolean,
 ) {
+  if (text === '') return '';
   if (isTypeReference)
     return `(typeof value.${propertyName} === 'undefined' || is${text}(value.${propertyName}))`;
   return `(typeof value.${propertyName} === 'undefined' || ${text})`;

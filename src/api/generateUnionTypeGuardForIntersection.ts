@@ -13,12 +13,9 @@ import {
 } from 'typescript';
 import { generateLiteralTypeTypeGuard } from './generateLiteralTypeTypeGuard';
 import {
-  capitalize,
   isAnyKeyword,
   isBigIntKeyword,
   isBooleanKeyword,
-  isKeyofKeyword,
-  isNeverKeyword,
   isNumberKeyword,
   isObjectKeyword,
   isStringKeyword,
@@ -38,8 +35,8 @@ import {
   generateVoidKeywordTypeGuard,
 } from './generateKeywordTypeGuardsForUnion';
 import { generateIntersectionTypeGuardForType } from './generateIntersectionTypeGuardForType';
-import { generatePropertyGuard } from './index';
-
+import { generatePropertyGuard } from '../api';
+import { capitalize } from 'ts-raw-utils';
 /**
  * Generate a union type guard for a given TypeScript type alias.
  *
@@ -246,12 +243,8 @@ function processUnionTypeWithTypeGuards(
     typeGuardCode.push(generateObjectKeywordTypeGuard(unionType.kind));
   } else if (isUnknownKeyword(unionType.kind)) {
     typeGuardCode.push(generateObjectKeywordTypeGuard(unionType.kind));
-  } else if (isNeverKeyword(unionType.kind)) {
-    //skip never keyword
   } else if (isVoidKeyword(unionType.kind)) {
     typeGuardCode.push(generateVoidKeywordTypeGuard(unionType.kind));
-  } else if (isKeyofKeyword(unionType.kind)) {
-    //skip keyof keyword for now as it is not supported
   }
   return typeGuardCode;
 }

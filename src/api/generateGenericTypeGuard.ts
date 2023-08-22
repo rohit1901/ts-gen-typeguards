@@ -4,12 +4,8 @@ import {
   TypeElement,
   TypeParameterDeclaration,
 } from 'typescript';
-import {
-  buildHasOwnPropertyString,
-  capitalize,
-  getPropertyName,
-} from '../utils';
-
+import { buildHasOwnPropertyString, getPropertyName } from '../utils';
+import { capitalize } from 'ts-raw-utils';
 /**
  * Generate a generic type guard for a given property. This is used for nested properties as well.
  * @example
@@ -49,7 +45,7 @@ export function buildGenericFunctionSignature(
   typeParameters: NodeArray<TypeParameterDeclaration>,
 ) {
   const genericNames = typeParameters.map(p => p.name.getText()).join(',');
-  return `export function is${objectName}<${genericNames}>(val: any, ${getGenericFunctionParameters(
+  return `export function is${objectName}<${genericNames}>(value: any, ${getGenericFunctionParameters(
     typeParameters,
   )}): value is ${objectName}<${genericNames}>{return(typeof value === "object" &&
     value !== null`;

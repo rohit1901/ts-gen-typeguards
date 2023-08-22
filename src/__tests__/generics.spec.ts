@@ -1,7 +1,7 @@
 import { createSourceFile } from 'typescript';
 import * as ts from 'typescript';
 import { generateEnumTypeGuards, generateInterfaceTypeGuard } from '../api';
-import { removeWhitespace } from '../utils';
+import { removeWhitespace } from 'ts-raw-utils';
 
 describe('Generator', () => {
   const text = `export interface GenericInterface<T> {
@@ -20,7 +20,7 @@ describe('Generator', () => {
     expect(removeWhitespace(result)).toEqual(
       removeWhitespace(`
         export function isGenericInterface<T>(
-          val: any,
+          value: any,
           isT: (val: any) => val is T
         ): value is GenericInterface<T> {
           return (

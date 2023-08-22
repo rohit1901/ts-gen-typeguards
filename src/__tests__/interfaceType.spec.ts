@@ -1,4 +1,4 @@
-import { removeWhitespace } from '../utils';
+import { removeWhitespace } from 'ts-raw-utils';
 import { generateInterfaceTypeGuard } from '../api';
 import * as ts from 'typescript';
 import { createSourceFile } from 'typescript';
@@ -81,7 +81,7 @@ describe('Generator', () => {
       return (
         typeof value === "object" &&
         value !== null &&
-        (typeof value.x === 'undefined' || typeof value.x === 'number') &&
+        (typeof value.x === 'undefined' ||value.hasOwnProperty('x') || typeof value.x === 'number') &&
         value.hasOwnProperty('y') &&
         typeof value.y === 'number'
       )
@@ -94,7 +94,7 @@ describe('Generator', () => {
       return (
         typeof value === "object" &&
         value !== null &&
-        (typeof value.name === 'undefined' || typeof value.name === 'string') &&
+        (typeof value.name === 'undefined' ||value.hasOwnProperty('name') || typeof value.name === 'string') &&
         value.hasOwnProperty('gender') &&
         ( value.gender === 'male' ||  value.gender === 'female')
       )
@@ -112,7 +112,7 @@ describe('Generator', () => {
         value !== null &&
         value.hasOwnProperty('employeeId') &&
         typeof value.employeeId === 'number' &&
-        (typeof value.name === 'undefined' || typeof value.name === 'string') &&
+        (typeof value.name === 'undefined' ||value.hasOwnProperty('name') || typeof value.name === 'string') &&
         value.hasOwnProperty('gender') &&
         ( value.gender === 'male' ||  value.gender === 'female')
       )
@@ -121,7 +121,7 @@ describe('Generator', () => {
       return (
         typeof value === "object" &&
         value !== null &&
-        (typeof value.name === 'undefined' || typeof value.name === 'string') &&
+        (typeof value.name === 'undefined' ||value.hasOwnProperty('name') || typeof value.name === 'string') &&
         value.hasOwnProperty('gender') &&
         ( value.gender === 'male' ||  value.gender === 'female')
       )
@@ -164,8 +164,8 @@ describe('Generator', () => {
           return (
             typeof value === "object" &&
             value !== null &&
-            (typeof value.name === 'undefined' || typeof value.name === 'string') &&
-            (typeof value.literalType === 'undefined' || value.literalType === '2') &&
+            (typeof value.name === 'undefined' ||value.hasOwnProperty('name') || typeof value.name === 'string') &&
+            (typeof value.literalType === 'undefined' ||value.hasOwnProperty('literalType') || value.literalType === '2') &&
             value.hasOwnProperty('typeLiteralType') &&
             isMediumCity(value.typeLiteralType) &&
             value.hasOwnProperty('population') &&

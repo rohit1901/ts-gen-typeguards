@@ -1,14 +1,16 @@
-import { InterfaceDeclaration, isInterfaceDeclaration } from 'typescript';
+import {
+  InterfaceDeclaration,
+  isInterfaceDeclaration,
+  isPropertySignature,
+} from 'typescript';
 import {
   buildGenericFunctionSignature,
+  generateOptionalPropertyTypeGuard,
   generatePropertyGuard,
   handleHeritageClauses,
 } from '../api';
-import {
-  getEscapedCapitalizedStringLiteral,
-  getTypeNameFromTypeParameter,
-} from '../utils';
-
+import { getTypeNameFromTypeParameter } from '../utils';
+import { getEscapedCapitalizedStringLiteral } from 'ts-raw-utils';
 /**
  * Generates a type guard for a single interface definition.
  * @param definition
@@ -27,11 +29,22 @@ export function generateSingleInterfaceTypeGuard(
   const typeParameterName = getTypeNameFromTypeParameter(definition);
   typeGuardStrings.push(buildInterfaceGuardSignature(definition));
   for (const property of updatedDefinition.members) {
-    typeGuardStrings.push(
-      ...generatePropertyGuard(property, undefined, typeParameterName),
-    );
+    // handle optional properties separately
+    if (property.questionToken && isPropertySignature(property))
+      typeGuardStrings.push(
+        ...generateOptionalPropertyTypeGuard(
+          property,
+          undefined,
+          typeParameterName,
+        ),
+      );
+    else {
+      typeGuardStrings.push(
+        ...generatePropertyGuard(property, undefined, typeParameterName),
+      );
+    }
   }
-  return typeGuardStrings.join('&&') + `)}`;
+  return typeGuardStrings.filter(t => typeof t === 'string').join('&&') + `)}`;
 }
 
 /**
