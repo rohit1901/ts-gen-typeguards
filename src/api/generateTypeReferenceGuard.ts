@@ -1,6 +1,9 @@
 import { isQualifiedName, isTypeReferenceNode, TypeNode } from 'typescript';
 import { getTernaryOperatorResult } from '../utils';
-import { generateQualifiedNameTypeGuard } from '../api';
+import {
+  generateGenericPropertyGuard,
+  generateQualifiedNameTypeGuard,
+} from '../api';
 import { getEscapedCapitalizedStringLiteral } from 'ts-raw-utils';
 /**
  * Generates a type guard for a TypeReferenceNode. Used to generate type guard string for type aliases.

@@ -15,6 +15,5 @@
     "src/out/**/*",
     "src/__tests__/**/*.ts",
     "lib",
-    "src/dry-run.ts"
   ]
 }
