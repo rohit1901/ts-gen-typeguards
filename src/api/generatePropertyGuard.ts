@@ -36,18 +36,16 @@ export function generatePropertyGuard(
   const propertyName = getPropertyName(property, parentName);
   // handle required properties in a different way
   typeGuard.push(buildHasOwnPropertyString(property, parentName));
-  if (isGenericProperty(property, typeParameterName))
-    {
-      return generateGenericPropertyGuard(
-          property,
-          parentName,
-          typeParameterName,
-      );
-    }
-  if (isArrayTypeNode(property.type))
-    {
-      typeGuard.push(generateArrayTypeGuard(property, propertyName));
-    }
+  if (isGenericProperty(property, typeParameterName)) {
+    return generateGenericPropertyGuard(
+      property,
+      parentName,
+      typeParameterName,
+    );
+  }
+  if (isArrayTypeNode(property.type)) {
+    typeGuard.push(generateArrayTypeGuard(property, propertyName));
+  }
   typeGuard.push(
     ...generateTypeLiteralTypeGuardWithinUnion(
       property.type,

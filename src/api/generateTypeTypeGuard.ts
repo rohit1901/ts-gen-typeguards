@@ -1,12 +1,14 @@
 import {
-  EnumDeclaration, isPropertySignature,
+  EnumDeclaration,
+  isPropertySignature,
   isTypeLiteralNode,
   TypeAliasDeclaration,
 } from 'typescript';
 import {
   buildGenericFunctionSignature,
   generateIntersectionTypeGuard,
-  generateKeywordGuard, generateOptionalPropertyTypeGuard,
+  generateKeywordGuard,
+  generateOptionalPropertyTypeGuard,
   generatePropertyGuard,
   generateUnionTypeGuard,
   handleEnumIntersection,
@@ -14,7 +16,7 @@ import {
 } from '../api';
 import { getEscapedCapitalizedStringLiteral } from 'ts-raw-utils';
 import { getName, getTypeNameFromTypeParameter, isLiteralType } from '../utils';
-import * as string_decoder from "string_decoder";
+import * as string_decoder from 'string_decoder';
 
 /**
  * Generate a set of type guard functions based on provided TypeAliasDeclarations.
@@ -39,7 +41,9 @@ export function generateTypeTypeGuard(
       ...generateKeywordGuard(type),
       ...handleEnumIntersection(definition, enums),
     );
-    typeGuard.push(typeGuardStrings.filter(p => typeof p === 'string').join('&&') + `)}`);
+    typeGuard.push(
+      typeGuardStrings.filter(p => typeof p === 'string').join('&&') + `)}`,
+    );
   }
   return typeGuard.join('\n');
 }
@@ -62,14 +66,16 @@ export function generateTypeWithinTypeLiteralTypeGuard(
   for (const property of type.members) {
     // handle optional properties separately
     if (property.questionToken && isPropertySignature(property))
-      typeGuardStrings.push(...generateOptionalPropertyTypeGuard(
+      typeGuardStrings.push(
+        ...generateOptionalPropertyTypeGuard(
           property,
           undefined,
           typeParameterName,
-      ));
+        ),
+      );
     else {
       typeGuardStrings.push(
-          ...generatePropertyGuard(property, undefined, typeParameterName),
+        ...generatePropertyGuard(property, undefined, typeParameterName),
       );
     }
   }

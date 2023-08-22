@@ -1,9 +1,15 @@
-import {isLiteralTypeNode, PropertySignature, SyntaxKind, TypeNode} from 'typescript';
+import {
+  isLiteralTypeNode,
+  PropertySignature,
+  SyntaxKind,
+  TypeNode,
+} from 'typescript';
 import {
   getLiteralType,
   isAnyKeyword,
   isKeyword,
-  isLiteral, isLiteralType,
+  isLiteral,
+  isLiteralType,
   isNeverKeyword,
   isUnknownKeyword,
   syntaxKindToType,
@@ -63,14 +69,17 @@ export function generateKeywordGuard(
 export function generateKeywordGuardForType(type: TypeNode): string {
   //NOTE: In case of unknown, never or any keyword, we don't need to check the type as it is already checked using the hasOwnProperty check.
   if (
-      isUnknownKeyword(type.kind) ||
-      isNeverKeyword(type.kind) ||
-      isAnyKeyword(type.kind)
+    isUnknownKeyword(type.kind) ||
+    isNeverKeyword(type.kind) ||
+    isAnyKeyword(type.kind)
   ) {
-    console.info('INFO: Unknown, never or any keyword found. Skipping typeguard for', type.getText());
+    console.info(
+      'INFO: Unknown, never or any keyword found. Skipping typeguard for',
+      type.getText(),
+    );
     return;
   }
-  if(isLiteralType(type.kind)) return `value === ${type.getText()}`;
+  if (isLiteralType(type.kind)) return `value === ${type.getText()}`;
   return `typeof value === '${syntaxKindToType(type.kind)}'`;
 }
 
@@ -122,11 +131,14 @@ export function generateKeywordTypeGuard(
 ): string {
   //NOTE: In case of unknown, never or any keyword, we don't need to check the type as it is already checked using the hasOwnProperty check.
   if (
-      isUnknownKeyword(keywordKind) ||
-      isNeverKeyword(keywordKind) ||
-      isAnyKeyword(keywordKind)
+    isUnknownKeyword(keywordKind) ||
+    isNeverKeyword(keywordKind) ||
+    isAnyKeyword(keywordKind)
   ) {
-    console.info('INFO: Unknown, never or any keyword found. Skipping typeguard for', propertyName);
+    console.info(
+      'INFO: Unknown, never or any keyword found. Skipping typeguard for',
+      propertyName,
+    );
     return;
     //return generateAnyUnknownNeverKeywordGuard(type);
   }

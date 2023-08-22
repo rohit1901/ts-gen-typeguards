@@ -4,7 +4,7 @@ import {
   TypeAliasDeclaration,
   TypeElement,
 } from 'typescript';
-import {getTernaryOperatorResult} from "./fileOps";
+import { getTernaryOperatorResult } from './fileOps';
 
 /**
  * Check if value is a string and is equal to "type"
@@ -21,8 +21,8 @@ export function isString(value: any): value is 'type' {
 export function getTypeNameFromTypeParameter(
   definition: InterfaceDeclaration | TypeAliasDeclaration,
 ): string | undefined {
-    if (!definition.typeParameters) return;
-    return definition.typeParameters[0].name.escapedText.toString();
+  if (!definition.typeParameters) return;
+  return definition.typeParameters[0].name.escapedText.toString();
   /*return getTernaryOperatorResult(definition.typeParameters && definition.typeParameters.length > 0
       , definition.typeParameters[0].name.escapedText.toString()
       ,undefined);*/
@@ -37,7 +37,7 @@ export function getPropertyName(
   property: TypeElement,
   parentName?: string,
 ): string {
-  if(!!parentName) return `${parentName}.${property.name.getText()}`;
+  if (!!parentName) return `${parentName}.${property.name.getText()}`;
   return property.name.getText();
 }
 
@@ -52,7 +52,11 @@ export function buildHasOwnPropertyString(
   property: TypeElement,
   parentName?: string,
 ): string {
-  const hasOwnPropertyString =  getTernaryOperatorResult(!!parentName, `value.${parentName}`, `value`);
+  const hasOwnPropertyString = getTernaryOperatorResult(
+    !!parentName,
+    `value.${parentName}`,
+    `value`,
+  );
   return `${hasOwnPropertyString}.hasOwnProperty('${property.name.getText()}')`;
 }
 

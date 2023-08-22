@@ -1,6 +1,11 @@
-import {InterfaceDeclaration, isInterfaceDeclaration, isPropertySignature} from 'typescript';
 import {
-  buildGenericFunctionSignature, generateOptionalPropertyTypeGuard,
+  InterfaceDeclaration,
+  isInterfaceDeclaration,
+  isPropertySignature,
+} from 'typescript';
+import {
+  buildGenericFunctionSignature,
+  generateOptionalPropertyTypeGuard,
   generatePropertyGuard,
   handleHeritageClauses,
 } from '../api';
@@ -26,14 +31,16 @@ export function generateSingleInterfaceTypeGuard(
   for (const property of updatedDefinition.members) {
     // handle optional properties separately
     if (property.questionToken && isPropertySignature(property))
-      typeGuardStrings.push(...generateOptionalPropertyTypeGuard(
+      typeGuardStrings.push(
+        ...generateOptionalPropertyTypeGuard(
           property,
           undefined,
           typeParameterName,
-      ));
+        ),
+      );
     else {
       typeGuardStrings.push(
-          ...generatePropertyGuard(property, undefined, typeParameterName),
+        ...generatePropertyGuard(property, undefined, typeParameterName),
       );
     }
   }

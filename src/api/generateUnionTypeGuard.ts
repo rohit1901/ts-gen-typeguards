@@ -72,6 +72,4 @@ export function generateUnionTypeGuard(
     return [];
   }
   return [`(${stringTypeGuards.join('||')})`];
-
-
 }
