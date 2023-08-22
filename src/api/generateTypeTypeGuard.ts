@@ -9,13 +9,13 @@ import {
   generateIntersectionTypeGuard,
   generateKeywordGuard,
   generateOptionalPropertyTypeGuard,
-  generatePropertyGuard,
+  generatePropertyGuard, generateTypeReferenceGuard,
   generateUnionTypeGuard,
   handleEnumIntersection,
   isKeywordType,
 } from '../api';
 import { getEscapedCapitalizedStringLiteral } from 'ts-raw-utils';
-import { getName, getTypeNameFromTypeParameter, isLiteralType } from '../utils';
+import {getName, getTypeNameFromTypeParameter, isGenericProperty, isLiteralType} from '../utils';
 import * as string_decoder from 'string_decoder';
 
 /**
@@ -39,7 +39,7 @@ export function generateTypeTypeGuard(
       ...generateTypeWithinTypeLiteralTypeGuard(definition),
       ...generateUnionTypeGuard(type, typeName, undefined, definitions),
       ...generateKeywordGuard(type),
-      ...handleEnumIntersection(definition, enums),
+      ...handleEnumIntersection(definition, enums), ...generateTypeReferenceGuard(type, typeName, false, definition.typeParameters),
     );
     typeGuard.push(
       typeGuardStrings.filter(p => typeof p === 'string').join('&&') + `)}`,
@@ -60,7 +60,7 @@ export function generateTypeWithinTypeLiteralTypeGuard(
   const typeParameterName = getTypeNameFromTypeParameter(definition);
   const typeGuardStrings: string[] = [];
   if (!isTypeLiteralNode(type)) {
-    return '';
+    return [];
   }
   //NOTE: Return empty string if the definition is not a TypeLiteralNode
   for (const property of type.members) {

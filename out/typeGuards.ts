@@ -3,6 +3,9 @@
 import {
   CarEnum,
   VehicleEnum,
+  Container,
+  PropertyContainer,
+  ShapeGeneric,
   AddressInterface,
   PersonInterface,
   EmployeeInterface,
@@ -25,6 +28,24 @@ import {
   LogLevelUnionEnum,
   LogLevelIntersectionEnum,
   ExtendedDirectionEnum,
+  ContainerOfString,
+  ContainerOfNumber,
+  ColorContainer,
+  RedContainer,
+  GreenContainer,
+  BlueContainer,
+  OptionalContainerOfString,
+  OptionalContainerOfNumber,
+  DirectionGeneric,
+  DirectionContainer,
+  UpDirectionContainer,
+  DownDirectionContainer,
+  ShapeWithProperty,
+  ColoredCircle,
+  ColoredSquare,
+  VehicleWithType,
+  CarWithInfo,
+  BikeWithInfo,
   CustomShapeInterface,
   MediaInterface,
   DirectionType,
@@ -77,6 +98,8 @@ import {
   StatusEnum,
   TrafficLightEnum,
   LogLevelEnum,
+  ColorEnumGeneric,
+  VehicleTypeGeneric,
   MediaTypeInterface,
   ColorTypeAliasType,
   MediaTypeType,
@@ -103,6 +126,41 @@ export function isVehicleEnum(value: any): value is VehicleEnum {
     (value.type === 'CAR' || value.type === 'BIKE') &&
     value.hasOwnProperty('direction') &&
     isDirectionEnum(value.direction)
+  );
+}
+export function isContainer<T>(
+  value: any,
+  isT: (val: any) => val is T,
+): value is Container<T> {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    value.hasOwnProperty('value') &&
+    isT(value.value)
+  );
+}
+export function isPropertyContainer<T>(
+  value: any,
+  isT: (val: any) => val is T,
+): value is PropertyContainer<T> {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    value.hasOwnProperty('value') &&
+    isT(value.value) &&
+    (typeof value.additionalValue === 'undefined' ||
+      value.hasOwnProperty('additionalValue') ||
+      isT(value.additionalValue))
+  );
+}
+export function isShapeGeneric(value: any): value is ShapeGeneric {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    value.hasOwnProperty('type') &&
+    (value.type === 'circle' ||
+      value.type === 'square' ||
+      value.type === 'triangle')
   );
 }
 export function isAddressInterface(value: any): value is AddressInterface {
@@ -338,6 +396,101 @@ export function isExtendedDirectionEnum(
     value === 'BACKWARD' &&
     isDirectionEnum(value)
   );
+}
+export function isContainerOfString(value: any): value is ContainerOfString {
+  return value !== null && isContainer(value);
+}
+export function isContainerOfNumber(value: any): value is ContainerOfNumber {
+  return value !== null && isContainer(value);
+}
+export function isColorContainer<T extends ColorEnumGeneric>(
+  value: any,
+  isT: (val: any) => val is T,
+): value is ColorContainer<T> {
+  return typeof value === 'object' && value !== null && isContainer<T>(value);
+}
+export function isRedContainer(value: any): value is RedContainer {
+  return value !== null && isColorContainer(value);
+}
+export function isGreenContainer(value: any): value is GreenContainer {
+  return value !== null && isColorContainer(value);
+}
+export function isBlueContainer(value: any): value is BlueContainer {
+  return value !== null && isColorContainer(value);
+}
+export function isOptionalContainerOfString(
+  value: any,
+): value is OptionalContainerOfString {
+  return value !== null && isPropertyContainer(value);
+}
+export function isOptionalContainerOfNumber(
+  value: any,
+): value is OptionalContainerOfNumber {
+  return value !== null && isPropertyContainer(value);
+}
+export function isDirectionGeneric(value: any): value is DirectionGeneric {
+  return (
+    value !== null &&
+    (value === 'up' ||
+      value === 'down' ||
+      value === 'left' ||
+      value === 'right')
+  );
+}
+export function isDirectionContainer<T extends DirectionGeneric>(
+  value: any,
+  isT: (val: any) => val is T,
+): value is DirectionContainer<T> {
+  return typeof value === 'object' && value !== null && isContainer<T>(value);
+}
+export function isUpDirectionContainer(
+  value: any,
+): value is UpDirectionContainer {
+  return value !== null && isDirectionContainer(value);
+}
+export function isDownDirectionContainer(
+  value: any,
+): value is DownDirectionContainer {
+  return value !== null && isDirectionContainer(value);
+}
+export function isShapeWithProperty<T extends ShapeGeneric>(
+  value: any,
+  isT: (val: any) => val is T,
+): value is ShapeWithProperty<T> {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    isT(value) &&
+    value.hasOwnProperty('color') &&
+    isColorEnumGeneric(value.color)
+  );
+}
+export function isColoredCircle(value: any): value is ColoredCircle {
+  return value !== null && isShapeWithProperty(value);
+}
+export function isColoredSquare(value: any): value is ColoredSquare {
+  return value !== null && isShapeWithProperty(value);
+}
+export function isVehicleWithType<T extends VehicleTypeGeneric>(
+  value: any,
+  isT: (val: any) => val is T,
+): value is VehicleWithType<T> {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    value.hasOwnProperty('type') &&
+    isT(value.type) &&
+    value.hasOwnProperty('brand') &&
+    typeof value.brand === 'string' &&
+    value.hasOwnProperty('model') &&
+    typeof value.model === 'string'
+  );
+}
+export function isCarWithInfo(value: any): value is CarWithInfo {
+  return value !== null && isVehicleWithType(value);
+}
+export function isBikeWithInfo(value: any): value is BikeWithInfo {
+  return value !== null && isVehicleWithType(value);
 }
 export function isCustomShapeInterface(
   value: any,
@@ -723,6 +876,12 @@ export function isTrafficLightEnum(value: any): value is TrafficLightEnum {
 }
 export function isLogLevelEnum(value: any): value is LogLevelEnum {
   return Object.values(LogLevelEnum).includes(value);
+}
+export function isColorEnumGeneric(value: any): value is ColorEnumGeneric {
+  return Object.values(ColorEnumGeneric).includes(value);
+}
+export function isVehicleTypeGeneric(value: any): value is VehicleTypeGeneric {
+  return Object.values(VehicleTypeGeneric).includes(value);
 }
 export function isMediaTypeInterface(value: any): value is MediaTypeInterface {
   return Object.values(MediaTypeInterface).includes(value);

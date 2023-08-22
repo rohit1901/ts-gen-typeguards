@@ -1,6 +1,14 @@
-import { isQualifiedName, isTypeReferenceNode, TypeNode } from 'typescript';
-import { getTernaryOperatorResult } from '../utils';
 import {
+  isQualifiedName,
+  isTypeReferenceNode,
+  NodeArray,
+  TypeNode,
+  TypeParameter,
+  TypeParameterDeclaration
+} from 'typescript';
+import {getTernaryOperatorResult, getTypeNameFromTypeParameter} from '../utils';
+import {
+  generateGenericParameterList,
   generateGenericPropertyGuard,
   generateQualifiedNameTypeGuard,
 } from '../api';
@@ -10,6 +18,7 @@ import { getEscapedCapitalizedStringLiteral } from 'ts-raw-utils';
  * @param type - A TypeNode.
  * @param typeName - The name of the type.
  * @param isProperty - Optional boolean to indicate if the type is a property.
+ * @param typeParameters
  * @returns An array of type guard strings.
  *
  * @example
@@ -30,8 +39,10 @@ export function generateTypeReferenceGuard(
   type: TypeNode,
   typeName: string,
   isProperty?: boolean,
+  typeParameters?: NodeArray<TypeParameterDeclaration>,
 ) {
   const typeGuard: string[] = [];
+  const genericNames = generateGenericParameterList(typeParameters);
   if (!isTypeReferenceNode(type)) return typeGuard;
   // Enums: Check if the typeName is a qualified name
   if (isQualifiedName(type.typeName)) {
@@ -54,7 +65,7 @@ export function generateTypeReferenceGuard(
   }
   // Generate type guard for non-property
   typeGuard.push(
-    `is${getEscapedCapitalizedStringLiteral(type.typeName.getText())}(value)`,
+    `is${getEscapedCapitalizedStringLiteral(type.typeName.getText())}${genericNames ? `<${genericNames}>` : ''}(value)`,
   );
   return typeGuard;
 }

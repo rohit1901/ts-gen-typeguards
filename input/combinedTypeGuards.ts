@@ -45,7 +45,7 @@ export enum TrafficLightEnum {
 }
 
 // Using enums in object properties
-interface CarEnum {
+export interface CarEnum {
     make: string;
     model: string;
     color: ColorEnum;
@@ -69,6 +69,67 @@ export interface VehicleEnum {
 export type ExtendedDirectionEnum = DirectionEnum & 'FORWARD' & 'BACKWARD';
 
 
+
+// Generic interface
+export interface Container<T> {
+    value: T;
+}
+
+// Derived types
+export type ContainerOfString = Container<string>;
+export type ContainerOfNumber = Container<number>;
+
+// Generic type from enum
+export enum ColorEnumGeneric {
+    Red = 'RED',
+    Green = 'GREEN',
+    Blue = 'BLUE',
+}
+
+export type ColorContainer<T extends ColorEnumGeneric> = Container<T>;
+
+export type RedContainer = ColorContainer<ColorEnumGeneric.Red>;
+export type GreenContainer = ColorContainer<ColorEnumGeneric.Green>;
+export type BlueContainer = ColorContainer<ColorEnumGeneric.Blue>;
+
+// Generic interface with optional property
+export interface PropertyContainer<T> {
+    value: T;
+    additionalValue?: T;
+}
+
+// Derived types with optional property
+export type OptionalContainerOfString = PropertyContainer<string>;
+export type OptionalContainerOfNumber = PropertyContainer<number>;
+
+// Generic type from union of literals
+export type DirectionGeneric = 'up' | 'down' | 'left' | 'right';
+
+export type DirectionContainer<T extends DirectionGeneric> = Container<T>;
+
+export type UpDirectionContainer = DirectionContainer<'up'>;
+export type DownDirectionContainer = DirectionContainer<'down'>;
+
+// Generic type with intersection
+export interface ShapeGeneric {
+    type: 'circle' | 'square' | 'triangle';
+}
+
+export type ShapeWithProperty<T extends ShapeGeneric> = T & { color: ColorEnumGeneric };
+
+export type ColoredCircle = ShapeWithProperty<{ type: 'circle'; radius: number }>;
+export type ColoredSquare = ShapeWithProperty<{ type: 'square'; sideLength: number }>;
+
+// Generic type with intersection from enum
+export enum VehicleTypeGeneric {
+    Car = 'CAR',
+    Bike = 'BIKE',
+}
+
+export type VehicleWithType<T extends VehicleTypeGeneric> = { type: T; brand: string; model: string };
+
+export type CarWithInfo = VehicleWithType<VehicleTypeGeneric.Car>;
+export type BikeWithInfo = VehicleWithType<VehicleTypeGeneric.Bike>;
 
 export interface AddressInterface {
     street: string;
@@ -101,7 +162,7 @@ export interface TriangleInterface {
     height: number;
 }
 
-type CustomShapeInterface = CircleInterface | SquareInterface | TriangleInterface;
+export type CustomShapeInterface = CircleInterface | SquareInterface | TriangleInterface;
 
 export interface CarInterface {
     brand: string;
@@ -261,15 +322,6 @@ export type EmployeeType = {
   jobTitle: string;
 } & PersonType;
 
-const john: EmployeeType = {
-  name: 'John',
-  age: 30,
-  jobTitle: 'Developer',
-  address: {
-    street: '123 Main St',
-    city: 'Cityville',
-  },
-};
 //Union Types
 export type NumberOrStringType = number | string;
 
@@ -317,23 +369,23 @@ export type DataType = {
 
 export type VehicleType = CarType | ElectricCarType | SportsCar;
 
-enum ColorTypeAliasType {
+export enum ColorTypeAliasType {
   Red = 'RED',
   Green = 'GREEN',
   Blue = 'BLUE',
 }
 
-enum MediaTypeType {
+export enum MediaTypeType {
   Image = 'image',
   Video = 'video',
 }
 
-enum ImageTypeType {
+export enum ImageTypeType {
   JPEG = 'jpeg',
   PNG = 'png',
 }
 
-enum VideoType {
+export enum VideoType {
   MP4 = 'mp4',
   AVI = 'avi',
 }
