@@ -9,13 +9,19 @@ import {
   generateIntersectionTypeGuard,
   generateKeywordGuard,
   generateOptionalPropertyTypeGuard,
-  generatePropertyGuard, generateTypeReferenceGuard,
+  generatePropertyGuard,
+  generateTypeReferenceGuard,
   generateUnionTypeGuard,
   handleEnumIntersection,
   isKeywordType,
 } from '../api';
 import { getEscapedCapitalizedStringLiteral } from 'ts-raw-utils';
-import {getName, getTypeNameFromTypeParameter, isGenericProperty, isLiteralType} from '../utils';
+import {
+  getName,
+  getTypeNameFromTypeParameter,
+  isGenericProperty,
+  isLiteralType,
+} from '../utils';
 import * as string_decoder from 'string_decoder';
 
 /**
@@ -39,7 +45,13 @@ export function generateTypeTypeGuard(
       ...generateTypeWithinTypeLiteralTypeGuard(definition),
       ...generateUnionTypeGuard(type, typeName, undefined, definitions),
       ...generateKeywordGuard(type),
-      ...handleEnumIntersection(definition, enums), ...generateTypeReferenceGuard(type, typeName, false, definition.typeParameters),
+      ...handleEnumIntersection(definition, enums),
+      ...generateTypeReferenceGuard(
+        type,
+        typeName,
+        false,
+        definition.typeParameters,
+      ),
     );
     typeGuard.push(
       typeGuardStrings.filter(p => typeof p === 'string').join('&&') + `)}`,

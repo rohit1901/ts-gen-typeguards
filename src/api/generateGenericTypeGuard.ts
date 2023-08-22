@@ -50,7 +50,8 @@ export function buildGenericFunctionSignature(
   typeParameters: NodeArray<TypeParameterDeclaration>,
 ) {
   const genericNames = generateGenericParameterList(typeParameters);
-  const genericNamesWithConstraints = generateGenericParameterListWithConstraints(typeParameters);
+  const genericNamesWithConstraints =
+    generateGenericParameterListWithConstraints(typeParameters);
   return `export function is${objectName}<${genericNamesWithConstraints}>(value: any, ${getGenericFunctionParameters(
     typeParameters,
   )}): value is ${objectName}<${genericNames}>{return(typeof value === "object" &&
@@ -64,7 +65,9 @@ export function buildGenericFunctionSignature(
  * Result: T
  * @param typeParameters - The type parameters of the object.
  */
-export function generateGenericParameterList(typeParameters?: NodeArray<TypeParameterDeclaration>): string {
+export function generateGenericParameterList(
+  typeParameters?: NodeArray<TypeParameterDeclaration>,
+): string {
   return typeParameters?.map(p => `${p.name.getText()}`).join(',');
 }
 
@@ -75,10 +78,18 @@ export function generateGenericParameterList(typeParameters?: NodeArray<TypePara
  * Result: T extends K
  * @param typeParameters
  */
-export function generateGenericParameterListWithConstraints(typeParameters?: NodeArray<TypeParameterDeclaration>): string {
-  return typeParameters?.map(p => `${p.name.getText()} ${p.constraint ? 'extends ' + p.constraint?.getText() : ''}`).join(',');
+export function generateGenericParameterListWithConstraints(
+  typeParameters?: NodeArray<TypeParameterDeclaration>,
+): string {
+  return typeParameters
+    ?.map(
+      p =>
+        `${p.name.getText()} ${
+          p.constraint ? 'extends ' + p.constraint?.getText() : ''
+        }`,
+    )
+    .join(',');
 }
-
 
 /**
  * Build the generic function parameters for a generic type guard. This is used to generate the type guard signature.
