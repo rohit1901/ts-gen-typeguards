@@ -1,12 +1,5 @@
-import {
-  capitalize,
-  isEnumString,
-  isInterfaceString,
-  isObject,
-  isTypeString,
-  removeWhitespace,
-} from '../utils';
-
+import { isEnumString, isInterfaceString, isObject, isString } from '../utils';
+import { capitalize, removeWhitespace } from 'ts-raw-utils';
 describe('Utils', () => {
   it('should capitalize a string', () => {
     const result = capitalize('hello');
@@ -25,7 +18,7 @@ describe('Utils', () => {
     expect(result).toEqual(false);
   });
   it('should test Type String', () => {
-    const result = isTypeString('hello world');
+    const result = isString('hello world');
     expect(result).toEqual(false);
   });
   it('should test Object', () => {

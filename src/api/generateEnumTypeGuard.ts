@@ -5,7 +5,7 @@ import {
   TypeAliasDeclaration,
   TypeNode,
 } from 'typescript';
-import { getEscapedCapitalizedStringLiteral } from '../utils';
+import { getEscapedCapitalizedStringLiteral } from 'ts-raw-utils';
 
 /**
  * Wrapper function for generating type guards for enums

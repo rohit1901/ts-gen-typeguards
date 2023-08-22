@@ -1,4 +1,4 @@
-#Folders
+# Folders
 dist/
 node_modules/
 .idea/
@@ -6,12 +6,12 @@ node_modules/
 coverage/
 lib/
 lib-esm/
-src/inputNew/**/*
-src/outputNew/**/*
-src/out/**/*
-#Files
+
+# Files
 *.js
+!*.config.js
 *.d.ts
 src/input/combinedTypeGuards.*
 .DS_Store
-
+*.map
+meta.json

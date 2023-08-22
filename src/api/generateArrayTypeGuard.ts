@@ -5,14 +5,14 @@ import {
   PropertySignature,
 } from 'typescript';
 import {
-  capitalize,
+  getTernaryOperatorResult,
   isKeyword,
   isKeywordTypeSyntaxKind,
   isLiteralType,
-  replaceAll,
   syntaxKindToType,
 } from '../utils';
-import { generatePropertyGuard } from './generatePropertyGuard';
+import { capitalize, replaceAll } from 'ts-raw-utils';
+import { generatePropertyGuard } from '../api';
 
 /**
  * Generates a type guard string for an array type property. The type guard string checks if the property is an array
@@ -27,11 +27,15 @@ export function generateArrayTypeGuard(
   propertyName?: string,
 ) {
   if (!isArrayTypeNode(property.type)) return '';
-  const arrayCheckName = propertyName ? `value.${propertyName}` : `value`;
+  const arrayCheckName = getTernaryOperatorResult(
+    !!propertyName,
+    `value.${propertyName}`,
+    `value`,
+  );
   if (isLiteralType(property.type.elementType.kind))
     return `(Array.isArray(${arrayCheckName}) && ${arrayCheckName}.every((item: any) => item === ${property.type.elementType.getText()}))`;
   if (isTypeReferenceNode(property.type.elementType))
-    return `(Array.isArray(${arrayCheckName}) && ${arrayCheckName}.every((item: any) => item === is${capitalize(
+    return `(Array.isArray(${arrayCheckName}) && ${arrayCheckName}.every((item: any) => is${capitalize(
       property.type.elementType.getText(),
     )}(item)))`;
   if (isTypeLiteralNode(property.type.elementType)) {

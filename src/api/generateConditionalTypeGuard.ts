@@ -1,8 +1,11 @@
 // Generate type guards for conditional types
+import { TypeNode } from 'typescript';
+
 export function generateConditionalTypeGuard(
-  typeName: string,
-  definition: any,
+  definition: TypeNode,
+  parentTypeName?: string,
 ) {
+  //TODO: Implement this function
   /*const typeGuard = generateInterfaceTypeGuard(typeName, definition);
 
   return typeGuard.replace(
