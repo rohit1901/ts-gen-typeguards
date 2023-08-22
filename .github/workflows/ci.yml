@@ -4,11 +4,7 @@ on:
     branches:
       - 'main'
 jobs:
-  bump_version:
-    uses: ./.github/workflows/bump_version.yml
   build:
-    # Requires the format_test job to pass
-    # needs: bump_version
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -32,11 +28,23 @@ jobs:
       - name: Install dependencies
         if: ${{ success() }}
         run: npm install
+      # Get the current version from package.json
+      - name: Get the current version from package.json
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@v1.3.1
+      # Build the project
       - name: Build the project
         if: ${{ success() }}
         run: npm run build
+      # Create a GitHub release
+      - name: Create a GitHub Release from the latest tag
+        if: ${{ success() }}
+        run: gh release create v${{ steps.package-version.outputs.current-version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # Publish to NPM
       - name: Publish to NPM
+        if: ${{ success() }}
         run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_PUBLISH_TOKEN}}

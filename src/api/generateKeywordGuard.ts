@@ -1,14 +1,22 @@
-import { isLiteralTypeNode, SyntaxKind, TypeNode } from 'typescript';
 import {
-  getEscapedStringLiteral,
+  isLiteralTypeNode,
+  PropertySignature,
+  SyntaxKind,
+  TypeNode,
+} from 'typescript';
+import {
   getLiteralType,
+  isAnyKeyword,
   isKeyword,
   isLiteral,
+  isLiteralType,
+  isNeverKeyword,
+  isUnknownKeyword,
   syntaxKindToType,
 } from '../utils';
-
 /**
  * Generates type guards for the given TypeScript TypeNode, which can be a keyword or a literal Type.
+ * In case of any, unknown or never keyword, the type guard condition is not generated as it is already checked using the hasOwnProperty check.
  * If the property propertyName is not provided, the type looks as follows:
  * @example
  * ```
@@ -59,8 +67,19 @@ export function generateKeywordGuard(
  * @returns {string} The type guard condition as a string.
  */
 export function generateKeywordGuardForType(type: TypeNode): string {
-  if (isLiteralTypeNode(type) && isLiteral(type.literal.kind))
-    return `value === ${type.literal.getText()}`;
+  //NOTE: In case of unknown, never or any keyword, we don't need to check the type as it is already checked using the hasOwnProperty check.
+  if (
+    isUnknownKeyword(type.kind) ||
+    isNeverKeyword(type.kind) ||
+    isAnyKeyword(type.kind)
+  ) {
+    console.info(
+      'INFO: Unknown, never or any keyword found. Skipping typeguard for',
+      type.getText(),
+    );
+    return;
+  }
+  if (isLiteralType(type.kind)) return `value === ${type.getText()}`;
   return `typeof value === '${syntaxKindToType(type.kind)}'`;
 }
 
@@ -72,7 +91,7 @@ export function generateKeywordGuardForType(type: TypeNode): string {
  * @param {any} kind - The kind property of the TypeScript TypeNode.
  * @returns {boolean} Returns true if the type is a keyword type or a literal type, otherwise false.
  */
-function isKeywordType(kind: any): boolean {
+export function isKeywordType(kind: any): boolean {
   return isKeyword(kind) || isLiteralTypeNode(kind);
 }
 
@@ -83,25 +102,45 @@ function isKeywordType(kind: any): boolean {
  * @param literalText
  * @returns {string} The type guard condition as a string.
  */
-function generateLiteralTypeGuard(
+export function generateLiteralTypeGuard(
   propertyName: string,
   literalKind: SyntaxKind,
   literalText?: string,
 ): string {
-  return `value.${propertyName} === '${
-    getEscapedStringLiteral(literalText) ?? getLiteralType(literalKind)
-  }'`;
+  function getText(literalText?: string) {
+    if (typeof literalText === 'string') {
+      return literalText;
+    }
+    return;
+  }
+  return `value.${propertyName} === ${
+    getText(literalText) ?? getLiteralType(literalKind)
+  }`;
 }
 
 /**
  * Generates a type guard condition for a keyword type node.
+ * @param type
  * @param {string} propertyName - The name of the property being type checked.
  * @param {SyntaxKind} keywordKind - The kind of the keyword type node.
  * @returns {string} The type guard condition as a string.
  */
-function generateKeywordTypeGuard(
+export function generateKeywordTypeGuard(
   propertyName: string,
   keywordKind: SyntaxKind,
 ): string {
+  //NOTE: In case of unknown, never or any keyword, we don't need to check the type as it is already checked using the hasOwnProperty check.
+  if (
+    isUnknownKeyword(keywordKind) ||
+    isNeverKeyword(keywordKind) ||
+    isAnyKeyword(keywordKind)
+  ) {
+    console.info(
+      'INFO: Unknown, never or any keyword found. Skipping typeguard for',
+      propertyName,
+    );
+    return;
+    //return generateAnyUnknownNeverKeywordGuard(type);
+  }
   return `typeof value.${propertyName} === '${syntaxKindToType(keywordKind)}'`;
 }

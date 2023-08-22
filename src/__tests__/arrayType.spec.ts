@@ -1,7 +1,7 @@
 import { createSourceFile } from 'typescript';
 import * as ts from 'typescript';
 import { generateInterfaceTypeGuard, generateTypeTypeGuard } from '../api';
-import { removeWhitespace } from '../utils';
+import { removeWhitespace } from 'ts-raw-utils';
 
 describe('Generator', () => {
   const text = `interface ArrayInterface {
@@ -35,7 +35,7 @@ describe('Generator', () => {
             value.hasOwnProperty('arrayProperty') &&
             (Array.isArray(value.arrayProperty) &&
             value.arrayProperty.every((item: any) => typeof item === 'string')) &&
-            (typeof value.arrayOptional === 'undefined' ||
+            (typeof value.arrayOptional === 'undefined' ||value.hasOwnProperty('arrayOptional') ||
               (Array.isArray(value.arrayOptional) &&
                 value.arrayOptional.every((item: any) => typeof item === 'string')))
           )
@@ -47,7 +47,6 @@ describe('Generator', () => {
     const expectedResult = removeWhitespace(`
         export function isArrayType(value: any): value is ArrayType {
           return (
-            typeof value === "object" &&
             value !== null &&
             value.hasOwnProperty('arrayProperty') &&
             (Array.isArray(value.arrayProperty) &&
