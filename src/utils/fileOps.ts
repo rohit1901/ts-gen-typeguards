@@ -80,12 +80,15 @@ export function deleteFileIfExists(filePath: string) {
 }
 
 /**
- * Function to recursively read files with a specific extension from a directory and return their content as a string
- * @param dir - Optional directory to read files from (defaults to ./out)
+ * Function to recursively read files with a specific extension from a directory and return their content as a string. The content can be optionally added to the output.
+ * If the content is not provided, the files are read from the directory otherwise the content is used.
+ * @param content - Optional content which will be added to the output
+ * @param dir - Optional directory to read files from (defaults to ./input)
  * @param extension - Optional extension to filter files by (defaults to .ts)
  */
 export function readFilesWithExtension(
-  dir: string = `./${defaultInputDir}`,
+  content?: string,
+  dir: string = `${defaultInputDir}`,
   extension: string = extensionTS,
 ) {
   try {
@@ -102,19 +105,22 @@ export function readFilesWithExtension(
     });
 
     const results = [];
-    for (const file of filteredFiles) {
-      const filePath = './' + path.join(dir, file);
-      if (
-        !filePath.includes(`.${extensionDTS}`) &&
-        !filePath.includes(`${defaultOutputTypesFileName}.${extensionTS}`)
-      ) {
-        console.info(`INFO: Reading file: ${filePath}`);
-        try {
-          const content = fs.readFileSync(filePath, 'utf8');
-          results.push(content);
-        } catch (readError) {
-          console.error(`ERROR: Error reading file: ${filePath}`);
-          console.error(readError.message);
+    if (content) results.push(content);
+    else {
+      for (const file of filteredFiles) {
+        const filePath = './' + path.join(dir, file);
+        if (
+          !filePath.includes(`.${extensionDTS}`) &&
+          !filePath.includes(`${defaultOutputTypesFileName}.${extensionTS}`)
+        ) {
+          console.info(`INFO: Reading file: ${filePath}`);
+          try {
+            const content = fs.readFileSync(filePath, 'utf8');
+            results.push(content);
+          } catch (readError) {
+            console.error(`ERROR: Error reading file: ${filePath}`);
+            console.error(readError.message);
+          }
         }
       }
     }
@@ -216,8 +222,8 @@ function appendText(
 ) {
   const filePath = getTernaryOperatorResult(
     isCombinedInput,
-    `./${inputPath}`,
-    `./${outputPath}`,
+    `${inputPath}`,
+    `${outputPath}`,
   );
   try {
     fs.appendFileSync(filePath, typeGuardsText);

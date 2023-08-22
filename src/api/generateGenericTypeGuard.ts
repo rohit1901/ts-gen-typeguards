@@ -45,7 +45,7 @@ export function buildGenericFunctionSignature(
   typeParameters: NodeArray<TypeParameterDeclaration>,
 ) {
   const genericNames = typeParameters.map(p => p.name.getText()).join(',');
-  return `export function is${objectName}<${genericNames}>(val: any, ${getGenericFunctionParameters(
+  return `export function is${objectName}<${genericNames}>(value: any, ${getGenericFunctionParameters(
     typeParameters,
   )}): value is ${objectName}<${genericNames}>{return(typeof value === "object" &&
     value !== null`;

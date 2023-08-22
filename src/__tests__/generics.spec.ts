@@ -20,7 +20,7 @@ describe('Generator', () => {
     expect(removeWhitespace(result)).toEqual(
       removeWhitespace(`
         export function isGenericInterface<T>(
-          val: any,
+          value: any,
           isT: (val: any) => val is T
         ): value is GenericInterface<T> {
           return (

@@ -73,5 +73,5 @@ export function generateIntersectionTypeGuard(
       ),
     );
   }
-  return typeGuard;
+  return typeGuard.filter(t => typeof t === 'string');
 }
