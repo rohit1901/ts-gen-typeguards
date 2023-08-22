@@ -34,6 +34,7 @@ export function generatePropertyGuard(
   if (!isPropertySignature(property)) return typeGuard;
   const propertyName = getPropertyName(property, parentName);
   // handle optional properties separately
+  //TODO: Check the functionality of this function and refactor if needed
   if (property.questionToken)
     return generateOptionalPropertyTypeGuard(
       property,
@@ -43,13 +44,17 @@ export function generatePropertyGuard(
   // handle required properties in a different way
   typeGuard.push(buildHasOwnPropertyString(property, parentName));
   if (isGenericProperty(property, typeParameterName))
-    return generateGenericPropertyGuard(
-      property,
-      parentName,
-      typeParameterName,
-    );
+    {
+      return generateGenericPropertyGuard(
+          property,
+          parentName,
+          typeParameterName,
+      );
+    }
   if (isArrayTypeNode(property.type))
-    typeGuard.push(generateArrayTypeGuard(property, propertyName));
+    {
+      typeGuard.push(generateArrayTypeGuard(property, propertyName));
+    }
   typeGuard.push(
     ...generateTypeLiteralTypeGuardWithinUnion(
       property.type,

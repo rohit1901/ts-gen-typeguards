@@ -44,14 +44,6 @@ export function generateKeywordGuard(
     );
     return typeGuard;
   }
-  //NOTE: In case of unknown, never or any keyword, we don't need to check the type as it is already checked using the hasOwnProperty check.
-  if (
-    isUnknownKeyword(type.kind) ||
-    isNeverKeyword(type.kind) ||
-    isAnyKeyword(type.kind)
-  )
-    return typeGuard;
-  //TODO: any gets through. Check
   typeGuard.push(generateKeywordTypeGuard(typeName, type.kind));
   return typeGuard;
 }
@@ -69,8 +61,18 @@ export function generateKeywordGuard(
  * @returns {string} The type guard condition as a string.
  */
 export function generateKeywordGuardForType(type: TypeNode): string {
-  if (isLiteralTypeNode(type) && isLiteral(type.literal.kind))
-    return `value === ${type.literal.getText()}`;
+  /*if (isLiteralTypeNode(type) && isLiteral(type.literal.kind))
+    return `value === ${type.literal.getText()}`;*/
+  //NOTE: In case of unknown, never or any keyword, we don't need to check the type as it is already checked using the hasOwnProperty check.
+  if (
+      isUnknownKeyword(type.kind) ||
+      isNeverKeyword(type.kind) ||
+      isAnyKeyword(type.kind)
+  ) {
+    console.info('INFO: Unknown, never or any keyword found. Skipping typeguard for', type.getText());
+    return;
+    //return generateAnyUnknownNeverKeywordGuard(type);
+  }
   return `typeof value === '${syntaxKindToType(type.kind)}'`;
 }
 
@@ -120,4 +122,21 @@ export function generateKeywordTypeGuard(
   keywordKind: SyntaxKind,
 ): string {
   return `typeof value.${propertyName} === '${syntaxKindToType(keywordKind)}'`;
+}
+
+/**
+ * Generates a type guard condition for a KeywordTypeNode with a kind of any, unknown or never.
+ * if typeName is not provided, the type looks as follows: `!!value`
+ * if typeName is provided, the type looks as follows: `value.hasOwnProperty('${typeName}')`
+ * @param type
+ * @param typeName
+ */
+function generateAnyUnknownNeverKeywordGuard(
+  type: TypeNode,
+  typeName?: string,
+): string {
+  if(!typeName) {
+    return `!!value`;
+  }
+  return `value.hasOwnProperty('${typeName}')`;
 }

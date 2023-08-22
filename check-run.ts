@@ -1,5 +1,7 @@
+/*
 // index.ts
 import * as guards from './out/typeguards';
+import * as types from './input/combinedTypeGuards';
 
 const employeeData = {
     name: 'John',
@@ -58,11 +60,11 @@ console.log('isPersonWithOptionalAddress', guards.isPersonWithOptionalAddress(pe
 // ... Previous checks
 
 // Image and Video Enums
-/*console.log('isMediaType', guards.isMediaTypeInterface('image'));
-console.log('isMediaType', guards.isMediaTypeInterface('video'));*/
+console.log('isMediaType', guards.isMediaTypeInterface(types.MediaTypeInterface.Image));
+console.log('isMediaType', guards.isMediaTypeInterface(types.MediaTypeInterface.Image));
 
 // Type Aliases
-console.log('isDirection', guards.isDirection('up'));
+console.log('isDirection', guards.isDirection(types.DirectionEnum.Up));
 console.log('isEvenNumber', guards.isEvenNumbers(4));
 
 // Union Types
@@ -138,18 +140,19 @@ console.log('isCalculator', guards.isCalculator({
 }));
 
 // Image Interface Checks
-/*console.log('isImage', guards.isImage({
-    type: MediaTypeInterface.Image,
+console.log('isImage', guards.isImage({
+    type: types.MediaTypeInterface.Image,
     url: 'example.jpg',
-}));*/
+}));
 
 // Video Interface Checks
-/*console.log('isVideo', guards.isVideo({
-    type: MediaTypeInterface.Video,
+console.log('isVideo', guards.isVideo({
+    type: types.MediaTypeInterface.Video,
     source: 'example.mp4',
-}));*/
+}));
 
 // Additional Interface Checks
 // ...
 
 
+*/

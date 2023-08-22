@@ -14,6 +14,7 @@ import {
 } from '../api';
 import { getEscapedCapitalizedStringLiteral } from 'ts-raw-utils';
 import { getName, getTypeNameFromTypeParameter, isLiteralType } from '../utils';
+import * as string_decoder from "string_decoder";
 
 /**
  * Generate a set of type guard functions based on provided TypeAliasDeclarations.
@@ -38,7 +39,7 @@ export function generateTypeTypeGuard(
       ...generateKeywordGuard(type),
       ...handleEnumIntersection(definition, enums),
     );
-    typeGuard.push(typeGuardStrings.join('&&') + `)}`);
+    typeGuard.push(typeGuardStrings.filter(p => typeof p === 'string').join('&&') + `)}`);
   }
   return typeGuard.join('\n');
 }
@@ -69,7 +70,7 @@ export function generateTypeWithinTypeLiteralTypeGuard(
 /**
  * Build the type guard signature for a type. This includes the type guard function name and the type guard parameter.
  * @example
- * export function isTypeName(value: any): value is TypeName {return(typeof value === "object" && value !== null
+ * export function isTypeName(value: any): value is TypeName {return(value !== null
  * @param definition - The type definition to process.
  */
 function buildTypeTypeGuardSignature(definition: TypeAliasDeclaration): string {

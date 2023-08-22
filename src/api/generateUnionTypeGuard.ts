@@ -67,5 +67,11 @@ export function generateUnionTypeGuard(
     }
     typeGuard.push(...generatePropertyTypeGuard(newMember, typeGuard));
   }
-  return [`(${typeGuard.join('||')})`];
+  const stringTypeGuards = typeGuard.filter(t => typeof t === 'string');
+  if (stringTypeGuards.length === 0) {
+    return [];
+  }
+  return [`(${stringTypeGuards.join('||')})`];
+
+
 }
