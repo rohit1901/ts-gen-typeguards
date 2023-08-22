@@ -16,8 +16,6 @@ import {
   isAnyKeyword,
   isBigIntKeyword,
   isBooleanKeyword,
-  isKeyofKeyword,
-  isNeverKeyword,
   isNumberKeyword,
   isObjectKeyword,
   isStringKeyword,
@@ -245,12 +243,8 @@ function processUnionTypeWithTypeGuards(
     typeGuardCode.push(generateObjectKeywordTypeGuard(unionType.kind));
   } else if (isUnknownKeyword(unionType.kind)) {
     typeGuardCode.push(generateObjectKeywordTypeGuard(unionType.kind));
-  } else if (isNeverKeyword(unionType.kind)) {
-    //skip never keyword
   } else if (isVoidKeyword(unionType.kind)) {
     typeGuardCode.push(generateVoidKeywordTypeGuard(unionType.kind));
-  } else if (isKeyofKeyword(unionType.kind)) {
-    //skip keyof keyword for now as it is not supported
   }
   return typeGuardCode;
 }

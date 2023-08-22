@@ -5,10 +5,13 @@ node_modules/
 .github/
 coverage/
 src/**/*
+input/**/*
+out/**/*
 # Files
 .prettierrc
 package-lock.json
 tsconfig.json
 esbuild.config.js
+check-run.*
 
 
