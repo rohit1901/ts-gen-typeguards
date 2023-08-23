@@ -13,16 +13,12 @@ import {
   generateTypeReferenceGuard,
   generateUnionTypeGuard,
   handleEnumIntersection,
-  isKeywordType,
 } from '../api';
 import { getEscapedCapitalizedStringLiteral } from 'ts-raw-utils';
 import {
   getName,
   getTypeNameFromTypeParameter,
-  isGenericProperty,
-  isLiteralType,
 } from '../utils';
-import * as string_decoder from 'string_decoder';
 
 /**
  * Generate a set of type guard functions based on provided TypeAliasDeclarations.
@@ -50,7 +46,6 @@ export function generateTypeTypeGuard(
         type,
         typeName,
         false,
-        definition.typeParameters,
       ),
     );
     typeGuard.push(
@@ -110,4 +105,3 @@ function buildTypeTypeGuardSignature(definition: TypeAliasDeclaration): string {
     typeName,
   )}(value: any): value is ${typeName} {return(value !== null`;
 }
-//${isLiteralType(definition.type.kind) ? 'typeof value === "object" &&': ''}

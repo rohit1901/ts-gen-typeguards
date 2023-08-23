@@ -1,18 +1,11 @@
 import {
   isQualifiedName,
   isTypeReferenceNode,
-  NodeArray,
-  TypeNode,
-  TypeParameter,
-  TypeParameterDeclaration,
+  TypeNode, TypeReferenceNode,
 } from 'typescript';
 import {
-  getTernaryOperatorResult,
-  getTypeNameFromTypeParameter,
 } from '../utils';
 import {
-  generateGenericParameterList,
-  generateGenericPropertyGuard,
   generateQualifiedNameTypeGuard,
 } from '../api';
 import { getEscapedCapitalizedStringLiteral } from 'ts-raw-utils';
@@ -42,17 +35,15 @@ export function generateTypeReferenceGuard(
   type: TypeNode,
   typeName: string,
   isProperty?: boolean,
-  typeParameters?: NodeArray<TypeParameterDeclaration>,
 ) {
   const typeGuard: string[] = [];
-  const genericNames = generateGenericParameterList(typeParameters);
   if (!isTypeReferenceNode(type)) return typeGuard;
   // Enums: Check if the typeName is a qualified name
   if (isQualifiedName(type.typeName)) {
     typeGuard.push(
       generateQualifiedNameTypeGuard(
         type.typeName,
-        getTernaryOperatorResult(isProperty, typeName),
+          isProperty?typeName:undefined,
       ),
     );
     return typeGuard;
@@ -62,15 +53,46 @@ export function generateTypeReferenceGuard(
     typeGuard.push(
       `is${getEscapedCapitalizedStringLiteral(
         type.typeName.getText(),
-      )}(value.${typeName})`,
+      )}${buildTypeArguments(type)}(value.${typeName})`,
     );
     return typeGuard;
   }
   // Generate type guard for non-property
   typeGuard.push(
     `is${getEscapedCapitalizedStringLiteral(type.typeName.getText())}${
-      genericNames ? `<${genericNames}>` : ''
+        buildTypeArguments(type)
     }(value)`,
   );
   return typeGuard;
+}
+
+/**
+ * Generates strings for TypeArguments if a TypeReferenceNode has them.
+ * TypeArguments look like:
+ * ```
+ * <T>
+ * <T, U>
+ * <string>
+ * ```
+ * Result:
+ * - <T>
+ * - <T, U>
+ * - <string>
+ * @param typeReference - A TypeReferenceNode from which TypeArguments will be extracted.
+ */
+function buildTypeArguments(typeReference: TypeReferenceNode) {
+  const typeArguments= typeReference.typeArguments?.map((typeArgument) => {
+    if (isTypeReferenceNode(typeArgument)) {
+      return typeArgument.typeName.getText();
+    }
+    return typeArgument.getText();
+  }).join(', ');
+  if(typeArguments) return `<${typeArguments}>`;
+  return '';
+}
+function buildGenericParameterList(genericNames?: string) {
+  if(genericNames) {
+    `<${genericNames}>`
+  }
+  return ''
 }

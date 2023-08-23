@@ -398,10 +398,10 @@ export function isExtendedDirectionEnum(
   );
 }
 export function isContainerOfString(value: any): value is ContainerOfString {
-  return value !== null && isContainer(value);
+  return value !== null && isContainer<string>(value);
 }
 export function isContainerOfNumber(value: any): value is ContainerOfNumber {
-  return value !== null && isContainer(value);
+  return value !== null && isContainer<number>(value);
 }
 export function isColorContainer<T extends ColorEnumGeneric>(
   value: any,
@@ -410,23 +410,23 @@ export function isColorContainer<T extends ColorEnumGeneric>(
   return typeof value === 'object' && value !== null && isContainer<T>(value);
 }
 export function isRedContainer(value: any): value is RedContainer {
-  return value !== null && isColorContainer(value);
+  return value !== null && isColorContainer<ColorEnumGeneric.Red>(value);
 }
 export function isGreenContainer(value: any): value is GreenContainer {
-  return value !== null && isColorContainer(value);
+  return value !== null && isColorContainer<ColorEnumGeneric.Green>(value);
 }
 export function isBlueContainer(value: any): value is BlueContainer {
-  return value !== null && isColorContainer(value);
+  return value !== null && isColorContainer<ColorEnumGeneric.Blue>(value);
 }
 export function isOptionalContainerOfString(
   value: any,
 ): value is OptionalContainerOfString {
-  return value !== null && isPropertyContainer(value);
+  return value !== null && isPropertyContainer<string>(value);
 }
 export function isOptionalContainerOfNumber(
   value: any,
 ): value is OptionalContainerOfNumber {
-  return value !== null && isPropertyContainer(value);
+  return value !== null && isPropertyContainer<number>(value);
 }
 export function isDirectionGeneric(value: any): value is DirectionGeneric {
   return (
@@ -446,12 +446,12 @@ export function isDirectionContainer<T extends DirectionGeneric>(
 export function isUpDirectionContainer(
   value: any,
 ): value is UpDirectionContainer {
-  return value !== null && isDirectionContainer(value);
+  return value !== null && isDirectionContainer<'up'>(value);
 }
 export function isDownDirectionContainer(
   value: any,
 ): value is DownDirectionContainer {
-  return value !== null && isDirectionContainer(value);
+  return value !== null && isDirectionContainer<'down'>(value);
 }
 export function isShapeWithProperty<T extends ShapeGeneric>(
   value: any,
@@ -466,10 +466,16 @@ export function isShapeWithProperty<T extends ShapeGeneric>(
   );
 }
 export function isColoredCircle(value: any): value is ColoredCircle {
-  return value !== null && isShapeWithProperty(value);
+  return (
+    value !== null &&
+    isShapeWithProperty<{ type: 'circle'; radius: number }>(value)
+  );
 }
 export function isColoredSquare(value: any): value is ColoredSquare {
-  return value !== null && isShapeWithProperty(value);
+  return (
+    value !== null &&
+    isShapeWithProperty<{ type: 'square'; sideLength: number }>(value)
+  );
 }
 export function isVehicleWithType<T extends VehicleTypeGeneric>(
   value: any,
@@ -487,10 +493,10 @@ export function isVehicleWithType<T extends VehicleTypeGeneric>(
   );
 }
 export function isCarWithInfo(value: any): value is CarWithInfo {
-  return value !== null && isVehicleWithType(value);
+  return value !== null && isVehicleWithType<VehicleTypeGeneric.Car>(value);
 }
 export function isBikeWithInfo(value: any): value is BikeWithInfo {
-  return value !== null && isVehicleWithType(value);
+  return value !== null && isVehicleWithType<VehicleTypeGeneric.Bike>(value);
 }
 export function isCustomShapeInterface(
   value: any,

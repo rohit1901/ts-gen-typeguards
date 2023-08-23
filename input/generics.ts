@@ -2,8 +2,6 @@
 export interface Container<T> {
     value: T;
 }
-//TODO: update for these cases
-// Derived types
 export type ContainerOfString = Container<string>;
 export type ContainerOfNumber = Container<number>;
 

@@ -74,8 +74,6 @@ export type ExtendedDirectionEnum = DirectionEnum & 'FORWARD' & 'BACKWARD';
 export interface Container<T> {
     value: T;
 }
-
-// Derived types
 export type ContainerOfString = Container<string>;
 export type ContainerOfNumber = Container<number>;
 

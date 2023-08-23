@@ -32,7 +32,6 @@ export function generatePropertyGuard(
 ) {
   const typeGuard: string[] = [];
   if (!isPropertySignature(property)) return typeGuard;
-  //if(property.questionToken) return;
   const propertyName = getPropertyName(property, parentName);
   // handle required properties in a different way
   typeGuard.push(buildHasOwnPropertyString(property, parentName));
