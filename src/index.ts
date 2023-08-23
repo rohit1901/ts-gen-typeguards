@@ -39,7 +39,8 @@ type ObjectsType = {
  */
 function readObjects(path: string, content?: string): ObjectsType {
   try {
-    const sourceText = path === '' ? content : readFilesWithExtension(undefined, path).join('');
+    const sourceText =
+      path === '' ? content : readFilesWithExtension(undefined, path).join('');
     // Parse the file
     const parsedFile = createSourceFile(
       path,
@@ -96,7 +97,7 @@ function generateImports(objects: string[], path?: string) {
  * @param objects - Objects to generate the import statement for
  */
 function getImports(objects: string[], path?: string) {
-  return objects.length > 0?generateImports(objects, path):''
+  return objects.length > 0 ? generateImports(objects, path) : '';
 }
 
 /**

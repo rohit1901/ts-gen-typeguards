@@ -36,8 +36,10 @@ export function generateTypeGuardsFile(
   const inputPath =
     inputDir + `${defaultOutputTypesFileName}.${extensionTS}` ??
     defaultOutputTypesFilePath;
-  const outputPath = !!outputDir?outputDir + `${defaultTypeGuardsFileName}.${extensionTS}`:defaultOutputTypeGuardsFilePath
-  const path = isCombinedInput?inputPath: outputPath
+  const outputPath = !!outputDir
+    ? outputDir + `${defaultTypeGuardsFileName}.${extensionTS}`
+    : defaultOutputTypeGuardsFilePath;
+  const path = isCombinedInput ? inputPath : outputPath;
   prettify(typeGuardsText)
     .then(formattedText => {
       try {
@@ -169,7 +171,7 @@ function createFile(
 ) {
   const initialContent =
     '// Generated using ts-gen-typeguards\n // @ts-nocheck\n';
-  const filePath = isCombinedInput?inputPath:outputPath
+  const filePath = isCombinedInput ? inputPath : outputPath;
   try {
     fs.writeFileSync(filePath, `${initialContent}`);
     console.info(
@@ -198,7 +200,7 @@ function appendText(
   outputPath: string,
   isCombinedInput?: boolean,
 ) {
-  const filePath = isCombinedInput?`${inputPath}`:`${outputPath}`
+  const filePath = isCombinedInput ? `${inputPath}` : `${outputPath}`;
   try {
     fs.appendFileSync(filePath, typeGuardsText);
     console.info(`INFO: Text appended to the ${filePath} successfully.`);

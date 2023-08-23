@@ -1,7 +1,7 @@
 import { tsGenTypeguards } from './';
 
 // Usage Examples
-tsGenTypeguards()
+tsGenTypeguards();
 // tsGenTypeguards(undefined, 'inputNew', 'outputNew');
 // tsGenTypeguards(undefined, 'inputNew');
 // tsGenTypeguards(undefined, undefined, 'outputNew');

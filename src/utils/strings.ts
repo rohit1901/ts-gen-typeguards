@@ -48,7 +48,7 @@ export function buildHasOwnPropertyString(
   property: TypeElement,
   parentName?: string,
 ): string {
-  const hasOwnPropertyString = !!parentName? `value.${parentName}` : `value`;
+  const hasOwnPropertyString = !!parentName ? `value.${parentName}` : `value`;
   return `${hasOwnPropertyString}.hasOwnProperty('${property.name.getText()}')`;
 }
 

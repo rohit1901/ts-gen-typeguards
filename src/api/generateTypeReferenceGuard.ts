@@ -1,13 +1,11 @@
 import {
   isQualifiedName,
   isTypeReferenceNode,
-  TypeNode, TypeReferenceNode,
+  TypeNode,
+  TypeReferenceNode,
 } from 'typescript';
-import {
-} from '../utils';
-import {
-  generateQualifiedNameTypeGuard,
-} from '../api';
+import {} from '../utils';
+import { generateQualifiedNameTypeGuard } from '../api';
 import { getEscapedCapitalizedStringLiteral } from 'ts-raw-utils';
 /**
  * Generates a type guard for a TypeReferenceNode. Used to generate type guard string for type aliases.
@@ -43,7 +41,7 @@ export function generateTypeReferenceGuard(
     typeGuard.push(
       generateQualifiedNameTypeGuard(
         type.typeName,
-          isProperty?typeName:undefined,
+        isProperty ? typeName : undefined,
       ),
     );
     return typeGuard;
@@ -59,9 +57,9 @@ export function generateTypeReferenceGuard(
   }
   // Generate type guard for non-property
   typeGuard.push(
-    `is${getEscapedCapitalizedStringLiteral(type.typeName.getText())}${
-        buildTypeArguments(type)
-    }(value)`,
+    `is${getEscapedCapitalizedStringLiteral(
+      type.typeName.getText(),
+    )}${buildTypeArguments(type)}(value)`,
   );
   return typeGuard;
 }
@@ -81,18 +79,20 @@ export function generateTypeReferenceGuard(
  * @param typeReference - A TypeReferenceNode from which TypeArguments will be extracted.
  */
 function buildTypeArguments(typeReference: TypeReferenceNode) {
-  const typeArguments= typeReference.typeArguments?.map((typeArgument) => {
-    if (isTypeReferenceNode(typeArgument)) {
-      return typeArgument.typeName.getText();
-    }
-    return typeArgument.getText();
-  }).join(', ');
-  if(typeArguments) return `<${typeArguments}>`;
+  const typeArguments = typeReference.typeArguments
+    ?.map(typeArgument => {
+      if (isTypeReferenceNode(typeArgument)) {
+        return typeArgument.typeName.getText();
+      }
+      return typeArgument.getText();
+    })
+    .join(', ');
+  if (typeArguments) return `<${typeArguments}>`;
   return '';
 }
 function buildGenericParameterList(genericNames?: string) {
-  if(genericNames) {
-    `<${genericNames}>`
+  if (genericNames) {
+    `<${genericNames}>`;
   }
-  return ''
+  return '';
 }

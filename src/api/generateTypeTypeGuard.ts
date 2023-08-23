@@ -15,10 +15,7 @@ import {
   handleEnumIntersection,
 } from '../api';
 import { getEscapedCapitalizedStringLiteral } from 'ts-raw-utils';
-import {
-  getName,
-  getTypeNameFromTypeParameter,
-} from '../utils';
+import { getName, getTypeNameFromTypeParameter } from '../utils';
 
 /**
  * Generate a set of type guard functions based on provided TypeAliasDeclarations.
@@ -42,11 +39,7 @@ export function generateTypeTypeGuard(
       ...generateUnionTypeGuard(type, typeName, undefined, definitions),
       ...generateKeywordGuard(type),
       ...handleEnumIntersection(definition, enums),
-      ...generateTypeReferenceGuard(
-        type,
-        typeName,
-        false,
-      ),
+      ...generateTypeReferenceGuard(type, typeName, false),
     );
     typeGuard.push(
       typeGuardStrings.filter(p => typeof p === 'string').join('&&') + `)}`,
