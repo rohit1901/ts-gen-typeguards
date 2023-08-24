@@ -7,7 +7,7 @@ import { KeywordTypeSyntaxKind, SyntaxKind } from 'typescript';
 export function isBooleanKeyword(
   kind: SyntaxKind,
 ): kind is SyntaxKind.BooleanKeyword {
-  return kind === 136 /* UndefinedKeyword */;
+  return kind === SyntaxKind.BooleanKeyword /* UndefinedKeyword */;
 }
 
 /**
@@ -18,7 +18,7 @@ export function isBooleanKeyword(
 export function isUndefinedKeyword(
   kind: SyntaxKind,
 ): kind is SyntaxKind.UndefinedKeyword {
-  return kind === 157 /* UndefinedKeyword */;
+  return kind === SyntaxKind.UndefinedKeyword /* UndefinedKeyword */;
 }
 
 /**
@@ -29,150 +29,69 @@ export function isUndefinedKeyword(
 export function isStringKeyword(
   kind: SyntaxKind,
 ): kind is SyntaxKind.StringKeyword {
-  return kind === 154 /* StringKeyword */;
+  return kind === SyntaxKind.StringKeyword /* StringKeyword */;
 }
 
 // typeguard for number keyword
 export function isNumberKeyword(
   kind: SyntaxKind,
 ): kind is SyntaxKind.NumberKeyword {
-  return kind === 150 /* NumberKeyword */;
+  return kind === SyntaxKind.NumberKeyword /* NumberKeyword */;
 }
 
 // typeguard for bigint keyword
 export function isBigIntKeyword(
   kind: SyntaxKind,
 ): kind is SyntaxKind.BigIntKeyword {
-  return kind === 162 /* BigIntKeyword */;
+  return kind === SyntaxKind.BigIntKeyword /* BigIntKeyword */;
 }
 
 // typeguard for symbol keyword
 export function isSymbolKeyword(
   kind: SyntaxKind,
 ): kind is SyntaxKind.SymbolKeyword {
-  return kind === 155 /* SymbolKeyword */;
+  return kind === SyntaxKind.SymbolKeyword /* SymbolKeyword */;
 }
 
 // typeguard for object keyword
 export function isObjectKeyword(
   kind: SyntaxKind,
 ): kind is SyntaxKind.ObjectKeyword {
-  return kind === 151 /* ObjectKeyword */;
+  return kind === SyntaxKind.ObjectKeyword /* ObjectKeyword */;
 }
 
 // typeguard for any keyword
 export function isAnyKeyword(kind: SyntaxKind): kind is SyntaxKind.AnyKeyword {
-  return kind === 133 /* AnyKeyword */;
+  return kind === SyntaxKind.AnyKeyword /* AnyKeyword */;
 }
 
 // typeguard for unknown keyword
 export function isUnknownKeyword(
   kind: SyntaxKind,
 ): kind is SyntaxKind.UnknownKeyword {
-  return kind === 159 /* UnknownKeyword */;
+  return kind === SyntaxKind.UnknownKeyword /* UnknownKeyword */;
 }
 
 // typeguard for never keyword
 export function isNeverKeyword(
   kind: SyntaxKind,
 ): kind is SyntaxKind.NeverKeyword {
-  return kind === 146 /* NeverKeyword */;
+  return kind === SyntaxKind.NeverKeyword /* NeverKeyword */;
 }
 
 // typeguard for void keyword
 export function isVoidKeyword(
   kind: SyntaxKind,
 ): kind is SyntaxKind.VoidKeyword {
-  return kind === 116 /* VoidKeyword */;
+  return kind === SyntaxKind.VoidKeyword /* VoidKeyword */;
 }
 
 // typeguard for keyof keyword
 export function isKeyofKeyword(
   kind: SyntaxKind,
 ): kind is SyntaxKind.KeyOfKeyword {
-  return kind === 143 /* KeyOfKeyword */;
+  return kind === SyntaxKind.KeyOfKeyword /* KeyOfKeyword */;
 }
-
-/**
- * Function checks if the provided SyntaxKind is a NullKeyword.
- * @param kind
- */
-export function isNullKeyword(
-  kind: SyntaxKind,
-): kind is SyntaxKind.NullKeyword {
-  return kind === 106 /* NullKeyword */;
-}
-
-/**
- * Function checks if the provided SyntaxKind is an EnumKeyword.
- * @param kind
- */
-export function isEnumKeyword(
-  kind: SyntaxKind,
-): kind is SyntaxKind.EnumKeyword {
-  return kind === 94 /* EnumKeyword */;
-}
-
-/**
- * Function checks if the provided SyntaxKind is a ThisKeyword.
- * @param kind
- */
-export function isThisKeyword(
-  kind: SyntaxKind,
-): kind is SyntaxKind.ThisKeyword {
-  return kind === 110 /* ThisKeyword */;
-}
-
-/**
- * Function checks if the provided SyntaxKind is a SuperKeyword.
- * @param kind
- */
-export function isSuperKeyword(
-  kind: SyntaxKind,
-): kind is SyntaxKind.SuperKeyword {
-  return kind === 108 /* SuperKeyword */;
-}
-
-/**
- * Function checks if the provided SyntaxKind is a TrueKeyword.
- * @param kind
- */
-export function isTrueKeyword(
-  kind: SyntaxKind,
-): kind is SyntaxKind.TrueKeyword {
-  return kind === 112 /* TrueKeyword */;
-}
-
-/**
- * Function checks if the provided SyntaxKind is a FalseKeyword.
- * @param kind
- */
-export function isFalseKeyword(
-  kind: SyntaxKind,
-): kind is SyntaxKind.FalseKeyword {
-  return kind === 97 /* FalseKeyword */;
-}
-
-/**
- * Function checks if the provided SyntaxKind is a IntrinsicKeyword.
- * @param kind
- */
-export function isIntrinsicKeyword(
-  kind: SyntaxKind,
-): kind is SyntaxKind.IntrinsicKeyword {
-  return kind === 141 /* IntrinsicKeyword */;
-}
-
-/**
- * Function checks if the provided SyntaxKind is a ReadonlyKeyword.
- * @param kind
- */
-export function isReadonlyKeyword(
-  kind: SyntaxKind,
-): kind is SyntaxKind.ReadonlyKeyword {
-  return kind === 148 /* ReadonlyKeyword */;
-}
-
 /**
  * Function checks if the provided SyntaxKind is a LiteralType.
  * @param kind
@@ -180,7 +99,7 @@ export function isReadonlyKeyword(
 export function isLiteralType(
   kind: SyntaxKind,
 ): kind is SyntaxKind.LiteralType {
-  return kind === 201 /* LiteralType */;
+  return kind === SyntaxKind.LiteralType /* LiteralType */;
 }
 
 /**
@@ -190,7 +109,7 @@ export function isLiteralType(
 export function isIndexedAccessType(
   kind: SyntaxKind,
 ): kind is SyntaxKind.IndexedAccessType {
-  return kind === 199 /* IndexedAccessType */;
+  return kind === SyntaxKind.IndexedAccessType /* IndexedAccessType */;
 }
 
 /**
