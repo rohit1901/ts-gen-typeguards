@@ -1,6 +1,7 @@
 // Generate type guards for any types
 import { isLiteralTypeNode, Node } from 'typescript';
 import { syntaxKindToType } from '../utils';
+
 /**
  * Generates a type guard condition for a literal type node.
  *

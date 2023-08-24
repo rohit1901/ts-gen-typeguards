@@ -1,5 +1,5 @@
-import { createSourceFile } from 'typescript';
 import * as ts from 'typescript';
+import { createSourceFile } from 'typescript';
 import { generateInterfaceTypeGuard, generateTypeTypeGuard } from '../api';
 import { removeWhitespace } from 'ts-raw-utils';
 

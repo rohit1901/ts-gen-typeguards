@@ -7,7 +7,6 @@ import {
   deleteFileIfExists,
   extensionTS,
   generateTypeGuardsFile,
-  getTernaryOperatorResult,
   readFilesWithExtension,
 } from './utils';
 
@@ -40,11 +39,8 @@ type ObjectsType = {
  */
 function readObjects(path: string, content?: string): ObjectsType {
   try {
-    const sourceText = getTernaryOperatorResult(
-      path === '',
-      content,
-      readFilesWithExtension(undefined, path).join(''),
-    );
+    const sourceText =
+      path === '' ? content : readFilesWithExtension(undefined, path).join('');
     // Parse the file
     const parsedFile = createSourceFile(
       path,
@@ -64,6 +60,7 @@ function readObjects(path: string, content?: string): ObjectsType {
     console.error('ERROR: Error while reading the file:', path, err.message);
   }
 }
+
 /**
  * Returns the names of the given objects (which can be interfaces, types, or enums) as an array of strings.
  * @example
@@ -82,6 +79,7 @@ function getObjectsNames(
   const enumNames = enumObjects.map(object => object.name.getText());
   return [...interfaceNames, ...typeNames, ...enumNames];
 }
+
 /**
  * Generates the import statement for the given objects and path.
  * If no path is provided, the default path is used. (defaults to '../combinedTypeGuards')
@@ -101,11 +99,7 @@ function generateImports(objects: string[], path?: string) {
  * @param objects - Objects to generate the import statement for
  */
 function getImports(objects: string[], path?: string) {
-  return getTernaryOperatorResult(
-    objects.length > 0,
-    generateImports(objects, path),
-    '',
-  );
+  return objects.length > 0 ? generateImports(objects, path) : '';
 }
 
 /**
@@ -154,6 +148,7 @@ export function tsGenTypeguards(
     outputFilePath,
   );
 }
+
 // Usage Examples
 // 1. using default values --> tsGenTypeguards();
 // 2. using custom values --> tsGenTypeguards(undefined, 'inputNew', 'outputNew');

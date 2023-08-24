@@ -118,6 +118,7 @@ export function handleIntersectionTypesForTypeAlias(
     factory.createTypeLiteralNode(removeDuplicateTypeElements(members)),
   );
 }
+
 //suggest a better name
 
 export function handleIntersectionTypesForTypeNode(

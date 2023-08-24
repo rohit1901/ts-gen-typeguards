@@ -1,5 +1,6 @@
 import { isEnumString, isInterfaceString, isObject, isString } from '../utils';
 import { capitalize, removeWhitespace } from 'ts-raw-utils';
+
 describe('Utils', () => {
   it('should capitalize a string', () => {
     const result = capitalize('hello');
