@@ -1,10 +1,10 @@
-import {removeWhitespace} from 'ts-raw-utils';
-import {generateInterfaceTypeGuard} from '../api';
+import { removeWhitespace } from 'ts-raw-utils';
+import { generateInterfaceTypeGuard } from '../api';
 import * as ts from 'typescript';
-import {createSourceFile} from 'typescript';
+import { createSourceFile } from 'typescript';
 
 describe('Generator', () => {
-    const text = `
+  const text = `
     export interface Point {
       x?: number;
       y: number;
@@ -58,26 +58,26 @@ describe('Generator', () => {
       Medium = 'Medium',
       Large = 'Large',
     }`;
-    const sourceFile = createSourceFile('', text, ts.ScriptTarget.ES2015, true);
-    const interfaces = sourceFile.statements.filter(ts.isInterfaceDeclaration);
-    const [
-        pointInterface,
-        personInterface,
-        employeeInterface,
-        userInterface,
-        carInterface,
-        cityInterface,
-        coordinatesInterface,
-        moveInterface,
-        productInterface,
-        vehicleInterface,
-    ] = interfaces;
-    beforeEach(() => {
-        jest.clearAllMocks();
-    });
-    it('should generate typeguard for Point Interface (InterfaceDeclaration with one optional property)', function () {
-        const result = generateInterfaceTypeGuard([pointInterface]);
-        const expectedResult = `export function isPoint(value: any): value is Point {
+  const sourceFile = createSourceFile('', text, ts.ScriptTarget.ES2015, true);
+  const interfaces = sourceFile.statements.filter(ts.isInterfaceDeclaration);
+  const [
+    pointInterface,
+    personInterface,
+    employeeInterface,
+    userInterface,
+    carInterface,
+    cityInterface,
+    coordinatesInterface,
+    moveInterface,
+    productInterface,
+    vehicleInterface,
+  ] = interfaces;
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+  it('should generate typeguard for Point Interface (InterfaceDeclaration with one optional property)', function () {
+    const result = generateInterfaceTypeGuard([pointInterface]);
+    const expectedResult = `export function isPoint(value: any): value is Point {
       return (
         typeof value === "object" &&
         value !== null &&
@@ -86,11 +86,11 @@ describe('Generator', () => {
         typeof value.y === 'number'
       )
     }`;
-        expect(removeWhitespace(result)).toEqual(removeWhitespace(expectedResult));
-    });
-    it('should generate typeguard for Person Interface (InterfaceDeclaration with one optional property and a UnionType property)', function () {
-        const result = generateInterfaceTypeGuard([personInterface]);
-        const expectedResult = `export function isPerson(value: any): value is Person {
+    expect(removeWhitespace(result)).toEqual(removeWhitespace(expectedResult));
+  });
+  it('should generate typeguard for Person Interface (InterfaceDeclaration with one optional property and a UnionType property)', function () {
+    const result = generateInterfaceTypeGuard([personInterface]);
+    const expectedResult = `export function isPerson(value: any): value is Person {
       return (
         typeof value === "object" &&
         value !== null &&
@@ -99,14 +99,14 @@ describe('Generator', () => {
         ( value.gender === 'male' ||  value.gender === 'female')
       )
     }`;
-        expect(removeWhitespace(result)).toEqual(removeWhitespace(expectedResult));
-    });
-    it('should generate typeguard for Employee Interface (InterfaceDeclaration which extends another InterfaceDeclaration)', function () {
-        const result = generateInterfaceTypeGuard([
-            employeeInterface,
-            personInterface,
-        ]);
-        const expectedResult = `export function isEmployee(value: any): value is Employee {
+    expect(removeWhitespace(result)).toEqual(removeWhitespace(expectedResult));
+  });
+  it('should generate typeguard for Employee Interface (InterfaceDeclaration which extends another InterfaceDeclaration)', function () {
+    const result = generateInterfaceTypeGuard([
+      employeeInterface,
+      personInterface,
+    ]);
+    const expectedResult = `export function isEmployee(value: any): value is Employee {
       return (
         typeof value === "object" &&
         value !== null &&
@@ -117,7 +117,7 @@ describe('Generator', () => {
         ( value.gender === 'male' ||  value.gender === 'female')
       )
     }`;
-        const expectedPersonResult = `export function isPerson(value: any): value is Person {
+    const expectedPersonResult = `export function isPerson(value: any): value is Person {
       return (
         typeof value === "object" &&
         value !== null &&
@@ -126,13 +126,13 @@ describe('Generator', () => {
         ( value.gender === 'male' ||  value.gender === 'female')
       )
     }`;
-        expect(removeWhitespace(result)).toEqual(
-            removeWhitespace(expectedResult + expectedPersonResult),
-        );
-    });
-    it('should generate typeguard for User Interface (InterfaceDeclaration with a LiteralType properties)', function () {
-        const result = generateInterfaceTypeGuard([userInterface]);
-        const expectedResult = `export function isUser(value: any): value is User {
+    expect(removeWhitespace(result)).toEqual(
+      removeWhitespace(expectedResult + expectedPersonResult),
+    );
+  });
+  it('should generate typeguard for User Interface (InterfaceDeclaration with a LiteralType properties)', function () {
+    const result = generateInterfaceTypeGuard([userInterface]);
+    const expectedResult = `export function isUser(value: any): value is User {
       return (
         typeof value === "object" &&
         value !== null &&
@@ -142,11 +142,11 @@ describe('Generator', () => {
         typeof value.name === 'string'
       )
     }`;
-        expect(removeWhitespace(result)).toEqual(removeWhitespace(expectedResult));
-    });
-    it('should generate typeguard for Car Interface (InterfaceDeclaration with UnionType properties of string LiteralTypes)', function () {
-        const result = generateInterfaceTypeGuard([carInterface]);
-        const expectedResult = `export function isCar(value: any): value is Car {
+    expect(removeWhitespace(result)).toEqual(removeWhitespace(expectedResult));
+  });
+  it('should generate typeguard for Car Interface (InterfaceDeclaration with UnionType properties of string LiteralTypes)', function () {
+    const result = generateInterfaceTypeGuard([carInterface]);
+    const expectedResult = `export function isCar(value: any): value is Car {
       return (
         typeof value === "object" &&
         value !== null &&
@@ -156,11 +156,11 @@ describe('Generator', () => {
         ( value.color === 'red' ||  value.color === 'blue' ||  value.color === 'black')
       )
     }`;
-        expect(removeWhitespace(result)).toEqual(removeWhitespace(expectedResult));
-    });
-    it('should generate typeguard for City Interface (InterfaceDeclaration with OptionalType and TypeReference properties)', function () {
-        const result = generateInterfaceTypeGuard([cityInterface]);
-        const expectedResult = `export function isCity(value: any): value is City {
+    expect(removeWhitespace(result)).toEqual(removeWhitespace(expectedResult));
+  });
+  it('should generate typeguard for City Interface (InterfaceDeclaration with OptionalType and TypeReference properties)', function () {
+    const result = generateInterfaceTypeGuard([cityInterface]);
+    const expectedResult = `export function isCity(value: any): value is City {
           return (
             typeof value === "object" &&
             value !== null &&
@@ -172,11 +172,11 @@ describe('Generator', () => {
             typeof value.population === 'number'
           )
         }`;
-        expect(removeWhitespace(result)).toEqual(removeWhitespace(expectedResult));
-    });
-    it('should generate typeguard for Coordinates Interface (InterfaceDeclaration with two required properties)', function () {
-        const result = generateInterfaceTypeGuard([coordinatesInterface]);
-        const expectedResult = `export function isCoordinates(value: any): value is Coordinates {
+    expect(removeWhitespace(result)).toEqual(removeWhitespace(expectedResult));
+  });
+  it('should generate typeguard for Coordinates Interface (InterfaceDeclaration with two required properties)', function () {
+    const result = generateInterfaceTypeGuard([coordinatesInterface]);
+    const expectedResult = `export function isCoordinates(value: any): value is Coordinates {
           return (
             typeof value === "object" &&
             value !== null &&
@@ -186,11 +186,11 @@ describe('Generator', () => {
             typeof value.y === 'number'
           )
         }`;
-        expect(removeWhitespace(result)).toEqual(removeWhitespace(expectedResult));
-    });
-    it('should generate typeguard for Move Interface (InterfaceDeclaration with an EnumDeclaration required property)', function () {
-        const result = generateInterfaceTypeGuard([moveInterface]);
-        const expectedResult = `export function isMove(value: any): value is Move {
+    expect(removeWhitespace(result)).toEqual(removeWhitespace(expectedResult));
+  });
+  it('should generate typeguard for Move Interface (InterfaceDeclaration with an EnumDeclaration required property)', function () {
+    const result = generateInterfaceTypeGuard([moveInterface]);
+    const expectedResult = `export function isMove(value: any): value is Move {
           return (
             typeof value === "object" &&
             value !== null &&
@@ -202,11 +202,11 @@ describe('Generator', () => {
             isCoordinates(value.position,)
           )
         }`;
-        expect(removeWhitespace(result)).toEqual(removeWhitespace(expectedResult));
-    });
-    it('should generate typeguard for Product Interface (InterfaceDeclaration with required property)', function () {
-        const result = generateInterfaceTypeGuard([productInterface]);
-        const expectedResult = `export function isProduct(value: any): value is Product {
+    expect(removeWhitespace(result)).toEqual(removeWhitespace(expectedResult));
+  });
+  it('should generate typeguard for Product Interface (InterfaceDeclaration with required property)', function () {
+    const result = generateInterfaceTypeGuard([productInterface]);
+    const expectedResult = `export function isProduct(value: any): value is Product {
           return (
             typeof value === "object" &&
             value !== null &&
@@ -216,11 +216,11 @@ describe('Generator', () => {
             typeof value.price === 'number'
           )
         }`;
-        expect(removeWhitespace(result)).toEqual(removeWhitespace(expectedResult));
-    });
-    it('should generate typeguard for Vehicle Interface (InterfaceDeclaration with UnionType properties of LiteralTypes)', function () {
-        const result = generateInterfaceTypeGuard([vehicleInterface]);
-        const expectedResult = `export function isVehicle(value: any): value is Vehicle {
+    expect(removeWhitespace(result)).toEqual(removeWhitespace(expectedResult));
+  });
+  it('should generate typeguard for Vehicle Interface (InterfaceDeclaration with UnionType properties of LiteralTypes)', function () {
+    const result = generateInterfaceTypeGuard([vehicleInterface]);
+    const expectedResult = `export function isVehicle(value: any): value is Vehicle {
           return (
             typeof value === "object" &&
             value !== null &&
@@ -232,6 +232,6 @@ describe('Generator', () => {
             typeof value.wheels === 'number'
           )
         }`;
-        expect(removeWhitespace(result)).toEqual(removeWhitespace(expectedResult));
-    });
+    expect(removeWhitespace(result)).toEqual(removeWhitespace(expectedResult));
+  });
 });

@@ -1,4 +1,8 @@
-import {isPropertySignature, isTypeReferenceNode, TypeElement,} from 'typescript';
+import {
+  isPropertySignature,
+  isTypeReferenceNode,
+  TypeElement,
+} from 'typescript';
 
 /**
  * Function to check if a property is a generic property. A generic property is a property that has a type of TypeReferenceNode
@@ -7,12 +11,12 @@ import {isPropertySignature, isTypeReferenceNode, TypeElement,} from 'typescript
  * @param typeParameterName - The name of the generic type parameter
  */
 export function isGenericProperty(
-    property: TypeElement,
-    typeParameterName: string,
+  property: TypeElement,
+  typeParameterName: string,
 ): boolean {
-    return (
-        isPropertySignature(property) &&
-        isTypeReferenceNode(property.type) &&
-        typeParameterName === property.type.typeName.getText()
-    );
+  return (
+    isPropertySignature(property) &&
+    isTypeReferenceNode(property.type) &&
+    typeParameterName === property.type.typeName.getText()
+  );
 }

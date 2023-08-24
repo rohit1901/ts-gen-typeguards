@@ -1,6 +1,15 @@
-import {factory, isArrayTypeNode, isIntersectionTypeNode, TypeNode,} from 'typescript';
-import {generateArrayTypeGuard, generateKeywordGuard, generateTypeReferenceGuard,} from '../api';
-import {generateTypeWithinTypeLiteralTypeGuard} from './generateTypeTypeGuard';
+import {
+  factory,
+  isArrayTypeNode,
+  isIntersectionTypeNode,
+  TypeNode,
+} from 'typescript';
+import {
+  generateArrayTypeGuard,
+  generateKeywordGuard,
+  generateTypeReferenceGuard,
+} from '../api';
+import { generateTypeWithinTypeLiteralTypeGuard } from './generateTypeTypeGuard';
 
 /**
  * Generates a type guard for an IntersectionTypeNode.
@@ -31,38 +40,38 @@ import {generateTypeWithinTypeLiteralTypeGuard} from './generateTypeTypeGuard';
  * types, an empty array is returned.
  */
 export function generateIntersectionTypeGuard(
-    type: TypeNode,
-    typeName: string,
-    isProperty?: boolean,
+  type: TypeNode,
+  typeName: string,
+  isProperty?: boolean,
 ) {
-    const typeGuard: string[] = [];
-    if (!isIntersectionTypeNode(type)) return typeGuard;
-    if (!type.types) return typeGuard;
-    for (const member of type.types) {
-        if (isArrayTypeNode(member)) {
-            typeGuard.push(
-                generateArrayTypeGuard(
-                    factory.createPropertySignature(
-                        undefined,
-                        undefined,
-                        undefined,
-                        member,
-                    ),
-                ),
-            );
-        }
-        typeGuard.push(
-            ...generateKeywordGuard(member, typeName, isProperty),
-            ...generateTypeReferenceGuard(member, typeName, isProperty),
-            ...generateTypeWithinTypeLiteralTypeGuard(
-                factory.createTypeAliasDeclaration(
-                    undefined,
-                    typeName,
-                    undefined,
-                    member,
-                ),
-            ),
-        );
+  const typeGuard: string[] = [];
+  if (!isIntersectionTypeNode(type)) return typeGuard;
+  if (!type.types) return typeGuard;
+  for (const member of type.types) {
+    if (isArrayTypeNode(member)) {
+      typeGuard.push(
+        generateArrayTypeGuard(
+          factory.createPropertySignature(
+            undefined,
+            undefined,
+            undefined,
+            member,
+          ),
+        ),
+      );
     }
-    return typeGuard.filter(t => typeof t === 'string');
+    typeGuard.push(
+      ...generateKeywordGuard(member, typeName, isProperty),
+      ...generateTypeReferenceGuard(member, typeName, isProperty),
+      ...generateTypeWithinTypeLiteralTypeGuard(
+        factory.createTypeAliasDeclaration(
+          undefined,
+          typeName,
+          undefined,
+          member,
+        ),
+      ),
+    );
+  }
+  return typeGuard.filter(t => typeof t === 'string');
 }

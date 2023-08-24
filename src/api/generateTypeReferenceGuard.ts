@@ -7,8 +7,8 @@ import {
   TypeNode,
   TypeReferenceNode,
 } from 'typescript';
-import {generateQualifiedNameTypeGuard} from '../api';
-import {getEscapedCapitalizedStringLiteral} from 'ts-raw-utils';
+import { generateQualifiedNameTypeGuard } from '../api';
+import { getEscapedCapitalizedStringLiteral } from 'ts-raw-utils';
 
 /**
  * Generates a type guard for a TypeReferenceNode. Used to generate type guard string for type aliases.
@@ -33,58 +33,58 @@ import {getEscapedCapitalizedStringLiteral} from 'ts-raw-utils';
  * // Result: ['isPoint(value)']
  */
 export function generateTypeReferenceGuard(
-    type: TypeNode,
-    typeName: string,
-    isProperty?: boolean,
+  type: TypeNode,
+  typeName: string,
+  isProperty?: boolean,
 ) {
-    const typeGuard: string[] = [];
-    if (!isTypeReferenceNode(type)) return typeGuard;
-    // Enums: Check if the typeName is a qualified name
-    if (isQualifiedName(type.typeName)) {
-        typeGuard.push(
-            generateQualifiedNameTypeGuard(
-                type.typeName,
-                isProperty ? typeName : undefined,
-            ),
-        );
-        return typeGuard;
-    }
-    if (isProperty) {
-        // Generate type guard for property
-        typeGuard.push(
-            `is${getEscapedCapitalizedStringLiteral(
-                type.typeName.getText(),
-            )}${buildTypeArguments(
-                type,
-            )}(value.${typeName}, ${buildGenericParameterList(
-                type,
-                `value.${typeName}`,
-            )})`,
-        );
-        return typeGuard;
-    }
-    if (type.typeArguments && type.typeArguments.length > 0) {
-        type.typeArguments.forEach(typeArgument => {
-            if (isQualifiedName(typeArgument)) {
-                typeGuard.push(
-                    generateQualifiedNameTypeGuard(
-                        typeArgument,
-                        typeArgument.left.getText(),
-                    ),
-                    ``,
-                );
-            }
-        });
-    }
-    const functionParams = ['value'];
-    functionParams.push(buildGenericParameterList(type, 'value'));
-    // Generate type guard for non-property
+  const typeGuard: string[] = [];
+  if (!isTypeReferenceNode(type)) return typeGuard;
+  // Enums: Check if the typeName is a qualified name
+  if (isQualifiedName(type.typeName)) {
     typeGuard.push(
-        `is${getEscapedCapitalizedStringLiteral(
-            type.typeName.getText(),
-        )}${buildTypeArguments(type)}(${functionParams.join(',')})`,
+      generateQualifiedNameTypeGuard(
+        type.typeName,
+        isProperty ? typeName : undefined,
+      ),
     );
     return typeGuard;
+  }
+  if (isProperty) {
+    // Generate type guard for property
+    typeGuard.push(
+      `is${getEscapedCapitalizedStringLiteral(
+        type.typeName.getText(),
+      )}${buildTypeArguments(
+        type,
+      )}(value.${typeName}, ${buildGenericParameterList(
+        type,
+        `value.${typeName}`,
+      )})`,
+    );
+    return typeGuard;
+  }
+  if (type.typeArguments && type.typeArguments.length > 0) {
+    type.typeArguments.forEach(typeArgument => {
+      if (isQualifiedName(typeArgument)) {
+        typeGuard.push(
+          generateQualifiedNameTypeGuard(
+            typeArgument,
+            typeArgument.left.getText(),
+          ),
+          ``,
+        );
+      }
+    });
+  }
+  const functionParams = ['value'];
+  functionParams.push(buildGenericParameterList(type, 'value'));
+  // Generate type guard for non-property
+  typeGuard.push(
+    `is${getEscapedCapitalizedStringLiteral(
+      type.typeName.getText(),
+    )}${buildTypeArguments(type)}(${functionParams.join(',')})`,
+  );
+  return typeGuard;
 }
 
 /**
@@ -102,16 +102,16 @@ export function generateTypeReferenceGuard(
  * @param typeReference - A TypeReferenceNode from which TypeArguments will be extracted.
  */
 function buildTypeArguments(typeReference: TypeReferenceNode) {
-    const typeArguments = typeReference.typeArguments
-        ?.map(typeArgument => {
-            if (isTypeReferenceNode(typeArgument)) {
-                return typeArgument.typeName.getText();
-            }
-            return typeArgument.getText();
-        })
-        .join(', ');
-    if (typeArguments) return `<${typeArguments}>`;
-    return '';
+  const typeArguments = typeReference.typeArguments
+    ?.map(typeArgument => {
+      if (isTypeReferenceNode(typeArgument)) {
+        return typeArgument.typeName.getText();
+      }
+      return typeArgument.getText();
+    })
+    .join(', ');
+  if (typeArguments) return `<${typeArguments}>`;
+  return '';
 }
 
 /**
@@ -131,31 +131,31 @@ function buildTypeArguments(typeReference: TypeReferenceNode) {
  * // Result: "isShapeWithProperty,isCustomType"
  */
 export function buildGenericParameterList(
-    typeReference: TypeReferenceNode,
-    functionParameter?: string,
+  typeReference: TypeReferenceNode,
+  functionParameter?: string,
 ) {
-    const typeArguments = typeReference.typeArguments?.map(typeArgument => {
-        if (isTypeReferenceNode(typeArgument)) {
-            if (isQualifiedName(typeArgument.typeName)) {
-                return typeArgument.typeName.left.getText();
-            }
-            return typeArgument.typeName.getText();
-        }
-        if (
-            isTypeLiteralNode(typeArgument) ||
-            isIntersectionTypeNode(typeArgument) ||
-            isUnionTypeNode(typeArgument)
-        ) {
-            return 'CustomType';
-        }
-        return typeArgument.getText();
-    });
-    return (
-        typeArguments
-            ?.map(
-                typeArgument => `is${getEscapedCapitalizedStringLiteral(typeArgument)}`,
-            )
-            .filter(v => !!v)
-            .join(',') ?? ''
-    );
+  const typeArguments = typeReference.typeArguments?.map(typeArgument => {
+    if (isTypeReferenceNode(typeArgument)) {
+      if (isQualifiedName(typeArgument.typeName)) {
+        return typeArgument.typeName.left.getText();
+      }
+      return typeArgument.typeName.getText();
+    }
+    if (
+      isTypeLiteralNode(typeArgument) ||
+      isIntersectionTypeNode(typeArgument) ||
+      isUnionTypeNode(typeArgument)
+    ) {
+      return 'CustomType';
+    }
+    return typeArgument.getText();
+  });
+  return (
+    typeArguments
+      ?.map(
+        typeArgument => `is${getEscapedCapitalizedStringLiteral(typeArgument)}`,
+      )
+      .filter(v => !!v)
+      .join(',') ?? ''
+  );
 }

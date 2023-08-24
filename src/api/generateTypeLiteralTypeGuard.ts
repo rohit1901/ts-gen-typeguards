@@ -6,9 +6,15 @@ import {
   TypeAliasDeclaration,
   TypeLiteralNode,
 } from 'typescript';
-import {isPrimitiveSyntaxKind, syntaxKindToType} from '../utils';
-import {generateIntersectionTypeGuardForProperty, generateUnionTypeGuardForProperty} from '../api';
-import {getEscapedCapitalizedStringLiteral, getEscapedStringLiteral,} from 'ts-raw-utils';
+import { isPrimitiveSyntaxKind, syntaxKindToType } from '../utils';
+import {
+  generateIntersectionTypeGuardForProperty,
+  generateUnionTypeGuardForProperty,
+} from '../api';
+import {
+  getEscapedCapitalizedStringLiteral,
+  getEscapedStringLiteral,
+} from 'ts-raw-utils';
 
 /**
  * Generates a type guard for a property based on its TypeScript PropertySignature.
@@ -18,43 +24,43 @@ import {getEscapedCapitalizedStringLiteral, getEscapedStringLiteral,} from 'ts-r
  * @returns {string} The generated type guard code as a string.
  */
 export function generatePropertyTypeGuard(
-    {questionToken, name, type}: PropertySignature,
-    typeAliases: TypeAliasDeclaration[],
+  { questionToken, name, type }: PropertySignature,
+  typeAliases: TypeAliasDeclaration[],
 ): string {
-    const propType = syntaxKindToType(type.kind);
-    const typeGuardCode: string[] = [];
-    if (isTypeReferenceNode(type) && !questionToken) {
-        typeGuardCode.push(
-            `if (!value.hasOwnProperty('${getEscapedStringLiteral(
-                name.getText(),
-            )}') || !is${getEscapedCapitalizedStringLiteral(
-                type.typeName.getText(),
-            )}(value.${getEscapedStringLiteral(name.getText())})) {`,
-        );
-        typeGuardCode.push(`    return false;\n`);
-
-        typeGuardCode.push(`}\n`);
-    } else if (isPrimitiveSyntaxKind(type.kind) && !questionToken) {
-        typeGuardCode.push(
-            `if (!value.hasOwnProperty('${getEscapedStringLiteral(
-                name.getText(),
-            )}') || typeof value.${getEscapedStringLiteral(
-                name.getText(),
-            )} !== '${propType}') {`,
-        );
-        typeGuardCode.push(`    return false;\n`);
-
-        typeGuardCode.push(`}\n`);
-    }
+  const propType = syntaxKindToType(type.kind);
+  const typeGuardCode: string[] = [];
+  if (isTypeReferenceNode(type) && !questionToken) {
     typeGuardCode.push(
-        generateUnionTypeGuardForProperty(type, typeAliases, name?.getText()),
-        generateIntersectionTypeGuardForProperty(
-            type,
-            typeAliases,
-            name?.getText(),
-        ),
+      `if (!value.hasOwnProperty('${getEscapedStringLiteral(
+        name.getText(),
+      )}') || !is${getEscapedCapitalizedStringLiteral(
+        type.typeName.getText(),
+      )}(value.${getEscapedStringLiteral(name.getText())})) {`,
     );
-    return typeGuardCode.join('');
+    typeGuardCode.push(`    return false;\n`);
+
+    typeGuardCode.push(`}\n`);
+  } else if (isPrimitiveSyntaxKind(type.kind) && !questionToken) {
+    typeGuardCode.push(
+      `if (!value.hasOwnProperty('${getEscapedStringLiteral(
+        name.getText(),
+      )}') || typeof value.${getEscapedStringLiteral(
+        name.getText(),
+      )} !== '${propType}') {`,
+    );
+    typeGuardCode.push(`    return false;\n`);
+
+    typeGuardCode.push(`}\n`);
+  }
+  typeGuardCode.push(
+    generateUnionTypeGuardForProperty(type, typeAliases, name?.getText()),
+    generateIntersectionTypeGuardForProperty(
+      type,
+      typeAliases,
+      name?.getText(),
+    ),
+  );
+  return typeGuardCode.join('');
 }
 
 /**
@@ -67,15 +73,15 @@ export function generatePropertyTypeGuard(
  * @returns {string[]} An array of strings containing the generated type guard code for the property signatures.
  */
 export function generateTypeLiteralTypeGuard(
-    typeLiteral: TypeLiteralNode,
-    typeAliases: TypeAliasDeclaration[],
-    parentName?: string,
+  typeLiteral: TypeLiteralNode,
+  typeAliases: TypeAliasDeclaration[],
+  parentName?: string,
 ): string[] {
-    const typeGuardCode: string[] = [];
-    typeLiteral.members.forEach(member => {
-        if (isPropertySignature(member)) {
-            typeGuardCode.push(generatePropertyTypeGuard(member, typeAliases));
-        }
-    });
-    return typeGuardCode;
+  const typeGuardCode: string[] = [];
+  typeLiteral.members.forEach(member => {
+    if (isPropertySignature(member)) {
+      typeGuardCode.push(generatePropertyTypeGuard(member, typeAliases));
+    }
+  });
+  return typeGuardCode;
 }

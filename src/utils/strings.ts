@@ -1,11 +1,16 @@
-import {Identifier, InterfaceDeclaration, TypeAliasDeclaration, TypeElement,} from 'typescript';
+import {
+  Identifier,
+  InterfaceDeclaration,
+  TypeAliasDeclaration,
+  TypeElement,
+} from 'typescript';
 
 /**
  * Check if value is a string and is equal to "type"
  * @param value - A value to check
  */
 export function isString(value: any): value is 'type' {
-    return typeof value === 'string' && value === 'type';
+  return typeof value === 'string' && value === 'type';
 }
 
 /**
@@ -13,10 +18,10 @@ export function isString(value: any): value is 'type' {
  * @param definition - An interface definition
  */
 export function getTypeNameFromTypeParameter(
-    definition: InterfaceDeclaration | TypeAliasDeclaration,
+  definition: InterfaceDeclaration | TypeAliasDeclaration,
 ): string | undefined {
-    if (!definition.typeParameters) return;
-    return definition.typeParameters[0].name.escapedText.toString();
+  if (!definition.typeParameters) return;
+  return definition.typeParameters[0].name.escapedText.toString();
 }
 
 /**
@@ -25,11 +30,11 @@ export function getTypeNameFromTypeParameter(
  * @param parentName - Optional. The name of the parent property.
  */
 export function getPropertyName(
-    property: TypeElement,
-    parentName?: string,
+  property: TypeElement,
+  parentName?: string,
 ): string {
-    if (!!parentName) return `${parentName}.${property.name.getText()}`;
-    return property.name.getText();
+  if (!!parentName) return `${parentName}.${property.name.getText()}`;
+  return property.name.getText();
 }
 
 /**
@@ -40,11 +45,11 @@ export function getPropertyName(
  * @param parentName - Optional. The name of the parent property.
  */
 export function buildHasOwnPropertyString(
-    property: TypeElement,
-    parentName?: string,
+  property: TypeElement,
+  parentName?: string,
 ): string {
-    const hasOwnPropertyString = !!parentName ? `value.${parentName}` : `value`;
-    return `${hasOwnPropertyString}.hasOwnProperty('${property.name.getText()}')`;
+  const hasOwnPropertyString = !!parentName ? `value.${parentName}` : `value`;
+  return `${hasOwnPropertyString}.hasOwnProperty('${property.name.getText()}')`;
 }
 
 /**
@@ -55,9 +60,9 @@ export function buildHasOwnPropertyString(
  * @param name - The Identifier object to extract the name from.
  */
 export function getName(name: Identifier): string {
-    if (!name) return;
-    if (name.hasOwnProperty('escapedText')) {
-        return name.escapedText.toString();
-    }
-    return name.getText();
+  if (!name) return;
+  if (name.hasOwnProperty('escapedText')) {
+    return name.escapedText.toString();
+  }
+  return name.getText();
 }
