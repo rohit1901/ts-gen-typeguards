@@ -11,6 +11,7 @@ import {
 } from '../api';
 import { getTypeNameFromTypeParameter } from '../utils';
 import { getEscapedCapitalizedStringLiteral } from 'ts-raw-utils';
+
 /**
  * Generates a type guard for a single interface definition.
  * @param definition

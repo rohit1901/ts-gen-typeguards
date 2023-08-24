@@ -21,6 +21,7 @@ const literalTypes: SyntaxKind[] = [
 export function isLiteral(kind: SyntaxKind): kind is SyntaxKind.LiteralType {
   return literalTypes.includes(kind);
 }
+
 /**
  * Enum containing only the SyntaxKind values of literal types.
  */
@@ -35,6 +36,7 @@ enum LiteralSyntaxKind {
   RegularExpressionLiteral = SyntaxKind.RegularExpressionLiteral,
   NoSubstitutionTemplateLiteral = SyntaxKind.NoSubstitutionTemplateLiteral,
 }
+
 /**
  * Define a map that maps SyntaxKind to their corresponding literal types.
  */
@@ -90,6 +92,7 @@ const literalTypeValues: Record<LiteralSyntaxKind, spFunction> = {
     return;
   },
 };
+
 /**
  * Getter function that returns the type of a literal based on its SyntaxKind.
  * @param kind
@@ -97,6 +100,7 @@ const literalTypeValues: Record<LiteralSyntaxKind, spFunction> = {
 export function getLiteralType(kind: SyntaxKind): string | undefined {
   return literalTypeMap[kind];
 }
+
 export function getLiteralTypeValue(type: LiteralTypeNode) {
   return literalTypeValues[type.literal.kind](type.literal);
 }

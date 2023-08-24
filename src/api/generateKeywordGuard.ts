@@ -1,19 +1,14 @@
-import {
-  isLiteralTypeNode,
-  PropertySignature,
-  SyntaxKind,
-  TypeNode,
-} from 'typescript';
+import { isLiteralTypeNode, SyntaxKind, TypeNode } from 'typescript';
 import {
   getLiteralType,
   isAnyKeyword,
   isKeyword,
-  isLiteral,
   isLiteralType,
   isNeverKeyword,
   isUnknownKeyword,
   syntaxKindToType,
 } from '../utils';
+
 /**
  * Generates type guards for the given TypeScript TypeNode, which can be a keyword or a literal Type.
  * In case of any, unknown or never keyword, the type guard condition is not generated as it is already checked using the hasOwnProperty check.
@@ -53,6 +48,7 @@ export function generateKeywordGuard(
   typeGuard.push(generateKeywordTypeGuard(typeName, type.kind));
   return typeGuard;
 }
+
 /**
  * Generates a type guard condition for a single keyword type.
  * The generated condition checks if a given value conforms to the specified keyword type.
@@ -113,6 +109,7 @@ export function generateLiteralTypeGuard(
     }
     return;
   }
+
   return `value.${propertyName} === ${
     getText(literalText) ?? getLiteralType(literalKind)
   }`;

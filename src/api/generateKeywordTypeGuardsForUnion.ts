@@ -22,6 +22,7 @@ export function generateStringKeywordTypeGuard(kind: SyntaxKind): string {
   }
   return '';
 }
+
 /**
  * Generates a type guard for the number keyword.
  *
@@ -34,6 +35,7 @@ export function generateNumberKeywordTypeGuard(kind: SyntaxKind): string {
   }
   return '';
 }
+
 /**
  * Generates a type guard for the bigint keyword.
  *
@@ -46,6 +48,7 @@ export function generateBigIntKeywordTypeGuard(kind: SyntaxKind): string {
   }
   return '';
 }
+
 /**
  * Generates a type guard for the symbol keyword.
  *
@@ -59,6 +62,7 @@ export function generateSymbolKeywordTypeGuard(kind: SyntaxKind): string {
   }
   return '';
 }
+
 /**
  * Generates a type guard for the object keyword.
  *
@@ -70,6 +74,7 @@ export function generateObjectKeywordTypeGuard(kind: SyntaxKind): string {
     return `(typeof value !== 'object' && value !== null)`;
   }
 }
+
 /**
  * Generates a type guard for the 'any' keyword.
  * NOTE: any keyword is not a type guard and typeguard should not be generated for it.
@@ -110,6 +115,7 @@ export function generateNeverKeywordTypeGuard(kind: SyntaxKind) {
   //NOTE: never keyword is not a type guard and typeguard should not be generated for it
   return;
 }
+
 /**
  * Generates a type guard for the void keyword.
  *
@@ -121,6 +127,7 @@ export function generateVoidKeywordTypeGuard(kind: SyntaxKind): string {
     return `(value !== undefined)`;
   }
 }
+
 /**
  * Generates a type guard for the keyof keyword.
  *
@@ -130,11 +137,12 @@ export function generateVoidKeywordTypeGuard(kind: SyntaxKind): string {
 export function generateKeyofKeywordTypeGuard(kind: SyntaxKind): string {
   //TODO: fix this function to generate the correct type guard
   /*if(isKeyofKeyword(kind)) {
-        return `(typeof value !== keyof)`;
-    }
-    */
+          return `(typeof value !== keyof)`;
+      }
+      */
   return '';
 }
+
 /**
  * Generates a type guard for the boolean keyword.
  *
@@ -147,6 +155,7 @@ export function generateBooleanKeywordTypeGuard(type: SyntaxKind): string {
   }
   return '';
 }
+
 /**
  * Generates a type guard for the undefined keyword.
  *

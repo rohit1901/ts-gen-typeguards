@@ -1,7 +1,7 @@
-import { capitalize, removeWhitespace } from 'ts-raw-utils';
+import { removeWhitespace } from 'ts-raw-utils';
 import { generateEnumTypeGuards } from '../api';
-import { createSourceFile } from 'typescript';
 import * as ts from 'typescript';
+import { createSourceFile } from 'typescript';
 
 describe('Generator', () => {
   const text = `export enum Fruit {

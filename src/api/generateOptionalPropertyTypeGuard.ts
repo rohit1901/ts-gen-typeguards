@@ -56,53 +56,53 @@ export function generateOptionalPropertyTypeGuard(
   );
   // check if the type is a TypeReference
   /*typeGuardCode.push(
-      createTypeguardString(
-        parentName ?? name.getText(),
-        generateTypeReferenceGuard(type, parentName ?? name.getText(), true).join(
-          '',
+        createTypeguardString(
+          parentName ?? name.getText(),
+          generateTypeReferenceGuard(type, parentName ?? name.getText(), true).join(
+            '',
+          ),
         ),
-      ),
-      createTypeguardString(
-        parentName ?? name.getText(),
-        generateKeywordGuard(
-          property.type,
+        createTypeguardString(
           parentName ?? name.getText(),
-          true,
-        ).join(''),
-      ),
-      createTypeguardString(
-        parentName ?? name.getText(),
-        generateTypeLiteralTypeGuardWithinUnion(
-          type,
+          generateKeywordGuard(
+            property.type,
+            parentName ?? name.getText(),
+            true,
+          ).join(''),
+        ),
+        createTypeguardString(
           parentName ?? name.getText(),
-          typeParameterName,
-        ).join(''),
-      ),
-      createTypeguardString(
-        parentName ?? name.getText(),
-        generateLiteralTypeTypeGuard(property),
-      ),
-      createTypeguardString(
-        parentName ?? name.getText(),
-        generateArrayTypeGuard(property, parentName ?? name.getText()),
-      ),
-      createTypeguardString(
-        parentName ?? name.getText(),
-        generateIntersectionTypeGuard(
-          property.type,
+          generateTypeLiteralTypeGuardWithinUnion(
+            type,
+            parentName ?? name.getText(),
+            typeParameterName,
+          ).join(''),
+        ),
+        createTypeguardString(
           parentName ?? name.getText(),
-          true,
-        ).join('&&'),
-      ),
-      createTypeguardString(
-        parentName ?? name.getText(),
-        generateUnionTypeGuard(
-          property.type,
+          generateLiteralTypeTypeGuard(property),
+        ),
+        createTypeguardString(
           parentName ?? name.getText(),
-          true,
-        ).join('&&'),
-      ),
-    )*/
+          generateArrayTypeGuard(property, parentName ?? name.getText()),
+        ),
+        createTypeguardString(
+          parentName ?? name.getText(),
+          generateIntersectionTypeGuard(
+            property.type,
+            parentName ?? name.getText(),
+            true,
+          ).join('&&'),
+        ),
+        createTypeguardString(
+          parentName ?? name.getText(),
+          generateUnionTypeGuard(
+            property.type,
+            parentName ?? name.getText(),
+            true,
+          ).join('&&'),
+        ),
+      )*/
   return typeGuardCode.filter(value => value !== '');
 }
 
