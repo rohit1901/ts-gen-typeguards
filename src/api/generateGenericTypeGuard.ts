@@ -1,11 +1,7 @@
-import {
-  isPropertySignature,
-  NodeArray,
-  TypeElement,
-  TypeParameterDeclaration,
-} from 'typescript';
-import { buildHasOwnPropertyString, getPropertyName } from '../utils';
-import { capitalize } from 'ts-raw-utils';
+import {isPropertySignature, NodeArray, TypeElement, TypeParameterDeclaration,} from 'typescript';
+import {buildHasOwnPropertyString, getPropertyName} from '../utils';
+import {capitalize} from 'ts-raw-utils';
+
 /**
  * Generate a generic type guard for a given property. This is used for nested properties as well.
  * @example
@@ -43,15 +39,21 @@ export function generateGenericPropertyGuard(
  *
  * @param objectName - The name of the object to generate the type guard for.
  * @param typeParameters - The type parameters of the object.
+ * @param typeArguments
  * @returns A string representing the generic function signature for the type guard.
  */
 export function buildGenericFunctionSignature(
   objectName: string,
-  typeParameters: NodeArray<TypeParameterDeclaration>,
+  typeParameters?: NodeArray<TypeParameterDeclaration>,
+  typeArguments?: string,
 ) {
   const genericNames = generateGenericParameterList(typeParameters);
   const genericNamesWithConstraints =
     generateGenericParameterListWithConstraints(typeParameters);
+  if(typeArguments && typeArguments !== '') {
+    return `export function is${objectName}<${genericNamesWithConstraints}>(value: any, ${typeArguments}): value is ${objectName}<${typeArguments}>{return(typeof value === "object" &&
+      value !== null`;
+  }
   return `export function is${objectName}<${genericNamesWithConstraints}>(value: any, ${getGenericFunctionParameters(
     typeParameters,
   )}): value is ${objectName}<${genericNames}>{return(typeof value === "object" &&
@@ -99,11 +101,10 @@ export function generateGenericParameterListWithConstraints(
  * @param typeParameters - The type parameters of the object.
  * @returns A string of generic function parameters like isT: (val: any) => val is T.
  */
-function getGenericFunctionParameters(
-  typeParameters: NodeArray<TypeParameterDeclaration>,
+export function getGenericFunctionParameters(
+  typeParameters?: NodeArray<TypeParameterDeclaration>,
 ) {
-  return typeParameters
-    .map(
+  return typeParameters?.map(
       parameter =>
         `is${capitalize(
           parameter.name.getText(),

@@ -397,36 +397,64 @@ export function isExtendedDirectionEnum(
     isDirectionEnum(value)
   );
 }
-export function isContainerOfString(value: any): value is ContainerOfString {
-  return value !== null && isContainer<string>(value);
+export function isContainerOfString(
+  value: any,
+  isString: (v: any) => v is string,
+): value is ContainerOfString {
+  return value !== null && isContainer<string>(value, isString);
 }
-export function isContainerOfNumber(value: any): value is ContainerOfNumber {
-  return value !== null && isContainer<number>(value);
+export function isContainerOfNumber(
+  value: any,
+  isNumber: (v: any) => v is number,
+): value is ContainerOfNumber {
+  return value !== null && isContainer<number>(value, isNumber);
 }
 export function isColorContainer<T extends ColorEnumGeneric>(
   value: any,
   isT: (val: any) => val is T,
 ): value is ColorContainer<T> {
-  return typeof value === 'object' && value !== null && isContainer<T>(value);
+  return (
+    typeof value === 'object' && value !== null && isContainer<T>(value, isT)
+  );
 }
-export function isRedContainer(value: any): value is RedContainer {
-  return value !== null && isColorContainer<ColorEnumGeneric.Red>(value);
+export function isRedContainer(
+  value: any,
+  isColorEnumGeneric: (v: any) => v is ColorEnumGeneric.Red,
+): value is RedContainer {
+  return (
+    value !== null &&
+    isColorContainer<ColorEnumGeneric.Red>(value, isColorEnumGeneric)
+  );
 }
-export function isGreenContainer(value: any): value is GreenContainer {
-  return value !== null && isColorContainer<ColorEnumGeneric.Green>(value);
+export function isGreenContainer(
+  value: any,
+  isColorEnumGeneric: (v: any) => v is ColorEnumGeneric.Green,
+): value is GreenContainer {
+  return (
+    value !== null &&
+    isColorContainer<ColorEnumGeneric.Green>(value, isColorEnumGeneric)
+  );
 }
-export function isBlueContainer(value: any): value is BlueContainer {
-  return value !== null && isColorContainer<ColorEnumGeneric.Blue>(value);
+export function isBlueContainer(
+  value: any,
+  isColorEnumGeneric: (v: any) => v is ColorEnumGeneric.Blue,
+): value is BlueContainer {
+  return (
+    value !== null &&
+    isColorContainer<ColorEnumGeneric.Blue>(value, isColorEnumGeneric)
+  );
 }
 export function isOptionalContainerOfString(
   value: any,
+  isString: (v: any) => v is string,
 ): value is OptionalContainerOfString {
-  return value !== null && isPropertyContainer<string>(value);
+  return value !== null && isPropertyContainer<string>(value, isString);
 }
 export function isOptionalContainerOfNumber(
   value: any,
+  isNumber: (v: any) => v is number,
 ): value is OptionalContainerOfNumber {
-  return value !== null && isPropertyContainer<number>(value);
+  return value !== null && isPropertyContainer<number>(value, isNumber);
 }
 export function isDirectionGeneric(value: any): value is DirectionGeneric {
   return (
@@ -441,17 +469,21 @@ export function isDirectionContainer<T extends DirectionGeneric>(
   value: any,
   isT: (val: any) => val is T,
 ): value is DirectionContainer<T> {
-  return typeof value === 'object' && value !== null && isContainer<T>(value);
+  return (
+    typeof value === 'object' && value !== null && isContainer<T>(value, isT)
+  );
 }
 export function isUpDirectionContainer(
   value: any,
+  isUp: (v: any) => v is 'up',
 ): value is UpDirectionContainer {
-  return value !== null && isDirectionContainer<'up'>(value);
+  return value !== null && isDirectionContainer<'up'>(value, isUp);
 }
 export function isDownDirectionContainer(
   value: any,
+  isDown: (v: any) => v is 'down',
 ): value is DownDirectionContainer {
-  return value !== null && isDirectionContainer<'down'>(value);
+  return value !== null && isDirectionContainer<'down'>(value, isDown);
 }
 export function isShapeWithProperty<T extends ShapeGeneric>(
   value: any,
@@ -465,16 +497,25 @@ export function isShapeWithProperty<T extends ShapeGeneric>(
     isColorEnumGeneric(value.color)
   );
 }
-export function isColoredCircle(value: any): value is ColoredCircle {
+export function isColoredCircle(
+  value: any,
+  isCustomType: (val: any) => val is { type: 'circle'; radius: number },
+): value is ColoredCircle {
   return (
     value !== null &&
-    isShapeWithProperty<{ type: 'circle'; radius: number }>(value)
+    isShapeWithProperty<{ type: 'circle'; radius: number }>(value, isCustomType)
   );
 }
-export function isColoredSquare(value: any): value is ColoredSquare {
+export function isColoredSquare(
+  value: any,
+  isCustomType: (val: any) => val is { type: 'square'; sideLength: number },
+): value is ColoredSquare {
   return (
     value !== null &&
-    isShapeWithProperty<{ type: 'square'; sideLength: number }>(value)
+    isShapeWithProperty<{ type: 'square'; sideLength: number }>(
+      value,
+      isCustomType,
+    )
   );
 }
 export function isVehicleWithType<T extends VehicleTypeGeneric>(
@@ -492,11 +533,23 @@ export function isVehicleWithType<T extends VehicleTypeGeneric>(
     typeof value.model === 'string'
   );
 }
-export function isCarWithInfo(value: any): value is CarWithInfo {
-  return value !== null && isVehicleWithType<VehicleTypeGeneric.Car>(value);
+export function isCarWithInfo(
+  value: any,
+  isVehicleTypeGeneric: (v: any) => v is VehicleTypeGeneric.Car,
+): value is CarWithInfo {
+  return (
+    value !== null &&
+    isVehicleWithType<VehicleTypeGeneric.Car>(value, isVehicleTypeGeneric)
+  );
 }
-export function isBikeWithInfo(value: any): value is BikeWithInfo {
-  return value !== null && isVehicleWithType<VehicleTypeGeneric.Bike>(value);
+export function isBikeWithInfo(
+  value: any,
+  isVehicleTypeGeneric: (v: any) => v is VehicleTypeGeneric.Bike,
+): value is BikeWithInfo {
+  return (
+    value !== null &&
+    isVehicleWithType<VehicleTypeGeneric.Bike>(value, isVehicleTypeGeneric)
+  );
 }
 export function isCustomShapeInterface(
   value: any,

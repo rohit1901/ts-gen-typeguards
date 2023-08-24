@@ -1,12 +1,15 @@
 import {
+  isIntersectionTypeNode,
   isQualifiedName,
+  isTypeLiteralNode,
   isTypeReferenceNode,
+  isUnionTypeNode,
   TypeNode,
   TypeReferenceNode,
 } from 'typescript';
-import {} from '../utils';
-import { generateQualifiedNameTypeGuard } from '../api';
-import { getEscapedCapitalizedStringLiteral } from 'ts-raw-utils';
+import {generateQualifiedNameTypeGuard} from '../api';
+import {getEscapedCapitalizedStringLiteral} from 'ts-raw-utils';
+
 /**
  * Generates a type guard for a TypeReferenceNode. Used to generate type guard string for type aliases.
  * @param type - A TypeNode.
@@ -51,15 +54,30 @@ export function generateTypeReferenceGuard(
     typeGuard.push(
       `is${getEscapedCapitalizedStringLiteral(
         type.typeName.getText(),
-      )}${buildTypeArguments(type)}(value.${typeName})`,
+      )}${buildTypeArguments(type)}(value.${typeName}, ${buildGenericParameterList(type, `value.${typeName}`)})`,
     );
     return typeGuard;
   }
+  if(type.typeArguments && type.typeArguments.length > 0) {
+    type.typeArguments.forEach(typeArgument => {
+      if(isQualifiedName(typeArgument)) {
+        typeGuard.push(
+          generateQualifiedNameTypeGuard(
+            typeArgument,
+            typeArgument.left.getText(),
+          ),
+            ``
+        );
+      }
+    });
+  }
+  const functionParams = ['value'];
+  functionParams.push(buildGenericParameterList(type, 'value'));
   // Generate type guard for non-property
   typeGuard.push(
     `is${getEscapedCapitalizedStringLiteral(
       type.typeName.getText(),
-    )}${buildTypeArguments(type)}(value)`,
+    )}${buildTypeArguments(type)}(${functionParams.join(',')})`,
   );
   return typeGuard;
 }
@@ -90,9 +108,35 @@ function buildTypeArguments(typeReference: TypeReferenceNode) {
   if (typeArguments) return `<${typeArguments}>`;
   return '';
 }
-function buildGenericParameterList(genericNames?: string) {
-  if (genericNames) {
-    `<${genericNames}>`;
-  }
-  return '';
+
+/**
+ * Builds a comma-separated list of type guards based on the provided type reference's type arguments.
+ * If a type argument is a TypeReferenceNode, it generates a type guard using its type name.
+ * If a type argument is a complex type like a TypeLiteralNode, IntersectionTypeNode, or UnionTypeNode,
+ * it generates a type guard using the placeholder 'CustomType'.
+ *
+ * @param {TypeReferenceNode} typeReference - The type reference node containing type arguments.
+ * @param {string} [functionParameter] - An optional parameter for generating function parameters.
+ * @returns {string} A comma-separated list of type guards for the type arguments.
+ * @example
+ * // Given a type reference with type arguments
+ * // TypeReference: ShapeWithProperty<{ type: 'circle'; radius: number }>
+ * const typeReference = getTypeReferenceNode(); // Type reference node
+ * const result = buildGenericParameterList(typeReference);
+ * // Result: "isShapeWithProperty,isCustomType"
+ */
+export function buildGenericParameterList(typeReference: TypeReferenceNode, functionParameter?: string) {
+  const typeArguments = typeReference.typeArguments?.map(typeArgument => {
+    if (isTypeReferenceNode(typeArgument)) {
+      if(isQualifiedName(typeArgument.typeName)) {
+        return typeArgument.typeName.left.getText();
+      }
+      return typeArgument.typeName.getText();
+    }
+    if(isTypeLiteralNode(typeArgument) || isIntersectionTypeNode(typeArgument) || isUnionTypeNode(typeArgument)) {
+      return 'CustomType';
+    }
+    return typeArgument.getText();
+  });
+  return typeArguments?.map(typeArgument => `is${getEscapedCapitalizedStringLiteral(typeArgument)}`).filter(v => !!v).join(',') ?? '';
 }
