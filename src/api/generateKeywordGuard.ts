@@ -35,6 +35,7 @@ export function generateKeywordGuard(
     typeGuard.push(generateKeywordGuardForType(type));
     return typeGuard;
   }
+
   if (isLiteralTypeNode(type)) {
     typeGuard.push(
       generateLiteralTypeGuard(
