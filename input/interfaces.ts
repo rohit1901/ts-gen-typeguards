@@ -29,7 +29,7 @@ export interface TriangleInterface {
     height: number;
 }
 
-type CustomShapeInterface = CircleInterface | SquareInterface | TriangleInterface;
+export type CustomShapeInterface = CircleInterface | SquareInterface | TriangleInterface;
 
 export interface CarInterface {
     brand: string;

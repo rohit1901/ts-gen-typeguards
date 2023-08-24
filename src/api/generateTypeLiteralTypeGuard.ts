@@ -7,8 +7,10 @@ import {
   TypeLiteralNode,
 } from 'typescript';
 import { isPrimitiveSyntaxKind, syntaxKindToType } from '../utils';
-import { generateUnionTypeGuardForProperty } from '../api';
-import { generateIntersectionTypeGuardForProperty } from '../api';
+import {
+  generateIntersectionTypeGuardForProperty,
+  generateUnionTypeGuardForProperty,
+} from '../api';
 import {
   getEscapedCapitalizedStringLiteral,
   getEscapedStringLiteral,
@@ -60,6 +62,7 @@ export function generatePropertyTypeGuard(
   );
   return typeGuardCode.join('');
 }
+
 /**
  * Generates TypeScript type guards for a given TypeLiteralNode by iterating through its members
  * and generating type guards for property signatures.

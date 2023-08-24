@@ -85,6 +85,7 @@ export function generateIntersectionTypeGuardForType(
 
   return typeGuardCode.join('');
 }
+
 /**
  * Generates a type guard condition for an intersection type property.
  *
@@ -210,6 +211,7 @@ function generateTypeLiteralGuards(
     }
   }
 }
+
 /**
  * Process an intersection type and generate type guard code based on the type's components.
  *
