@@ -1,11 +1,6 @@
-import {
-  isPropertySignature,
-  NodeArray,
-  TypeElement,
-  TypeParameterDeclaration,
-} from 'typescript';
-import { buildHasOwnPropertyString, getPropertyName } from '../utils';
-import { capitalize } from 'ts-raw-utils';
+import {isPropertySignature, NodeArray, TypeElement, TypeParameterDeclaration,} from 'typescript';
+import {buildHasOwnPropertyString, getPropertyName} from '../utils';
+import {capitalize} from 'ts-raw-utils';
 
 /**
  * Generate a generic type guard for a given property. This is used for nested properties as well.
@@ -21,15 +16,15 @@ import { capitalize } from 'ts-raw-utils';
  * @param genericName
  */
 export function generateGenericPropertyGuard(
-  property: TypeElement,
-  parentName?: string,
-  genericName?: string,
+    property: TypeElement,
+    parentName?: string,
+    genericName?: string,
 ) {
-  if (!isPropertySignature(property) || !genericName) return [];
-  return [
-    buildHasOwnPropertyString(property, parentName),
-    `is${genericName}(value.${getPropertyName(property, parentName)})`,
-  ];
+    if (!isPropertySignature(property) || !genericName) return [];
+    return [
+        buildHasOwnPropertyString(property, parentName),
+        `is${genericName}(value.${getPropertyName(property, parentName)})`,
+    ];
 }
 
 /**
@@ -48,20 +43,20 @@ export function generateGenericPropertyGuard(
  * @returns A string representing the generic function signature for the type guard.
  */
 export function buildGenericFunctionSignature(
-  objectName: string,
-  typeParameters?: NodeArray<TypeParameterDeclaration>,
-  typeArguments?: string,
+    objectName: string,
+    typeParameters?: NodeArray<TypeParameterDeclaration>,
+    typeArguments?: string,
 ) {
-  const genericNames = generateGenericParameterList(typeParameters);
-  const genericNamesWithConstraints =
-    generateGenericParameterListWithConstraints(typeParameters);
-  if (typeArguments && typeArguments !== '') {
-    return `export function is${objectName}<${genericNamesWithConstraints}>(value: any, ${typeArguments}): value is ${objectName}<${typeArguments}>{return(typeof value === "object" &&
+    const genericNames = generateGenericParameterList(typeParameters);
+    const genericNamesWithConstraints =
+        generateGenericParameterListWithConstraints(typeParameters);
+    if (typeArguments && typeArguments !== '') {
+        return `export function is${objectName}<${genericNamesWithConstraints}>(value: any, ${typeArguments}): value is ${objectName}<${typeArguments}>{return(typeof value === "object" &&
       value !== null`;
-  }
-  return `export function is${objectName}<${genericNamesWithConstraints}>(value: any, ${getGenericFunctionParameters(
-    typeParameters,
-  )}): value is ${objectName}<${genericNames}>{return(typeof value === "object" &&
+    }
+    return `export function is${objectName}<${genericNamesWithConstraints}>(value: any, ${getGenericFunctionParameters(
+        typeParameters,
+    )}): value is ${objectName}<${genericNames}>{return(typeof value === "object" &&
     value !== null`;
 }
 
@@ -73,9 +68,9 @@ export function buildGenericFunctionSignature(
  * @param typeParameters - The type parameters of the object.
  */
 export function generateGenericParameterList(
-  typeParameters?: NodeArray<TypeParameterDeclaration>,
+    typeParameters?: NodeArray<TypeParameterDeclaration>,
 ): string {
-  return typeParameters?.map(p => `${p.name.getText()}`).join(',');
+    return typeParameters?.map(p => `${p.name.getText()}`).join(',');
 }
 
 /**
@@ -86,16 +81,16 @@ export function generateGenericParameterList(
  * @param typeParameters
  */
 export function generateGenericParameterListWithConstraints(
-  typeParameters?: NodeArray<TypeParameterDeclaration>,
+    typeParameters?: NodeArray<TypeParameterDeclaration>,
 ): string {
-  return typeParameters
-    ?.map(
-      p =>
-        `${p.name.getText()} ${
-          p.constraint ? 'extends ' + p.constraint?.getText() : ''
-        }`,
-    )
-    .join(',');
+    return typeParameters
+        ?.map(
+            p =>
+                `${p.name.getText()} ${
+                    p.constraint ? 'extends ' + p.constraint?.getText() : ''
+                }`,
+        )
+        .join(',');
 }
 
 /**
@@ -107,14 +102,14 @@ export function generateGenericParameterListWithConstraints(
  * @returns A string of generic function parameters like isT: (val: any) => val is T.
  */
 export function getGenericFunctionParameters(
-  typeParameters?: NodeArray<TypeParameterDeclaration>,
+    typeParameters?: NodeArray<TypeParameterDeclaration>,
 ) {
-  return typeParameters
-    ?.map(
-      parameter =>
-        `is${capitalize(
-          parameter.name.getText(),
-        )}: (val: any) => val is ${parameter.name.getText()}`,
-    )
-    .join(',');
+    return typeParameters
+        ?.map(
+            parameter =>
+                `is${capitalize(
+                    parameter.name.getText(),
+                )}: (val: any) => val is ${parameter.name.getText()}`,
+        )
+        .join(',');
 }

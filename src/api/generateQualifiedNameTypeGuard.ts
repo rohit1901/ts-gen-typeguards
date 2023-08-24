@@ -1,4 +1,5 @@
-import { QualifiedName } from 'typescript';
+import {QualifiedName} from 'typescript';
+
 /**
  * Function to generate a type guard for a QualifiedName.
  * A QualifiedName is used to represent a qualified name, e.g. `A.B` in the following code:
@@ -19,11 +20,11 @@ import { QualifiedName } from 'typescript';
  * @param typeName - The name of the type.
  */
 export function generateQualifiedNameTypeGuard(
-  type: QualifiedName,
-  typeName?: string,
+    type: QualifiedName,
+    typeName?: string,
 ) {
-  const v = !!typeName ? `value.${typeName}` : 'value';
-  return `${v} === ${type.left.getText()}.${type.right.getText()}`;
+    const v = !!typeName ? `value.${typeName}` : 'value';
+    return `${v} === ${type.left.getText()}.${type.right.getText()}`;
 }
 
 /**
@@ -32,5 +33,5 @@ export function generateQualifiedNameTypeGuard(
  * @param type
  */
 export function getQualifiedNameText(type: QualifiedName) {
-  return `${type.left.getText()}.${type.right.getText()}`;
+    return `${type.left.getText()}.${type.right.getText()}`;
 }

@@ -1,42 +1,43 @@
 import {
-  factory,
-  isIntersectionTypeNode,
-  isLiteralTypeNode,
-  isPropertySignature,
-  isTypeLiteralNode,
-  isTypeReferenceNode,
-  isUnionTypeNode,
-  PropertyName,
-  TypeAliasDeclaration,
-  TypeNode,
-  TypeReferenceNode,
+    factory,
+    isIntersectionTypeNode,
+    isLiteralTypeNode,
+    isPropertySignature,
+    isTypeLiteralNode,
+    isTypeReferenceNode,
+    isUnionTypeNode,
+    PropertyName,
+    TypeAliasDeclaration,
+    TypeNode,
+    TypeReferenceNode,
 } from 'typescript';
-import { generateLiteralTypeTypeGuard } from './generateLiteralTypeTypeGuard';
+import {generateLiteralTypeTypeGuard} from './generateLiteralTypeTypeGuard';
 import {
-  isAnyKeyword,
-  isBigIntKeyword,
-  isBooleanKeyword,
-  isNumberKeyword,
-  isObjectKeyword,
-  isStringKeyword,
-  isSymbolKeyword,
-  isUndefinedKeyword,
-  isUnknownKeyword,
-  isVoidKeyword,
+    isAnyKeyword,
+    isBigIntKeyword,
+    isBooleanKeyword,
+    isNumberKeyword,
+    isObjectKeyword,
+    isStringKeyword,
+    isSymbolKeyword,
+    isUndefinedKeyword,
+    isUnknownKeyword,
+    isVoidKeyword,
 } from '../utils';
 import {
-  generateBigIntKeywordTypeGuard,
-  generateBooleanKeywordTypeGuard,
-  generateNumberKeywordTypeGuard,
-  generateObjectKeywordTypeGuard,
-  generateStringKeywordTypeGuard,
-  generateSymbolKeywordTypeGuard,
-  generateUndefinedKeywordTypeGuard,
-  generateVoidKeywordTypeGuard,
+    generateBigIntKeywordTypeGuard,
+    generateBooleanKeywordTypeGuard,
+    generateNumberKeywordTypeGuard,
+    generateObjectKeywordTypeGuard,
+    generateStringKeywordTypeGuard,
+    generateSymbolKeywordTypeGuard,
+    generateUndefinedKeywordTypeGuard,
+    generateVoidKeywordTypeGuard,
 } from './generateKeywordTypeGuardsForUnion';
-import { generateIntersectionTypeGuardForType } from './generateIntersectionTypeGuardForType';
-import { generatePropertyGuard } from '../api';
-import { capitalize } from 'ts-raw-utils';
+import {generateIntersectionTypeGuardForType} from './generateIntersectionTypeGuardForType';
+import {generatePropertyGuard} from '../api';
+import {capitalize} from 'ts-raw-utils';
+
 /**
  * Generate a union type guard for a given TypeScript type alias.
  *
@@ -46,21 +47,21 @@ import { capitalize } from 'ts-raw-utils';
  * @returns The generated union type guard code as a string.
  */
 export function generateUnionTypeGuardForIntersection(
-  { type }: TypeAliasDeclaration,
-  typeAliases: TypeAliasDeclaration[],
-  name?: PropertyName,
+    {type}: TypeAliasDeclaration,
+    typeAliases: TypeAliasDeclaration[],
+    name?: PropertyName,
 ): string {
-  if (!isUnionTypeNode(type)) {
-    return '';
-  }
-  const typeGuardCode: string[] = [];
-  for (const unionType of type.types) {
-    typeGuardCode.push(
-      ...processUnionTypeWithTypeGuards(unionType, typeAliases),
-    );
-  }
+    if (!isUnionTypeNode(type)) {
+        return '';
+    }
+    const typeGuardCode: string[] = [];
+    for (const unionType of type.types) {
+        typeGuardCode.push(
+            ...processUnionTypeWithTypeGuards(unionType, typeAliases),
+        );
+    }
 
-  return `if(${typeGuardCode.join(' || ')}) return false;`;
+    return `if(${typeGuardCode.join(' || ')}) return false;`;
 }
 
 /**
@@ -70,17 +71,17 @@ export function generateUnionTypeGuardForIntersection(
  * @param typeAliases - An array of TypeAliasDeclaration containing type aliases used in the union.
  */
 export function generateTypeReferenceTypeGuard(
-  typeRefNode: TypeReferenceNode,
-  typeAliases: TypeAliasDeclaration[],
+    typeRefNode: TypeReferenceNode,
+    typeAliases: TypeAliasDeclaration[],
 ): string[] {
-  const typeGuardCode = [];
-  const typeAlias = typeAliases.find(
-    typeAlias => typeAlias.name.getText() === typeRefNode.typeName.getText(),
-  );
-  if (typeAlias) {
-    typeGuardCode.push(generateTypeAliasGuardExpression(typeAlias));
-  }
-  return typeGuardCode;
+    const typeGuardCode = [];
+    const typeAlias = typeAliases.find(
+        typeAlias => typeAlias.name.getText() === typeRefNode.typeName.getText(),
+    );
+    if (typeAlias) {
+        typeGuardCode.push(generateTypeAliasGuardExpression(typeAlias));
+    }
+    return typeGuardCode;
 }
 
 /**
@@ -118,25 +119,25 @@ export function generateTypeReferenceTypeGuard(
  * // []
  */
 export function generateTypeLiteralTypeGuardWithinUnion(
-  typeLiteral: TypeNode,
-  parentName?: string,
-  typeParameterName?: string,
+    typeLiteral: TypeNode,
+    parentName?: string,
+    typeParameterName?: string,
 ): string[] {
-  if (!isTypeLiteralNode(typeLiteral)) return [];
-  const propertyGuards: string[] = [];
-  for (const member of typeLiteral.members) {
-    if (isPropertySignature(member)) {
-      propertyGuards.push(
-        ...generatePropertyGuard(member, parentName, typeParameterName),
-      );
+    if (!isTypeLiteralNode(typeLiteral)) return [];
+    const propertyGuards: string[] = [];
+    for (const member of typeLiteral.members) {
+        if (isPropertySignature(member)) {
+            propertyGuards.push(
+                ...generatePropertyGuard(member, parentName, typeParameterName),
+            );
+        }
     }
-  }
 
-  if (propertyGuards.length > 0) {
-    return [`(${propertyGuards.join(' && ')})`];
-  }
+    if (propertyGuards.length > 0) {
+        return [`(${propertyGuards.join(' && ')})`];
+    }
 
-  return [`(${propertyGuards.join('')})`];
+    return [`(${propertyGuards.join('')})`];
 }
 
 /**
@@ -146,9 +147,9 @@ export function generateTypeLiteralTypeGuardWithinUnion(
  * @returns The generated type guard code as a string.
  */
 export function generateTypeAliasGuardExpression(
-  typeAlias: TypeAliasDeclaration,
+    typeAlias: TypeAliasDeclaration,
 ): string {
-  return `!is${capitalize(typeAlias.name.getText())}(value)`;
+    return `!is${capitalize(typeAlias.name.getText())}(value)`;
 }
 
 /**
@@ -159,35 +160,35 @@ export function generateTypeAliasGuardExpression(
  * @param name
  */
 export function generateUnionTypeGuardForProperty(
-  type: TypeNode,
-  typeAliases: TypeAliasDeclaration[],
-  name?: string,
+    type: TypeNode,
+    typeAliases: TypeAliasDeclaration[],
+    name?: string,
 ): string {
-  const typeGuardCode: string[] = [];
-  if (!isUnionTypeNode(type)) {
-    return '';
-  }
-  if (name) {
-    typeGuardCode.push(`!value.hasOwnProperty('${name}')`);
-  }
-  for (const unionType of type.types) {
-    if (isIntersectionTypeNode(unionType)) {
-      typeGuardCode.push(
-        generateIntersectionTypeGuardForType(
-          factory.createTypeAliasDeclaration(
-            undefined,
-            undefined,
-            undefined,
-            unionType,
-          ),
-          typeAliases,
-        ),
-      );
+    const typeGuardCode: string[] = [];
+    if (!isUnionTypeNode(type)) {
+        return '';
     }
-    processUnionTypeWithTypeGuards(unionType, typeAliases);
-  }
+    if (name) {
+        typeGuardCode.push(`!value.hasOwnProperty('${name}')`);
+    }
+    for (const unionType of type.types) {
+        if (isIntersectionTypeNode(unionType)) {
+            typeGuardCode.push(
+                generateIntersectionTypeGuardForType(
+                    factory.createTypeAliasDeclaration(
+                        undefined,
+                        undefined,
+                        undefined,
+                        unionType,
+                    ),
+                    typeAliases,
+                ),
+            );
+        }
+        processUnionTypeWithTypeGuards(unionType, typeAliases);
+    }
 
-  return `if(${typeGuardCode.join(' || ')}) return false;`;
+    return `if(${typeGuardCode.join(' || ')}) return false;`;
 }
 
 /**
@@ -213,38 +214,38 @@ export function generateUnionTypeGuardForProperty(
  * The generated type guard code snippets can be later used for runtime type checks or other purposes.
  */
 function processUnionTypeWithTypeGuards(
-  unionType: TypeNode,
-  typeAliases: TypeAliasDeclaration[],
+    unionType: TypeNode,
+    typeAliases: TypeAliasDeclaration[],
 ): string[] {
-  const typeGuardCode: string[] = [];
-  if (isTypeReferenceNode(unionType)) {
-    typeGuardCode.push(
-      ...generateTypeReferenceTypeGuard(unionType, typeAliases),
-    );
-  } else if (isTypeLiteralNode(unionType)) {
-    typeGuardCode.push(...generateTypeLiteralTypeGuardWithinUnion(unionType));
-  } else if (isLiteralTypeNode(unionType)) {
-    typeGuardCode.push(generateLiteralTypeTypeGuard(unionType));
-  } else if (isUndefinedKeyword(unionType.kind)) {
-    typeGuardCode.push(generateUndefinedKeywordTypeGuard(unionType.kind));
-  } else if (isBooleanKeyword(unionType.kind)) {
-    typeGuardCode.push(generateBooleanKeywordTypeGuard(unionType.kind));
-  } else if (isStringKeyword(unionType.kind)) {
-    typeGuardCode.push(generateStringKeywordTypeGuard(unionType.kind));
-  } else if (isNumberKeyword(unionType.kind)) {
-    typeGuardCode.push(generateNumberKeywordTypeGuard(unionType.kind));
-  } else if (isBigIntKeyword(unionType.kind)) {
-    typeGuardCode.push(generateBigIntKeywordTypeGuard(unionType.kind));
-  } else if (isSymbolKeyword(unionType.kind)) {
-    typeGuardCode.push(generateSymbolKeywordTypeGuard(unionType.kind));
-  } else if (isObjectKeyword(unionType.kind)) {
-    typeGuardCode.push(generateObjectKeywordTypeGuard(unionType.kind));
-  } else if (isAnyKeyword(unionType.kind)) {
-    typeGuardCode.push(generateObjectKeywordTypeGuard(unionType.kind));
-  } else if (isUnknownKeyword(unionType.kind)) {
-    typeGuardCode.push(generateObjectKeywordTypeGuard(unionType.kind));
-  } else if (isVoidKeyword(unionType.kind)) {
-    typeGuardCode.push(generateVoidKeywordTypeGuard(unionType.kind));
-  }
-  return typeGuardCode;
+    const typeGuardCode: string[] = [];
+    if (isTypeReferenceNode(unionType)) {
+        typeGuardCode.push(
+            ...generateTypeReferenceTypeGuard(unionType, typeAliases),
+        );
+    } else if (isTypeLiteralNode(unionType)) {
+        typeGuardCode.push(...generateTypeLiteralTypeGuardWithinUnion(unionType));
+    } else if (isLiteralTypeNode(unionType)) {
+        typeGuardCode.push(generateLiteralTypeTypeGuard(unionType));
+    } else if (isUndefinedKeyword(unionType.kind)) {
+        typeGuardCode.push(generateUndefinedKeywordTypeGuard(unionType.kind));
+    } else if (isBooleanKeyword(unionType.kind)) {
+        typeGuardCode.push(generateBooleanKeywordTypeGuard(unionType.kind));
+    } else if (isStringKeyword(unionType.kind)) {
+        typeGuardCode.push(generateStringKeywordTypeGuard(unionType.kind));
+    } else if (isNumberKeyword(unionType.kind)) {
+        typeGuardCode.push(generateNumberKeywordTypeGuard(unionType.kind));
+    } else if (isBigIntKeyword(unionType.kind)) {
+        typeGuardCode.push(generateBigIntKeywordTypeGuard(unionType.kind));
+    } else if (isSymbolKeyword(unionType.kind)) {
+        typeGuardCode.push(generateSymbolKeywordTypeGuard(unionType.kind));
+    } else if (isObjectKeyword(unionType.kind)) {
+        typeGuardCode.push(generateObjectKeywordTypeGuard(unionType.kind));
+    } else if (isAnyKeyword(unionType.kind)) {
+        typeGuardCode.push(generateObjectKeywordTypeGuard(unionType.kind));
+    } else if (isUnknownKeyword(unionType.kind)) {
+        typeGuardCode.push(generateObjectKeywordTypeGuard(unionType.kind));
+    } else if (isVoidKeyword(unionType.kind)) {
+        typeGuardCode.push(generateVoidKeywordTypeGuard(unionType.kind));
+    }
+    return typeGuardCode;
 }

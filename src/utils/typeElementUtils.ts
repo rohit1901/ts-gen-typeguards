@@ -1,10 +1,5 @@
-import {
-  KeywordTypeSyntaxKind,
-  LiteralTypeNode,
-  SourceFile,
-  SyntaxKind,
-  TypeElement,
-} from 'typescript';
+import {KeywordTypeSyntaxKind, LiteralTypeNode, SourceFile, SyntaxKind, TypeElement,} from 'typescript';
+
 /**
  * Creates a fake TypeElement with the given `brand` representing a KeywordTypeSyntaxKind property.
  * The `_typeElementBrand` property is set to 'fake' to indicate it is a KeywordTypeSyntaxKind.
@@ -13,34 +8,35 @@ import {
  * @returns {TypeElement} - A fake TypeElement with the `_typeElementBrand` set to 'fake'.
  */
 export function createFakeTypeElement(
-  brand: KeywordTypeSyntaxKind | LiteralTypeNode | SyntaxKind,
-  literalText?: string,
+    brand: KeywordTypeSyntaxKind | LiteralTypeNode | SyntaxKind,
+    literalText?: string,
 ): TypeElement {
-  return {
-    _declarationBrand: brand,
-    end: 0,
-    flags: undefined,
-    kind: undefined,
-    parent: undefined,
-    pos: 0,
-    forEachChild: undefined,
-    getChildAt: undefined,
-    getChildCount: undefined,
-    getChildren: undefined,
-    getEnd: undefined,
-    getFirstToken: undefined,
-    getFullStart: undefined,
-    getFullText: undefined,
-    getFullWidth: undefined,
-    getLastToken: undefined,
-    getLeadingTriviaWidth: undefined,
-    getSourceFile: undefined,
-    getStart: undefined,
-    getText: (sourceFile?: SourceFile): string => literalText ?? '',
-    getWidth: undefined,
-    _typeElementBrand: 'fake',
-  };
+    return {
+        _declarationBrand: brand,
+        end: 0,
+        flags: undefined,
+        kind: undefined,
+        parent: undefined,
+        pos: 0,
+        forEachChild: undefined,
+        getChildAt: undefined,
+        getChildCount: undefined,
+        getChildren: undefined,
+        getEnd: undefined,
+        getFirstToken: undefined,
+        getFullStart: undefined,
+        getFullText: undefined,
+        getFullWidth: undefined,
+        getLastToken: undefined,
+        getLeadingTriviaWidth: undefined,
+        getSourceFile: undefined,
+        getStart: undefined,
+        getText: (sourceFile?: SourceFile): string => literalText ?? '',
+        getWidth: undefined,
+        _typeElementBrand: 'fake',
+    };
 }
+
 /**
  * Removes duplicate TypeElements from the input array and returns a new array containing unique TypeElements.
  * If a TypeElement has the property '_typeElementBrand' set to 'fake', it represents a KeywordTypeSyntaxKind property
@@ -49,20 +45,20 @@ export function createFakeTypeElement(
  * @returns {TypeElement[]} - An array containing unique TypeElements, including those with '_typeElementBrand' === 'fake'.
  */
 export function removeDuplicateTypeElements(
-  members: TypeElement[],
+    members: TypeElement[],
 ): TypeElement[] {
-  const uniqueMembers: TypeElement[] = [];
-  uniqueMembers.push(
-    ...members.filter(member =>
-      member._typeElementBrand ? member._typeElementBrand === 'fake' : false,
-    ),
-  );
-  members.forEach(member => {
-    if (!uniqueMembers.some(m => areTypeElementsEqual(m, member))) {
-      uniqueMembers.push(member);
-    }
-  });
-  return uniqueMembers;
+    const uniqueMembers: TypeElement[] = [];
+    uniqueMembers.push(
+        ...members.filter(member =>
+            member._typeElementBrand ? member._typeElementBrand === 'fake' : false,
+        ),
+    );
+    members.forEach(member => {
+        if (!uniqueMembers.some(m => areTypeElementsEqual(m, member))) {
+            uniqueMembers.push(member);
+        }
+    });
+    return uniqueMembers;
 }
 
 /**
@@ -72,6 +68,6 @@ export function removeDuplicateTypeElements(
  * @returns {boolean} - True if the TypeElements are equal, false otherwise.
  */
 function areTypeElementsEqual(a: TypeElement, b: TypeElement): boolean {
-  // Compare the names and types of the TypeElements.
-  return a.getText() === b.getText() && a.kind === b.kind;
+    // Compare the names and types of the TypeElements.
+    return a.getText() === b.getText() && a.kind === b.kind;
 }

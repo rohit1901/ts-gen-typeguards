@@ -1,19 +1,14 @@
-import { isArrayTypeNode, isPropertySignature, TypeElement } from 'typescript';
+import {isArrayTypeNode, isPropertySignature, TypeElement} from 'typescript';
 import {
-  generateArrayTypeGuard,
-  generateGenericPropertyGuard,
-  generateIntersectionTypeGuard,
-  generateKeywordGuard,
-  generateOptionalPropertyTypeGuard,
-  generateTypeReferenceGuard,
-  generateUnionTypeGuard,
+    generateArrayTypeGuard,
+    generateGenericPropertyGuard,
+    generateIntersectionTypeGuard,
+    generateKeywordGuard,
+    generateTypeReferenceGuard,
+    generateUnionTypeGuard,
 } from '../api';
-import { generateTypeLiteralTypeGuardWithinUnion } from './generateUnionTypeGuardForIntersection';
-import {
-  buildHasOwnPropertyString,
-  getPropertyName,
-  isGenericProperty,
-} from '../utils';
+import {generateTypeLiteralTypeGuardWithinUnion} from './generateUnionTypeGuardForIntersection';
+import {buildHasOwnPropertyString, getPropertyName, isGenericProperty,} from '../utils';
 
 /**
  * Function to generate a type guard for a TypeElement. Used to generate type guard string for properties.
@@ -26,35 +21,35 @@ import {
  * @param typeParameterName - The name of the type parameter. Its presence signifies that the property is a generic property.
  */
 export function generatePropertyGuard(
-  property: TypeElement,
-  parentName?: string,
-  typeParameterName?: string,
+    property: TypeElement,
+    parentName?: string,
+    typeParameterName?: string,
 ) {
-  const typeGuard: string[] = [];
-  if (!isPropertySignature(property)) return typeGuard;
-  const propertyName = getPropertyName(property, parentName);
-  // handle required properties in a different way
-  typeGuard.push(buildHasOwnPropertyString(property, parentName));
-  if (isGenericProperty(property, typeParameterName)) {
-    return generateGenericPropertyGuard(
-      property,
-      parentName,
-      typeParameterName,
+    const typeGuard: string[] = [];
+    if (!isPropertySignature(property)) return typeGuard;
+    const propertyName = getPropertyName(property, parentName);
+    // handle required properties in a different way
+    typeGuard.push(buildHasOwnPropertyString(property, parentName));
+    if (isGenericProperty(property, typeParameterName)) {
+        return generateGenericPropertyGuard(
+            property,
+            parentName,
+            typeParameterName,
+        );
+    }
+    if (isArrayTypeNode(property.type)) {
+        typeGuard.push(generateArrayTypeGuard(property, propertyName));
+    }
+    typeGuard.push(
+        ...generateTypeLiteralTypeGuardWithinUnion(
+            property.type,
+            propertyName,
+            typeParameterName,
+        ),
+        ...generateKeywordGuard(property.type, propertyName, true),
+        ...generateTypeReferenceGuard(property.type, propertyName, true),
+        ...generateIntersectionTypeGuard(property.type, propertyName, true),
+        ...generateUnionTypeGuard(property.type, propertyName, true),
     );
-  }
-  if (isArrayTypeNode(property.type)) {
-    typeGuard.push(generateArrayTypeGuard(property, propertyName));
-  }
-  typeGuard.push(
-    ...generateTypeLiteralTypeGuardWithinUnion(
-      property.type,
-      propertyName,
-      typeParameterName,
-    ),
-    ...generateKeywordGuard(property.type, propertyName, true),
-    ...generateTypeReferenceGuard(property.type, propertyName, true),
-    ...generateIntersectionTypeGuard(property.type, propertyName, true),
-    ...generateUnionTypeGuard(property.type, propertyName, true),
-  );
-  return typeGuard;
+    return typeGuard;
 }

@@ -1,11 +1,11 @@
 import {
-  EnumDeclaration,
-  isIntersectionTypeNode,
-  isTypeReferenceNode,
-  TypeAliasDeclaration,
-  TypeNode,
+    EnumDeclaration,
+    isIntersectionTypeNode,
+    isTypeReferenceNode,
+    TypeAliasDeclaration,
+    TypeNode,
 } from 'typescript';
-import { getEscapedCapitalizedStringLiteral } from 'ts-raw-utils';
+import {getEscapedCapitalizedStringLiteral} from 'ts-raw-utils';
 
 /**
  * Wrapper function for generating type guards for enums
@@ -16,11 +16,11 @@ import { getEscapedCapitalizedStringLiteral } from 'ts-raw-utils';
  * ```
  */
 export function generateEnumTypeGuards(enums: EnumDeclaration[]) {
-  const enumGuards: string[] = [];
-  for (const definition of enums) {
-    enumGuards.push(generateEnumTypeGuard(definition));
-  }
-  return enumGuards.join('\n');
+    const enumGuards: string[] = [];
+    for (const definition of enums) {
+        enumGuards.push(generateEnumTypeGuard(definition));
+    }
+    return enumGuards.join('\n');
 }
 
 /**
@@ -33,15 +33,15 @@ export function generateEnumTypeGuards(enums: EnumDeclaration[]) {
  * @param enumDefinition - The enum definition
  */
 export function generateEnumTypeGuard(enumDefinition: EnumDeclaration) {
-  const { name } = enumDefinition;
-  return `export function is${getEscapedCapitalizedStringLiteral(
-    name.getText(),
-  )}(value: any): value is ${getEscapedCapitalizedStringLiteral(
-    name.getText(),
-  )} {
+    const {name} = enumDefinition;
+    return `export function is${getEscapedCapitalizedStringLiteral(
+        name.getText(),
+    )}(value: any): value is ${getEscapedCapitalizedStringLiteral(
+        name.getText(),
+    )} {
         return Object.values(${getEscapedCapitalizedStringLiteral(
-          name.getText(),
-        )}).includes(value);
+        name.getText(),
+    )}).includes(value);
         }`;
 }
 
@@ -51,17 +51,17 @@ export function generateEnumTypeGuard(enumDefinition: EnumDeclaration) {
  * @param enums - The enum definitions
  */
 export function handleEnumIntersection(
-  definition: TypeAliasDeclaration,
-  enums: EnumDeclaration[],
+    definition: TypeAliasDeclaration,
+    enums: EnumDeclaration[],
 ) {
-  const enumGuards: string[] = [];
-  if (!isIntersectionTypeNode(definition.type)) return enumGuards;
-  for (const refType of definition.type.types) {
-    const referenceCheckString = getTypeReferenceCheckForEnum(refType, enums);
-    if (referenceCheckString) enumGuards.push(referenceCheckString);
-  }
-  if (enumGuards.length === 0) return enumGuards;
-  return enumGuards;
+    const enumGuards: string[] = [];
+    if (!isIntersectionTypeNode(definition.type)) return enumGuards;
+    for (const refType of definition.type.types) {
+        const referenceCheckString = getTypeReferenceCheckForEnum(refType, enums);
+        if (referenceCheckString) enumGuards.push(referenceCheckString);
+    }
+    if (enumGuards.length === 0) return enumGuards;
+    return enumGuards;
 }
 
 /**
@@ -70,15 +70,15 @@ export function handleEnumIntersection(
  * @param enums - The enum definitions
  */
 function getTypeReferenceCheckForEnum(
-  refType: TypeNode,
-  enums: EnumDeclaration[],
+    refType: TypeNode,
+    enums: EnumDeclaration[],
 ) {
-  if (!isTypeReferenceNode(refType)) return;
-  const enumDefinition = enums.find(
-    d => d.name.getText() === refType.typeName.getText(),
-  );
-  if (!enumDefinition) return;
-  return `is${getEscapedCapitalizedStringLiteral(
-    enumDefinition.name.getText(),
-  )}(value)`;
+    if (!isTypeReferenceNode(refType)) return;
+    const enumDefinition = enums.find(
+        d => d.name.getText() === refType.typeName.getText(),
+    );
+    if (!enumDefinition) return;
+    return `is${getEscapedCapitalizedStringLiteral(
+        enumDefinition.name.getText(),
+    )}(value)`;
 }
