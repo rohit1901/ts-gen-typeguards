@@ -1,6 +1,11 @@
-import {isPropertySignature, NodeArray, TypeElement, TypeParameterDeclaration,} from 'typescript';
-import {buildHasOwnPropertyString, getPropertyName} from '../utils';
-import {capitalize} from 'ts-raw-utils';
+import {
+  isPropertySignature,
+  NodeArray,
+  TypeElement,
+  TypeParameterDeclaration,
+} from 'typescript';
+import { buildHasOwnPropertyString, getPropertyName } from '../utils';
+import { capitalize } from 'ts-raw-utils';
 
 /**
  * Generate a generic type guard for a given property. This is used for nested properties as well.
@@ -50,7 +55,7 @@ export function buildGenericFunctionSignature(
   const genericNames = generateGenericParameterList(typeParameters);
   const genericNamesWithConstraints =
     generateGenericParameterListWithConstraints(typeParameters);
-  if(typeArguments && typeArguments !== '') {
+  if (typeArguments && typeArguments !== '') {
     return `export function is${objectName}<${genericNamesWithConstraints}>(value: any, ${typeArguments}): value is ${objectName}<${typeArguments}>{return(typeof value === "object" &&
       value !== null`;
   }
@@ -104,7 +109,8 @@ export function generateGenericParameterListWithConstraints(
 export function getGenericFunctionParameters(
   typeParameters?: NodeArray<TypeParameterDeclaration>,
 ) {
-  return typeParameters?.map(
+  return typeParameters
+    ?.map(
       parameter =>
         `is${capitalize(
           parameter.name.getText(),

@@ -7,8 +7,8 @@ import {
   TypeNode,
   TypeReferenceNode,
 } from 'typescript';
-import {generateQualifiedNameTypeGuard} from '../api';
-import {getEscapedCapitalizedStringLiteral} from 'ts-raw-utils';
+import { generateQualifiedNameTypeGuard } from '../api';
+import { getEscapedCapitalizedStringLiteral } from 'ts-raw-utils';
 
 /**
  * Generates a type guard for a TypeReferenceNode. Used to generate type guard string for type aliases.
@@ -54,19 +54,24 @@ export function generateTypeReferenceGuard(
     typeGuard.push(
       `is${getEscapedCapitalizedStringLiteral(
         type.typeName.getText(),
-      )}${buildTypeArguments(type)}(value.${typeName}, ${buildGenericParameterList(type, `value.${typeName}`)})`,
+      )}${buildTypeArguments(
+        type,
+      )}(value.${typeName}, ${buildGenericParameterList(
+        type,
+        `value.${typeName}`,
+      )})`,
     );
     return typeGuard;
   }
-  if(type.typeArguments && type.typeArguments.length > 0) {
+  if (type.typeArguments && type.typeArguments.length > 0) {
     type.typeArguments.forEach(typeArgument => {
-      if(isQualifiedName(typeArgument)) {
+      if (isQualifiedName(typeArgument)) {
         typeGuard.push(
           generateQualifiedNameTypeGuard(
             typeArgument,
             typeArgument.left.getText(),
           ),
-            ``
+          ``,
         );
       }
     });
@@ -125,18 +130,32 @@ function buildTypeArguments(typeReference: TypeReferenceNode) {
  * const result = buildGenericParameterList(typeReference);
  * // Result: "isShapeWithProperty,isCustomType"
  */
-export function buildGenericParameterList(typeReference: TypeReferenceNode, functionParameter?: string) {
+export function buildGenericParameterList(
+  typeReference: TypeReferenceNode,
+  functionParameter?: string,
+) {
   const typeArguments = typeReference.typeArguments?.map(typeArgument => {
     if (isTypeReferenceNode(typeArgument)) {
-      if(isQualifiedName(typeArgument.typeName)) {
+      if (isQualifiedName(typeArgument.typeName)) {
         return typeArgument.typeName.left.getText();
       }
       return typeArgument.typeName.getText();
     }
-    if(isTypeLiteralNode(typeArgument) || isIntersectionTypeNode(typeArgument) || isUnionTypeNode(typeArgument)) {
+    if (
+      isTypeLiteralNode(typeArgument) ||
+      isIntersectionTypeNode(typeArgument) ||
+      isUnionTypeNode(typeArgument)
+    ) {
       return 'CustomType';
     }
     return typeArgument.getText();
   });
-  return typeArguments?.map(typeArgument => `is${getEscapedCapitalizedStringLiteral(typeArgument)}`).filter(v => !!v).join(',') ?? '';
+  return (
+    typeArguments
+      ?.map(
+        typeArgument => `is${getEscapedCapitalizedStringLiteral(typeArgument)}`,
+      )
+      .filter(v => !!v)
+      .join(',') ?? ''
+  );
 }
