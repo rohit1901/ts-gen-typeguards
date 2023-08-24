@@ -180,7 +180,7 @@ export function isReadonlyKeyword(
 export function isLiteralType(
   kind: SyntaxKind,
 ): kind is SyntaxKind.LiteralType {
-  return kind === 200 /* LiteralType */;
+  return kind === 201 /* LiteralType */;
 }
 
 /**
@@ -190,7 +190,7 @@ export function isLiteralType(
 export function isIndexedAccessType(
   kind: SyntaxKind,
 ): kind is SyntaxKind.IndexedAccessType {
-  return kind === 198 /* IndexedAccessType */;
+  return kind === 199 /* IndexedAccessType */;
 }
 
 /**
