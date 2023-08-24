@@ -43,7 +43,7 @@ export enum TrafficLightEnum {
 }
 
 // Using enums in object properties
-interface CarEnum {
+export interface CarEnum {
     make: string;
     model: string;
     color: ColorEnum;

@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as prettier from 'prettier';
-import * as path from 'path';
 import { Options } from 'prettier';
+import * as path from 'path';
 
 export const extensionTS = 'ts';
 export const extensionDTS = `d.${extensionTS}`;
@@ -20,6 +20,7 @@ const prettierRC: Options = {
   bracketSpacing: true,
   arrowParens: 'avoid',
 };
+
 /**
  * Generates a file with the given text
  * @param typeGuardsText - The text to be added to the file
@@ -36,12 +37,10 @@ export function generateTypeGuardsFile(
   const inputPath =
     inputDir + `${defaultOutputTypesFileName}.${extensionTS}` ??
     defaultOutputTypesFilePath;
-  const outputPath = getTernaryOperatorResult(
-    !!outputDir,
-    outputDir + `${defaultTypeGuardsFileName}.${extensionTS}`,
-    defaultOutputTypeGuardsFilePath,
-  );
-  const path = getTernaryOperatorResult(isCombinedInput, inputPath, outputPath);
+  const outputPath = !!outputDir
+    ? outputDir + `${defaultTypeGuardsFileName}.${extensionTS}`
+    : defaultOutputTypeGuardsFilePath;
+  const path = isCombinedInput ? inputPath : outputPath;
   prettify(typeGuardsText)
     .then(formattedText => {
       try {
@@ -160,19 +159,6 @@ export function createPath(folderPath: string) {
 }
 
 /**
- * Returns the left part if the condition is true, else returns the right part
- * @param condition - The condition to be checked
- * @param left - The part to be returned if the condition is true
- * @param right - The part to be returned if the condition is false
- */
-export function getTernaryOperatorResult(
-  condition: boolean,
-  left: string,
-  right?: string,
-) {
-  return condition ? left : right;
-}
-/**
  * Creates a file with the given text
  * @param typeGuardsText - The text to be added to the file
  * @param inputPath
@@ -187,11 +173,7 @@ function createFile(
 ) {
   const initialContent =
     '// Generated using ts-gen-typeguards\n // @ts-nocheck\n';
-  const filePath = getTernaryOperatorResult(
-    isCombinedInput,
-    inputPath,
-    outputPath,
-  );
+  const filePath = isCombinedInput ? inputPath : outputPath;
   try {
     fs.writeFileSync(filePath, `${initialContent}`);
     console.info(
@@ -220,11 +202,7 @@ function appendText(
   outputPath: string,
   isCombinedInput?: boolean,
 ) {
-  const filePath = getTernaryOperatorResult(
-    isCombinedInput,
-    `${inputPath}`,
-    `${outputPath}`,
-  );
+  const filePath = isCombinedInput ? `${inputPath}` : `${outputPath}`;
   try {
     fs.appendFileSync(filePath, typeGuardsText);
     console.info(`INFO: Text appended to the ${filePath} successfully.`);

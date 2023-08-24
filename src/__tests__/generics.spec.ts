@@ -1,6 +1,6 @@
-import { createSourceFile } from 'typescript';
 import * as ts from 'typescript';
-import { generateEnumTypeGuards, generateInterfaceTypeGuard } from '../api';
+import { createSourceFile } from 'typescript';
+import { generateInterfaceTypeGuard } from '../api';
 import { removeWhitespace } from 'ts-raw-utils';
 
 describe('Generator', () => {

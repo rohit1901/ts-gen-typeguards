@@ -167,7 +167,7 @@ describe('Generator', () => {
             (typeof value.name === 'undefined' ||value.hasOwnProperty('name') || typeof value.name === 'string') &&
             (typeof value.literalType === 'undefined' ||value.hasOwnProperty('literalType') || value.literalType === '2') &&
             value.hasOwnProperty('typeLiteralType') &&
-            isMediumCity(value.typeLiteralType) &&
+            isMediumCity(value.typeLiteralType,) &&
             value.hasOwnProperty('population') &&
             typeof value.population === 'number'
           )
@@ -195,11 +195,11 @@ describe('Generator', () => {
             typeof value === "object" &&
             value !== null &&
             value.hasOwnProperty('direction') &&
-            isDay(value.direction) &&
+            isDay(value.direction,) &&
             value.hasOwnProperty('distance') &&
             typeof value.distance === 'number' &&
             value.hasOwnProperty('position') &&
-            isCoordinates(value.position)
+            isCoordinates(value.position,)
           )
         }`;
     expect(removeWhitespace(result)).toEqual(removeWhitespace(expectedResult));

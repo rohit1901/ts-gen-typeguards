@@ -37,6 +37,7 @@ import {
 import { generateIntersectionTypeGuardForType } from './generateIntersectionTypeGuardForType';
 import { generatePropertyGuard } from '../api';
 import { capitalize } from 'ts-raw-utils';
+
 /**
  * Generate a union type guard for a given TypeScript type alias.
  *
