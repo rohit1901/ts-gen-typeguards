@@ -1,3 +1,4 @@
+import { getEscapedCapitalizedStringLiteral } from 'ts-raw-utils';
 import {
   EnumDeclaration,
   isIntersectionTypeNode,
@@ -5,7 +6,6 @@ import {
   TypeAliasDeclaration,
   TypeNode,
 } from 'typescript';
-import { getEscapedCapitalizedStringLiteral } from 'ts-raw-utils';
 
 /**
  * Wrapper function for generating type guards for enums

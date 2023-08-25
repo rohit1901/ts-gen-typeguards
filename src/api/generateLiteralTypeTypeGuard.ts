@@ -1,5 +1,6 @@
 // Generate type guards for any types
 import { isLiteralTypeNode, Node } from 'typescript';
+
 import { syntaxKindToType } from '../utils';
 
 /**
@@ -10,9 +11,9 @@ import { syntaxKindToType } from '../utils';
  */
 export function generateLiteralTypeTypeGuard(literalType: Node): string {
   if (isLiteralTypeNode(literalType)) {
-    if (!!literalType.literal?.getText()) {
+    if (literalType.literal?.getText()) {
       const value = literalType.literal.getText();
-      return `(value !== ${literalType.literal.getText()})`;
+      return `(value !== ${value})`;
     }
     return `(value !== ${syntaxKindToType(literalType.literal.kind)})`;
   }
