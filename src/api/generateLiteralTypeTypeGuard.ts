@@ -1,5 +1,5 @@
 // Generate type guards for any types
-import { isLiteralTypeNode,Node } from 'typescript';
+import { isLiteralTypeNode, Node } from 'typescript';
 
 import { syntaxKindToType } from '../utils';
 

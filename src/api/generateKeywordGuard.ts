@@ -1,4 +1,4 @@
-import { isLiteralTypeNode,SyntaxKind, TypeNode } from 'typescript';
+import { isLiteralTypeNode, SyntaxKind, TypeNode } from 'typescript';
 
 import {
   getLiteralType,

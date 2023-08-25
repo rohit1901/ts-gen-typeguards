@@ -1,4 +1,4 @@
-import { isArrayTypeNode, isPropertySignature,TypeElement } from 'typescript';
+import { isArrayTypeNode, isPropertySignature, TypeElement } from 'typescript';
 
 import {
   generateArrayTypeGuard,

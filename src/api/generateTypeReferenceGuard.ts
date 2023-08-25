@@ -57,9 +57,7 @@ export function generateTypeReferenceGuard(
         type.typeName.getText(),
       )}${buildTypeArguments(
         type,
-      )}(value.${typeName}, ${buildGenericParameterList(
-        type,
-      )})`,
+      )}(value.${typeName}, ${buildGenericParameterList(type)})`,
     );
     return typeGuard;
   }
@@ -130,9 +128,7 @@ function buildTypeArguments(typeReference: TypeReferenceNode) {
  * const result = buildGenericParameterList(typeReference);
  * // Result: "isShapeWithProperty,isCustomType"
  */
-export function buildGenericParameterList(
-  typeReference: TypeReferenceNode,
-) {
+export function buildGenericParameterList(typeReference: TypeReferenceNode) {
   const typeArguments = typeReference.typeArguments?.map(typeArgument => {
     if (isTypeReferenceNode(typeArgument)) {
       if (isQualifiedName(typeArgument.typeName)) {

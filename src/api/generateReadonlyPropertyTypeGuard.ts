@@ -1,4 +1,2 @@
 // Generate type guards for readonly properties
-export function generateReadonlyPropertyTypeGuard(
-) {
-}
+export function generateReadonlyPropertyTypeGuard() {}

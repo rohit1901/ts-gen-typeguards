@@ -9,30 +9,32 @@ describe('Generator', () => {
     export type NumberStringComboType = '2' | 4 | '6' | 8;`;
   const sourceFile = createSourceFile('', text, ts.ScriptTarget.ES2015, true);
   const interfaces = sourceFile.statements.filter(ts.isTypeAliasDeclaration);
-  const [
-    evenNumbers,
-    evenNumbersType,
-    numberStringComboType,
-  ] = interfaces;
+  const [evenNumbers, evenNumbersType, numberStringComboType] = interfaces;
   beforeEach(() => {
     jest.clearAllMocks();
   });
   it('should generate correct typeguard for even numbers (Literal Types)', () => {
     const result = generateTypeTypeGuard([evenNumbers], []);
     expect(removeWhitespace(result)).toEqual(
-      removeWhitespace(`exportfunctionisEvenNumbers(value:any):valueisEvenNumbers{return(value!==null&&value===2&&value===4&&value===6&&value===8)}`),
+      removeWhitespace(
+        `exportfunctionisEvenNumbers(value:any):valueisEvenNumbers{return(value!==null&&value===2&&value===4&&value===6&&value===8)}`,
+      ),
     );
   });
   it('should generate correct typeguard for even numbers as strings (Literal Types)', () => {
     const result = generateTypeTypeGuard([evenNumbersType], []);
     expect(removeWhitespace(result)).toEqual(
-      removeWhitespace(`exportfunctionisEvenNumbersType(value:any):valueisEvenNumbersType{return(value!==null&&(value==='2'||value==='4'||value==='6'||value==='8'))}`),
+      removeWhitespace(
+        `exportfunctionisEvenNumbersType(value:any):valueisEvenNumbersType{return(value!==null&&(value==='2'||value==='4'||value==='6'||value==='8'))}`,
+      ),
     );
   });
   it('should generate correct typeguard for even numbers as strings and numbers (Literal Types)', () => {
     const result = generateTypeTypeGuard([numberStringComboType], []);
     expect(removeWhitespace(result)).toEqual(
-      removeWhitespace(`exportfunctionisNumberStringComboType(value:any):valueisNumberStringComboType{return(value!==null&&(value==='2'||value===4||value==='6'||value===8))}`),
+      removeWhitespace(
+        `exportfunctionisNumberStringComboType(value:any):valueisNumberStringComboType{return(value!==null&&(value==='2'||value===4||value==='6'||value===8))}`,
+      ),
     );
   });
 });
