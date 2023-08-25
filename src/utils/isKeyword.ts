@@ -103,16 +103,6 @@ export function isLiteralType(
 }
 
 /**
- * Function checks if the provided SyntaxKind is an IndexedAccessType.
- * @param kind
- */
-export function isIndexedAccessType(
-  kind: SyntaxKind,
-): kind is SyntaxKind.IndexedAccessType {
-  return kind === SyntaxKind.IndexedAccessType /* IndexedAccessType */;
-}
-
-/**
  * Type guard for the KeywordTypeSyntaxKind type.
  * @param kind The SyntaxKind value to be checked.
  * @returns True if the provided SyntaxKind is one of the keyword types in KeywordTypeSyntaxKind, false otherwise.

@@ -1,5 +1,6 @@
 // Generate type guards for optional properties
 import { PropertySignature } from 'typescript';
+
 import { generatePropertyGuard } from './index';
 
 /**
@@ -43,7 +44,7 @@ export function generateOptionalPropertyTypeGuard(
   parentName?: string,
   typeParameterName?: string,
 ): string[] {
-  const { questionToken, name, type } = property;
+  const { questionToken, name } = property;
   if (!questionToken) return [];
   const typeGuardCode: string[] = [];
   typeGuardCode.push(
@@ -54,55 +55,6 @@ export function generateOptionalPropertyTypeGuard(
         .join('||'),
     ),
   );
-  // check if the type is a TypeReference
-  /*typeGuardCode.push(
-        createTypeguardString(
-          parentName ?? name.getText(),
-          generateTypeReferenceGuard(type, parentName ?? name.getText(), true).join(
-            '',
-          ),
-        ),
-        createTypeguardString(
-          parentName ?? name.getText(),
-          generateKeywordGuard(
-            property.type,
-            parentName ?? name.getText(),
-            true,
-          ).join(''),
-        ),
-        createTypeguardString(
-          parentName ?? name.getText(),
-          generateTypeLiteralTypeGuardWithinUnion(
-            type,
-            parentName ?? name.getText(),
-            typeParameterName,
-          ).join(''),
-        ),
-        createTypeguardString(
-          parentName ?? name.getText(),
-          generateLiteralTypeTypeGuard(property),
-        ),
-        createTypeguardString(
-          parentName ?? name.getText(),
-          generateArrayTypeGuard(property, parentName ?? name.getText()),
-        ),
-        createTypeguardString(
-          parentName ?? name.getText(),
-          generateIntersectionTypeGuard(
-            property.type,
-            parentName ?? name.getText(),
-            true,
-          ).join('&&'),
-        ),
-        createTypeguardString(
-          parentName ?? name.getText(),
-          generateUnionTypeGuard(
-            property.type,
-            parentName ?? name.getText(),
-            true,
-          ).join('&&'),
-        ),
-      )*/
   return typeGuardCode.filter(value => value !== '');
 }
 

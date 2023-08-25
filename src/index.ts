@@ -1,4 +1,20 @@
 import {
+  createSourceFile,
+  EnumDeclaration,
+  InterfaceDeclaration,
+  isEnumDeclaration,
+  isInterfaceDeclaration,
+  isTypeAliasDeclaration,
+  ScriptTarget,
+  TypeAliasDeclaration,
+} from 'typescript';
+
+import {
+  generateEnumTypeGuards,
+  generateInterfaceTypeGuard,
+  generateTypeTypeGuard,
+} from './api';
+import {
   createPath,
   defaultInputDir,
   defaultOutputDir,
@@ -9,22 +25,6 @@ import {
   generateTypeGuardsFile,
   readFilesWithExtension,
 } from './utils';
-
-import {
-  generateEnumTypeGuards,
-  generateInterfaceTypeGuard,
-  generateTypeTypeGuard,
-} from './api';
-import {
-  createSourceFile,
-  EnumDeclaration,
-  InterfaceDeclaration,
-  isEnumDeclaration,
-  isInterfaceDeclaration,
-  isTypeAliasDeclaration,
-  ScriptTarget,
-  TypeAliasDeclaration,
-} from 'typescript';
 
 type ObjectsType = {
   interfaces: InterfaceDeclaration[];

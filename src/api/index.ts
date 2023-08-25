@@ -1,6 +1,8 @@
-export * from './generateInterfaceTypeGuard';
+export * from './generateArrayTypeGuard';
 export * from './generateEnumTypeGuard';
 export * from './generateFunctionSignatureGuard';
+export * from './generateGenericTypeGuard';
+export * from './generateInterfaceTypeGuard';
 export * from './generateInterfaceTypeGuard';
 export * from './generateIntersectionTypeGuard';
 export * from './generateIntersectionTypeGuardForType';
@@ -14,11 +16,7 @@ export * from './generateReadonlyPropertyTypeGuard';
 export * from './generateSingleInterfaceTypeGuard';
 export * from './generateTypeLiteralTypeGuard';
 export * from './generateTypeReferenceGuard';
-export * from './generateUnionTypeGuard';
-export * from './handleHeritageClauses';
-export * from './generateArrayTypeGuard';
-
-export * from './generateUnionTypeGuardForIntersection';
-
 export * from './generateTypeTypeGuard';
-export * from './generateGenericTypeGuard';
+export * from './generateUnionTypeGuard';
+export * from './generateUnionTypeGuardForIntersection';
+export * from './handleHeritageClauses';

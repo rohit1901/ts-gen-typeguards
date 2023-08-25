@@ -1,20 +1,21 @@
 // Generate type guards for literal types
 import {
+  getEscapedCapitalizedStringLiteral,
+  getEscapedStringLiteral,
+} from 'ts-raw-utils';
+import {
   isPropertySignature,
   isTypeReferenceNode,
   PropertySignature,
   TypeAliasDeclaration,
   TypeLiteralNode,
 } from 'typescript';
-import { isPrimitiveSyntaxKind, syntaxKindToType } from '../utils';
+
 import {
   generateIntersectionTypeGuardForProperty,
   generateUnionTypeGuardForProperty,
 } from '../api';
-import {
-  getEscapedCapitalizedStringLiteral,
-  getEscapedStringLiteral,
-} from 'ts-raw-utils';
+import { isPrimitiveSyntaxKind, syntaxKindToType } from '../utils';
 
 /**
  * Generates a type guard for a property based on its TypeScript PropertySignature.
@@ -75,7 +76,6 @@ export function generatePropertyTypeGuard(
 export function generateTypeLiteralTypeGuard(
   typeLiteral: TypeLiteralNode,
   typeAliases: TypeAliasDeclaration[],
-  parentName?: string,
 ): string[] {
   const typeGuardCode: string[] = [];
   typeLiteral.members.forEach(member => {

@@ -498,6 +498,9 @@ describe('Generated Guards', () => {
   // Test for EvenNumbersType
   it('should test EvenNumbersType correctly', () => {
     expect(guards.isEvenNumbersType(2)).toBe(true);
+    expect(guards.isEvenNumbersType(4)).toBe(true);
+    expect(guards.isEvenNumbersType(6)).toBe(true);
+    expect(guards.isEvenNumbersType(8)).toBe(true);
   });
   // Test for BooleanStatesType
   it('should test BooleanStatesType correctly', () => {
@@ -518,6 +521,9 @@ describe('Generated Guards', () => {
   // NumberStringComboType
   it('should test NumberStringComboType correctly', () => {
     expect(guards.isNumberStringComboType('one')).toBe(true);
+    expect(guards.isNumberStringComboType(2)).toBe(true);
+    expect(guards.isNumberStringComboType('three')).toBe(true);
+    expect(guards.isNumberStringComboType(4)).toBe(true);
   });
   // Test for GreetingFlagType
   it('should test GreetingFlagType correctly', () => {

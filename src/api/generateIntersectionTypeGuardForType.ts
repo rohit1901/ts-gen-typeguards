@@ -6,12 +6,12 @@ import {
   isTypeLiteralNode,
   isTypeReferenceNode,
   isUnionTypeNode,
-  PropertyName,
   TypeAliasDeclaration,
   TypeLiteralNode,
   TypeNode,
   TypeReferenceNode,
 } from 'typescript';
+
 import {
   generateBigIntKeywordTypeGuard,
   generateBooleanKeywordTypeGuard,
@@ -24,8 +24,6 @@ import {
   generateUnionTypeGuardForIntersection,
   generateVoidKeywordTypeGuard,
 } from '../api';
-import { generatePropertyTypeGuard } from './generateTypeLiteralTypeGuard';
-import { generateLiteralTypeTypeGuard } from './generateLiteralTypeTypeGuard';
 import {
   isAnyKeyword,
   isBigIntKeyword,
@@ -40,6 +38,8 @@ import {
   isUnknownKeyword,
   isVoidKeyword,
 } from '../utils';
+import { generateLiteralTypeTypeGuard } from './generateLiteralTypeTypeGuard';
+import { generatePropertyTypeGuard } from './generateTypeLiteralTypeGuard';
 import {
   generateTypeLiteralTypeGuardWithinUnion,
   generateTypeReferenceTypeGuard,
@@ -54,7 +54,7 @@ import {
  * @returns The generated intersection type guard code as a string.
  */
 export function generateIntersectionTypeGuardForType(
-  { type, name }: TypeAliasDeclaration,
+  { type }: TypeAliasDeclaration,
   typeAliases: TypeAliasDeclaration[],
 ): string {
   if (!isIntersectionTypeNode(type)) {
@@ -78,7 +78,6 @@ export function generateIntersectionTypeGuardForType(
         encounteredPropertyNames,
         typeGuardCode,
         typeAliases,
-        name,
       );
     }
   }
@@ -142,7 +141,6 @@ function generateTypeReferenceTypeGuards(
   typeAliases: TypeAliasDeclaration[],
   encounteredPropertyNames: Set<string>,
   typeGuardCode: string[],
-  name?: PropertyName,
 ): void {
   const typeLiterals = typeAliases.filter(
     typeAlias =>
@@ -156,7 +154,6 @@ function generateTypeReferenceTypeGuards(
         encounteredPropertyNames,
         typeGuardCode,
         typeAliases,
-        name,
       );
     }
   }
@@ -176,7 +173,6 @@ function generateTypeLiteralGuards(
   encounteredPropertyNames: Set<string>,
   typeGuardCode: string[],
   typeAliases: TypeAliasDeclaration[],
-  name?: PropertyName,
 ): void {
   for (const member of typeLiteral.members) {
     if (isPropertySignature(member)) {
