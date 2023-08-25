@@ -1,6 +1,6 @@
 {
   "name": "ts-gen-typeguards",
-  "version": "1.0.8",
+  "version": "1.1.0",
   "description": "A utility to generate typeguards",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -14,6 +14,7 @@
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
     "prettify": "prettier --write \"src/**/*.ts\"",
+    "lint": "npx eslint . --ext .ts --fix",
     "prepublishOnly": "git push --follow-tags && gh-release -y",
     "changelog-dry-run": "auto-changelog -p --template keepachangelog auto-changelog --breaking-pattern 'BREAKING CHANGE:'",
     "changelog": "auto-changelog -p --template keepachangelog auto-changelog --breaking-pattern 'BREAKING CHANGE:' && git add CHANGELOG.md"
@@ -34,13 +35,18 @@
   "devDependencies": {
     "@types/jest": "^29.5.2",
     "@types/node": "^20.4.1",
+    "@typescript-eslint/eslint-plugin": "^6.4.1",
+    "@typescript-eslint/parser": "^6.4.1",
     "auto-changelog": "^1.16.2",
     "esbuild": "^0.18.0",
     "esbuild-node-externals": "^1.8.0",
+    "eslint": "^8.47.0",
+    "eslint-plugin-simple-import-sort": "^10.0.0",
+    "eslint-plugin-unused-imports": "^3.0.0",
     "gh-release": "^3.5.0",
     "jest": "^29.6.1",
     "ts-jest": "^29.1.1",
-    "typescript": "^5.1.6"
+    "typescript": "^5.2.2"
   },
   "jest": {
     "preset": "ts-jest",
@@ -60,7 +66,7 @@
     ]
   },
   "dependencies": {
-    "ts-raw-utils": "^1.1.0",
-    "prettier": "^3.0.0"
+    "prettier": "^3.0.0",
+    "ts-raw-utils": "^1.1.0"
   }
 }

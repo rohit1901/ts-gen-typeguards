@@ -1,7 +1,6 @@
 import {
   KeywordTypeSyntaxKind,
   LiteralTypeNode,
-  SourceFile,
   SyntaxKind,
   TypeElement,
 } from 'typescript';
@@ -37,7 +36,7 @@ export function createFakeTypeElement(
     getLeadingTriviaWidth: undefined,
     getSourceFile: undefined,
     getStart: undefined,
-    getText: (sourceFile?: SourceFile): string => literalText ?? '',
+    getText: (): string => literalText ?? '',
     getWidth: undefined,
     _typeElementBrand: 'fake',
   };
