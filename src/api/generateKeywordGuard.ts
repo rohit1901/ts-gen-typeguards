@@ -1,5 +1,5 @@
-import {getEscapedCapitalizedStringLiteral} from 'ts-raw-utils';
-import {isLiteralTypeNode, SyntaxKind, TypeNode} from 'typescript';
+import { getEscapedCapitalizedStringLiteral } from 'ts-raw-utils';
+import { isLiteralTypeNode, SyntaxKind, TypeNode } from 'typescript';
 
 import {
   getLiteralType,
@@ -150,8 +150,8 @@ export function generateKeywordTypeGuard(
  * @param typeArgument - The type argument of the type alias.
  */
 export function getTypeArgumentStringForKeyword(typeArgument: TypeNode) {
-  if(!isKeyword(typeArgument.kind)) return;
+  if (!isKeyword(typeArgument.kind)) return;
   return `is${getEscapedCapitalizedStringLiteral(
-      typeArgument.getText(),
+    typeArgument.getText(),
   )}: (v: any) => v is ${typeArgument.getText()}`;
 }

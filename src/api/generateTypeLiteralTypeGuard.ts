@@ -12,7 +12,9 @@ import {
 } from 'typescript';
 
 import {
-  generateIntersectionTypeGuardForProperty, generateOptionalPropertyTypeGuard, generatePropertyGuard,
+  generateIntersectionTypeGuardForProperty,
+  generateOptionalPropertyTypeGuard,
+  generatePropertyGuard,
   generateUnionTypeGuardForProperty,
 } from '../api';
 import { isPrimitiveSyntaxKind, syntaxKindToType } from '../utils';
@@ -87,20 +89,21 @@ export function generatePropertyTypeGuard(
  */
 export function generateTypeLiteralTypeGuard(
   typeLiteral: TypeLiteralNode,
-  typeParameterName: string): string[] {
+  typeParameterName: string,
+): string[] {
   const typeGuardCode: string[] = [];
   typeLiteral.members.forEach(member => {
     if (member.questionToken && isPropertySignature(member))
       typeGuardCode.push(
-          ...generateOptionalPropertyTypeGuard(
-              member,
-              undefined,
-              typeParameterName,
-          ),
+        ...generateOptionalPropertyTypeGuard(
+          member,
+          undefined,
+          typeParameterName,
+        ),
       );
     else {
       typeGuardCode.push(
-          ...generatePropertyGuard(member, undefined, typeParameterName),
+        ...generatePropertyGuard(member, undefined, typeParameterName),
       );
     }
   });

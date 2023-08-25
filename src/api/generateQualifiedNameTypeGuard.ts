@@ -1,5 +1,11 @@
-import {getEscapedCapitalizedStringLiteral} from 'ts-raw-utils';
-import {isQualifiedName, isTypeReferenceNode, QualifiedName, TypeNode, TypeReferenceNode} from 'typescript';
+import { getEscapedCapitalizedStringLiteral } from 'ts-raw-utils';
+import {
+  isQualifiedName,
+  isTypeReferenceNode,
+  QualifiedName,
+  TypeNode,
+  TypeReferenceNode,
+} from 'typescript';
 
 /**
  * Function to generate a type guard for a QualifiedName.
@@ -42,13 +48,11 @@ export function getQualifiedNameText(type: QualifiedName) {
  * @param typeArgument - A TypeReferenceNode with a QualifiedName.
  */
 export function getTypeArgumentStringForQualifiedName(typeArgument: TypeNode) {
-  if(!isTypeReferenceNode(typeArgument)) return;
-  if(!isQualifiedName(typeArgument.typeName)) return;
+  if (!isTypeReferenceNode(typeArgument)) return;
+  if (!isQualifiedName(typeArgument.typeName)) return;
   return `is${getEscapedCapitalizedStringLiteral(
-      typeArgument.typeName.left.getText(),
-  )}: (v: any) => v is ${getQualifiedNameText(
-      typeArgument.typeName,
-  )}`;
+    typeArgument.typeName.left.getText(),
+  )}: (v: any) => v is ${getQualifiedNameText(typeArgument.typeName)}`;
 }
 
 /**
@@ -70,11 +74,11 @@ export function getParametersForQualifiedName(typeArgument: TypeNode) {
  * @param type
  * @param typeName
  */
-export function getTypeReferenceGuardForQualifiedName(type: TypeReferenceNode, typeName: string) {
+export function getTypeReferenceGuardForQualifiedName(
+  type: TypeReferenceNode,
+  typeName: string,
+) {
   // Enums: Check if the typeName is a qualified name
   if (!isQualifiedName(type.typeName)) return;
-  return generateQualifiedNameTypeGuard(
-      type.typeName,
-      typeName,
-  )
+  return generateQualifiedNameTypeGuard(type.typeName, typeName);
 }
