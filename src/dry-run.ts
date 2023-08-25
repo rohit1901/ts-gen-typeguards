@@ -31,9 +31,28 @@ export type ShapeWithProperty<T extends ShapeGeneric> = T & { color: ColorEnumGe
 export type ColoredCircle = ShapeWithProperty<{ type: 'circle'; radius: number } & {}>;
 export type Literals = 'circle' | 'square' | 'triangle';
 `;
+const IntersectionType = `
+export interface A {
+    a: string;
+    d: {
+        e: {
+            f: string;
+            g: 'g';
+        }
+    };
+}
+export interface B {
+    b: string;
+}
+export interface C {
+    c: string;
+}
+export type Intersection = A & B & C;
+`;
 // Usage Examples
-tsGenTypeguards();
+// tsGenTypeguards();
 // tsGenTypeguards(undefined, 'inputNew', 'outputNew');
 // tsGenTypeguards(undefined, 'inputNew');
 // tsGenTypeguards(undefined, undefined, 'outputNew');
 // tsGenTypeguards(QualifiedNameGeneric);
+ tsGenTypeguards(IntersectionType);
