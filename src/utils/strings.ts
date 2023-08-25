@@ -33,7 +33,7 @@ export function getPropertyName(
   property: TypeElement,
   parentName?: string,
 ): string {
-  if (!!parentName) return `${parentName}.${property.name.getText()}`;
+  if (parentName) return `${parentName}.${property.name.getText()}`;
   return property.name.getText();
 }
 
@@ -48,7 +48,7 @@ export function buildHasOwnPropertyString(
   property: TypeElement,
   parentName?: string,
 ): string {
-  const hasOwnPropertyString = !!parentName ? `value.${parentName}` : `value`;
+  const hasOwnPropertyString = parentName ? `value.${parentName}` : `value`;
   return `${hasOwnPropertyString}.hasOwnProperty('${property.name.getText()}')`;
 }
 

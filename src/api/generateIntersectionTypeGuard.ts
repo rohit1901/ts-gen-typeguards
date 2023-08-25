@@ -4,6 +4,7 @@ import {
   isIntersectionTypeNode,
   TypeNode,
 } from 'typescript';
+
 import {
   generateArrayTypeGuard,
   generateKeywordGuard,

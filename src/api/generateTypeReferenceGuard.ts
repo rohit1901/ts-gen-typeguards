@@ -1,3 +1,4 @@
+import { getEscapedCapitalizedStringLiteral } from 'ts-raw-utils';
 import {
   isIntersectionTypeNode,
   isQualifiedName,
@@ -7,8 +8,8 @@ import {
   TypeNode,
   TypeReferenceNode,
 } from 'typescript';
+
 import { generateQualifiedNameTypeGuard } from '../api';
-import { getEscapedCapitalizedStringLiteral } from 'ts-raw-utils';
 
 /**
  * Generates a type guard for a TypeReferenceNode. Used to generate type guard string for type aliases.
@@ -58,7 +59,6 @@ export function generateTypeReferenceGuard(
         type,
       )}(value.${typeName}, ${buildGenericParameterList(
         type,
-        `value.${typeName}`,
       )})`,
     );
     return typeGuard;
@@ -77,7 +77,7 @@ export function generateTypeReferenceGuard(
     });
   }
   const functionParams = ['value'];
-  functionParams.push(buildGenericParameterList(type, 'value'));
+  functionParams.push(buildGenericParameterList(type));
   // Generate type guard for non-property
   typeGuard.push(
     `is${getEscapedCapitalizedStringLiteral(
@@ -132,7 +132,6 @@ function buildTypeArguments(typeReference: TypeReferenceNode) {
  */
 export function buildGenericParameterList(
   typeReference: TypeReferenceNode,
-  functionParameter?: string,
 ) {
   const typeArguments = typeReference.typeArguments?.map(typeArgument => {
     if (isTypeReferenceNode(typeArgument)) {

@@ -1,7 +1,7 @@
 import * as fs from 'fs';
+import * as path from 'path';
 import * as prettier from 'prettier';
 import { Options } from 'prettier';
-import * as path from 'path';
 
 export const extensionTS = 'ts';
 export const extensionDTS = `d.${extensionTS}`;
@@ -37,7 +37,7 @@ export function generateTypeGuardsFile(
   const inputPath =
     inputDir + `${defaultOutputTypesFileName}.${extensionTS}` ??
     defaultOutputTypesFilePath;
-  const outputPath = !!outputDir
+  const outputPath = outputDir
     ? outputDir + `${defaultTypeGuardsFileName}.${extensionTS}`
     : defaultOutputTypeGuardsFilePath;
   const path = isCombinedInput ? inputPath : outputPath;

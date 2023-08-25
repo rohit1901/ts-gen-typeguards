@@ -1,3 +1,4 @@
+import { getEscapedCapitalizedStringLiteral } from 'ts-raw-utils';
 import {
   EnumDeclaration,
   isIntersectionTypeNode,
@@ -8,6 +9,7 @@ import {
   isUnionTypeNode,
   TypeAliasDeclaration,
 } from 'typescript';
+
 import {
   buildGenericFunctionSignature,
   generateIntersectionTypeGuard,
@@ -19,7 +21,6 @@ import {
   getQualifiedNameText,
   handleEnumIntersection,
 } from '../api';
-import { getEscapedCapitalizedStringLiteral } from 'ts-raw-utils';
 import { getName, getTypeNameFromTypeParameter, isKeyword } from '../utils';
 
 /**
