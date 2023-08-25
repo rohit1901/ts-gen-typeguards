@@ -4,7 +4,8 @@ import {
   isQualifiedName,
   isTypeLiteralNode,
   isTypeReferenceNode,
-  isUnionTypeNode, TypeAliasDeclaration,
+  isUnionTypeNode,
+  TypeAliasDeclaration,
   TypeNode,
   TypeReferenceNode,
 } from 'typescript';
@@ -15,7 +16,7 @@ import {
   getTypeArgumentStringForKeyword,
   getTypeArgumentStringForQualifiedName,
   getTypeReferenceGuardForQualifiedName,
-  getTypeReferencePropertyFunctionSignature
+  getTypeReferencePropertyFunctionSignature,
 } from '../api';
 
 /**
@@ -47,8 +48,15 @@ export function generateTypeReferenceGuard(
 ) {
   const typeGuard: string[] = [];
   if (!isTypeReferenceNode(type)) return typeGuard;
-  if(isQualifiedName(type.typeName)) return [getTypeReferenceGuardForQualifiedName(type, isProperty ? typeName : undefined)];
-  if(isProperty) return [getTypeReferencePropertyFunctionSignature(typeName, type)];
+  if (isQualifiedName(type.typeName))
+    return [
+      getTypeReferenceGuardForQualifiedName(
+        type,
+        isProperty ? typeName : undefined,
+      ),
+    ];
+  if (isProperty)
+    return [getTypeReferencePropertyFunctionSignature(typeName, type)];
   if (type.typeArguments && type.typeArguments.length > 0) {
     type.typeArguments.forEach(typeArgument => {
       if (isQualifiedName(typeArgument)) {
@@ -68,7 +76,9 @@ export function generateTypeReferenceGuard(
   typeGuard.push(
     `is${getEscapedCapitalizedStringLiteral(
       type.typeName.getText(),
-    )}${buildTypeArgumentsForTypeReference(type)}(${functionParams.filter(p => typeof p === 'string').join(',')})`,
+    )}${buildTypeArgumentsForTypeReference(type)}(${functionParams
+      .filter(p => typeof p === 'string')
+      .join(',')})`,
   );
   return typeGuard;
 }
@@ -87,7 +97,9 @@ export function generateTypeReferenceGuard(
  * - <string>
  * @param typeReference - A TypeReferenceNode from which TypeArguments will be extracted.
  */
-export function buildTypeArgumentsForTypeReference(typeReference: TypeReferenceNode) {
+export function buildTypeArgumentsForTypeReference(
+  typeReference: TypeReferenceNode,
+) {
   const typeArguments = typeReference.typeArguments
     ?.map(typeArgument => {
       if (isTypeReferenceNode(typeArgument)) {
@@ -118,16 +130,18 @@ export function buildTypeArgumentsForTypeReference(typeReference: TypeReferenceN
  */
 export function buildGenericParameterList(typeReference: TypeReferenceNode) {
   const typeArguments = typeReference.typeArguments?.map(typeArgument => {
-    return getParametersForQualifiedName(typeArgument) ?? getCustomTypeParametersForSignature(typeArgument) ?? typeArgument.getText();
+    return (
+      getParametersForQualifiedName(typeArgument) ??
+      getCustomTypeParametersForSignature(typeArgument) ??
+      typeArgument.getText()
+    );
   });
-  return (
-    typeArguments
-      ?.map(
-        typeArgument => `is${getEscapedCapitalizedStringLiteral(typeArgument)}`,
-      )
-      .filter(v => typeof v === 'string')
-      .join(',')
-  );
+  return typeArguments
+    ?.map(
+      typeArgument => `is${getEscapedCapitalizedStringLiteral(typeArgument)}`,
+    )
+    .filter(v => typeof v === 'string')
+    .join(',');
 }
 
 /**
@@ -136,12 +150,14 @@ export function buildGenericParameterList(typeReference: TypeReferenceNode) {
  * TypeReferenceNodes with QualifiedNames, TypeLiteralNodes, IntersectionTypeNodes, or UnionTypeNodes.
  * @param definition - A TypeAliasDeclaration to generate a type guard signature for.
  */
-export function buildTypeReferenceFuntionSignature(definition: TypeAliasDeclaration) {
-  if(!isTypeReferenceNode(definition.type)) return '';
+export function buildTypeReferenceFuntionSignature(
+  definition: TypeAliasDeclaration,
+) {
+  if (!isTypeReferenceNode(definition.type)) return '';
   const typeName: string = definition.name.escapedText.toString();
   if (
-      definition.type.typeArguments &&
-      definition.type.typeArguments.length > 0
+    definition.type.typeArguments &&
+    definition.type.typeArguments.length > 0
   ) {
     const functionParams = ['value: any'];
     definition.type.typeArguments.forEach(typeArgument => {
@@ -150,10 +166,10 @@ export function buildTypeReferenceFuntionSignature(definition: TypeAliasDeclarat
       functionParams.push(getCustomTypeFunctionSignature(typeArgument));
     });
     return `export function is${getEscapedCapitalizedStringLiteral(
-        typeName,
-    )}(${functionParams.filter(p => typeof p === 'string').join(
-        ',',
-    )}): value is ${typeName} {return(value !== null`;
+      typeName,
+    )}(${functionParams
+      .filter(p => typeof p === 'string')
+      .join(',')}): value is ${typeName} {return(value !== null`;
   }
 }
 
@@ -163,13 +179,13 @@ export function buildTypeReferenceFuntionSignature(definition: TypeAliasDeclarat
  * This is used to generate type guards for complex types.
  * @param typeArgument - A TypeNode with a TypeLiteralNode, IntersectionTypeNode, or UnionTypeNode.
  */
-export function getCustomTypeFunctionSignature(typeArgument: TypeNode ) {
+export function getCustomTypeFunctionSignature(typeArgument: TypeNode) {
   if (
-      isTypeLiteralNode(typeArgument) ||
-      isIntersectionTypeNode(typeArgument) ||
-      isUnionTypeNode(typeArgument)
+    isTypeLiteralNode(typeArgument) ||
+    isIntersectionTypeNode(typeArgument) ||
+    isUnionTypeNode(typeArgument)
   ) {
-    return `isCustomType: (val: any) =>  val is ${typeArgument.getText()}`
+    return `isCustomType: (val: any) =>  val is ${typeArgument.getText()}`;
   }
   return;
 }
@@ -179,11 +195,11 @@ export function getCustomTypeFunctionSignature(typeArgument: TypeNode ) {
  * return CustomType as the type guard parameter.
  * @param typeArgument - A TypeNode with a TypeLiteralNode, IntersectionTypeNode, or UnionTypeNode.
  */
-export function getCustomTypeParametersForSignature(typeArgument: TypeNode ) {
+export function getCustomTypeParametersForSignature(typeArgument: TypeNode) {
   if (
-      isTypeLiteralNode(typeArgument) ||
-      isIntersectionTypeNode(typeArgument) ||
-      isUnionTypeNode(typeArgument)
+    isTypeLiteralNode(typeArgument) ||
+    isIntersectionTypeNode(typeArgument) ||
+    isUnionTypeNode(typeArgument)
   ) {
     return 'CustomType';
   }

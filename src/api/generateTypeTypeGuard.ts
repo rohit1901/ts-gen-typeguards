@@ -7,9 +7,11 @@ import {
 } from 'typescript';
 
 import {
-  buildGenericFunctionSignature, buildTypeReferenceFuntionSignature,
+  buildGenericFunctionSignature,
+  buildTypeReferenceFuntionSignature,
   generateIntersectionTypeGuard,
-  generateKeywordGuard, generateTypeLiteralTypeGuard,
+  generateKeywordGuard,
+  generateTypeLiteralTypeGuard,
   generateTypeReferenceGuard,
   generateUnionTypeGuard,
   handleEnumIntersection,
@@ -61,7 +63,9 @@ export function generateTypeWithinTypeLiteralTypeGuard(
   if (!isTypeLiteralNode(type)) {
     return [];
   }
-  typeGuardStrings.push(...generateTypeLiteralTypeGuard(type, typeParameterName));
+  typeGuardStrings.push(
+    ...generateTypeLiteralTypeGuard(type, typeParameterName),
+  );
   return typeGuardStrings;
 }
 
