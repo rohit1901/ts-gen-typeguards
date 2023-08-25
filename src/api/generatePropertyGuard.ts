@@ -1,10 +1,10 @@
+import { getEscapedCapitalizedStringLiteral } from 'ts-raw-utils';
 import {
   isArrayTypeNode,
   isPropertySignature,
   TypeElement,
   TypeReferenceNode,
 } from 'typescript';
-import { getEscapedCapitalizedStringLiteral } from 'ts-raw-utils';
 
 import {
   buildGenericParameterList,

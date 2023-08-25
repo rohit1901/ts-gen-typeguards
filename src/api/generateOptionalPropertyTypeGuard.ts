@@ -1,8 +1,8 @@
 // Generate type guards for optional properties
 import { PropertySignature } from 'typescript';
 
-import { generatePropertyGuard } from './index';
 import { wrapInParentheses } from '../utils';
+import { generatePropertyGuard } from './index';
 /**
  * Generates Typeguards for an Optional property which could be of the following types:
  * - LiteralType
