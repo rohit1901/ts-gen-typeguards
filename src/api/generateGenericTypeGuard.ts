@@ -1,11 +1,12 @@
+import { capitalize } from 'ts-raw-utils';
 import {
   isPropertySignature,
   NodeArray,
   TypeElement,
   TypeParameterDeclaration,
 } from 'typescript';
+
 import { buildHasOwnPropertyString, getPropertyName } from '../utils';
-import { capitalize } from 'ts-raw-utils';
 
 /**
  * Generate a generic type guard for a given property. This is used for nested properties as well.

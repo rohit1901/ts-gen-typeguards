@@ -29,10 +29,11 @@ export interface ShapeGeneric {
 export type ShapeWithProperty<T extends ShapeGeneric> = T & { color: ColorEnumGeneric };
 
 export type ColoredCircle = ShapeWithProperty<{ type: 'circle'; radius: number } & {}>;
+export type Literals = 'circle' | 'square' | 'triangle';
 `;
 // Usage Examples
 tsGenTypeguards();
 // tsGenTypeguards(undefined, 'inputNew', 'outputNew');
 // tsGenTypeguards(undefined, 'inputNew');
 // tsGenTypeguards(undefined, undefined, 'outputNew');
-// tsGenTypeguards(LiteralTypeGeneric);
+// tsGenTypeguards(QualifiedNameGeneric);

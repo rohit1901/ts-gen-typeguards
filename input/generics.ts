@@ -56,3 +56,12 @@ export type VehicleWithType<T extends VehicleTypeGeneric> = { type: T; brand: st
 
 export type CarWithInfo = VehicleWithType<VehicleTypeGeneric.Car>;
 export type BikeWithInfo = VehicleWithType<VehicleTypeGeneric.Bike>;
+export type OptionalUser<T> = {
+    k?: ShapeGeneric;
+    name?: string;
+    nested?: {
+        nestedName?: Container<T>;
+    }
+    nestedArray?: ShapeGeneric[];
+    nestedArrayKeyword?: string[];
+}

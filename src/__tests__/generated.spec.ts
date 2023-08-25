@@ -1,6 +1,7 @@
 import * as guards from '../../out/typeGuards';
 import * as types from '../../input/combinedTypeGuards';
 import {
+  ColorEnumGeneric,
   LogLevelEnum,
   PropertyContainer,
 } from '../../input/combinedTypeGuards';
@@ -268,10 +269,13 @@ describe('Generated Guards', () => {
     const withFax = {
       email: 'test@email.com',
       phone: '123-456-7890',
-      faxOptional: '987-654-3210',
+      faxOptional: 24,
     };
     expect(guards.isContactOptional(contactOptional)).toBe(true);
-    expect(guards.isContactOptional(withFax)).toBe(true);
+    expect(guards.isContactOptional(withFax)).toBe(false);
+    expect(
+      guards.isContactOptional({ ...withFax, faxOptional: '123-456-7890' }),
+    ).toBe(true);
   });
   // Test for LogLevelUnion
   it('should test LogLevelUnionEnum correctly', () => {
@@ -498,6 +502,9 @@ describe('Generated Guards', () => {
   // Test for EvenNumbersType
   it('should test EvenNumbersType correctly', () => {
     expect(guards.isEvenNumbersType(2)).toBe(true);
+    expect(guards.isEvenNumbersType(4)).toBe(true);
+    expect(guards.isEvenNumbersType(6)).toBe(true);
+    expect(guards.isEvenNumbersType(8)).toBe(true);
   });
   // Test for BooleanStatesType
   it('should test BooleanStatesType correctly', () => {
@@ -518,6 +525,9 @@ describe('Generated Guards', () => {
   // NumberStringComboType
   it('should test NumberStringComboType correctly', () => {
     expect(guards.isNumberStringComboType('one')).toBe(true);
+    expect(guards.isNumberStringComboType(2)).toBe(true);
+    expect(guards.isNumberStringComboType('three')).toBe(true);
+    expect(guards.isNumberStringComboType(4)).toBe(true);
   });
   // Test for GreetingFlagType
   it('should test GreetingFlagType correctly', () => {
@@ -553,7 +563,21 @@ describe('Generated Guards', () => {
   });
   // EmployeeOptional
   it('should test EmployeeOptional correctly', () => {
-    const employeeOptional = {
+    const wrongSuperOptional = {
+      name: 'Jane Doe',
+      jobTitle: 'Software Engineer',
+      department: 'Engineering',
+      age: '30',
+      address: {
+        street: '123 Main St',
+        city: 'Townsville',
+      },
+      contact: {
+        email: 'some@email.com',
+        phone: '123-456-7890',
+      },
+    };
+    const employeeOptional: types.EmployeeOptional = {
       name: 'John Doe',
       age: 30,
       address: {
@@ -568,9 +592,26 @@ describe('Generated Guards', () => {
       department: 'Engineering',
       supervisorOptional: {
         name: 'Jane Doe',
+        jobTitle: 'Software Engineer',
+        department: 'Engineering',
+        age: 30,
+        address: {
+          street: '123 Main St',
+          city: 'Townsville',
+        },
+        contact: {
+          email: 'some@email.com',
+          phone: '123-456-7890',
+        },
       },
     };
     expect(guards.isEmployeeOptional(employeeOptional)).toBe(true);
+    expect(
+      guards.isEmployeeOptional({
+        ...employeeOptional,
+        supervisorOptional: wrongSuperOptional,
+      }),
+    ).toBe(false);
   });
   // ProjectOptional
   it('should test ProjectOptional correctly', () => {
@@ -868,5 +909,22 @@ describe('Generated Guards', () => {
   it('should test VideoType correctly', () => {
     const videoType: types.VideoType = types.VideoType.MP4;
     expect(guards.isVideoType(videoType)).toBe(true);
+  });
+  // ShapeWithProperty
+  it('should test ShapeWithProperty correctly', () => {
+    const shapeWithProperty: types.ShapeWithProperty<{
+      type: 'circle';
+      radius: number;
+    }> = {
+      color: ColorEnumGeneric.Red,
+      type: 'circle',
+      radius: 4,
+    };
+    const isCustom = (
+      value: any,
+    ): value is { type: 'circle'; radius: number } => {
+      return value.type === 'circle' && typeof value.radius === 'number';
+    };
+    expect(guards.isShapeWithProperty(shapeWithProperty, isCustom)).toBe(true);
   });
 });

@@ -17,6 +17,7 @@ import {
   TypeNode,
   UnionTypeNode,
 } from 'typescript';
+
 import { syntaxKindToType } from './syntaxKindToType';
 
 /**

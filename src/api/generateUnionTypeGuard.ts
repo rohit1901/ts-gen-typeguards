@@ -6,6 +6,7 @@ import {
   TypeAliasDeclaration,
   TypeNode,
 } from 'typescript';
+
 import {
   generateArrayTypeGuard,
   generateIntersectionTypeGuard,

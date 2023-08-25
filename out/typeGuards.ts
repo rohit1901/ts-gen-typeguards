@@ -46,6 +46,7 @@ import {
   VehicleWithType,
   CarWithInfo,
   BikeWithInfo,
+  OptionalUser,
   CustomShapeInterface,
   MediaInterface,
   DirectionType,
@@ -110,11 +111,11 @@ export function isCarEnum(value: any): value is CarEnum {
   return (
     typeof value === 'object' &&
     value !== null &&
-    value.hasOwnProperty('make') &&
+    'make' in value &&
     typeof value.make === 'string' &&
-    value.hasOwnProperty('model') &&
+    'model' in value &&
     typeof value.model === 'string' &&
-    value.hasOwnProperty('color') &&
+    'color' in value &&
     isColorEnum(value.color)
   );
 }
@@ -122,9 +123,9 @@ export function isVehicleEnum(value: any): value is VehicleEnum {
   return (
     typeof value === 'object' &&
     value !== null &&
-    value.hasOwnProperty('type') &&
+    'type' in value &&
     (value.type === 'CAR' || value.type === 'BIKE') &&
-    value.hasOwnProperty('direction') &&
+    'direction' in value &&
     isDirectionEnum(value.direction)
   );
 }
@@ -135,7 +136,7 @@ export function isContainer<T>(
   return (
     typeof value === 'object' &&
     value !== null &&
-    value.hasOwnProperty('value') &&
+    'value' in value &&
     isT(value.value)
   );
 }
@@ -146,18 +147,17 @@ export function isPropertyContainer<T>(
   return (
     typeof value === 'object' &&
     value !== null &&
-    value.hasOwnProperty('value') &&
+    'value' in value &&
     isT(value.value) &&
     (typeof value.additionalValue === 'undefined' ||
-      value.hasOwnProperty('additionalValue') ||
-      isT(value.additionalValue))
+      ('additionalValue' in value && isT(value.additionalValue)))
   );
 }
 export function isShapeGeneric(value: any): value is ShapeGeneric {
   return (
     typeof value === 'object' &&
     value !== null &&
-    value.hasOwnProperty('type') &&
+    'type' in value &&
     (value.type === 'circle' ||
       value.type === 'square' ||
       value.type === 'triangle')
@@ -167,9 +167,9 @@ export function isAddressInterface(value: any): value is AddressInterface {
   return (
     typeof value === 'object' &&
     value !== null &&
-    value.hasOwnProperty('street') &&
+    'street' in value &&
     typeof value.street === 'string' &&
-    value.hasOwnProperty('city') &&
+    'city' in value &&
     typeof value.city === 'string'
   );
 }
@@ -177,37 +177,35 @@ export function isPersonInterface(value: any): value is PersonInterface {
   return (
     typeof value === 'object' &&
     value !== null &&
-    value.hasOwnProperty('name') &&
+    'name' in value &&
     typeof value.name === 'string' &&
-    value.hasOwnProperty('age') &&
+    'age' in value &&
     typeof value.age === 'number' &&
     (typeof value.address === 'undefined' ||
-      value.hasOwnProperty('address') ||
-      isAddressInterface(value.address))
+      ('address' in value && isAddressInterface(value.address)))
   );
 }
 export function isEmployeeInterface(value: any): value is EmployeeInterface {
   return (
     typeof value === 'object' &&
     value !== null &&
-    value.hasOwnProperty('jobTitle') &&
+    'jobTitle' in value &&
     typeof value.jobTitle === 'string' &&
-    value.hasOwnProperty('name') &&
+    'name' in value &&
     typeof value.name === 'string' &&
-    value.hasOwnProperty('age') &&
+    'age' in value &&
     typeof value.age === 'number' &&
     (typeof value.address === 'undefined' ||
-      value.hasOwnProperty('address') ||
-      isAddressInterface(value.address))
+      ('address' in value && isAddressInterface(value.address)))
   );
 }
 export function isCircleInterface(value: any): value is CircleInterface {
   return (
     typeof value === 'object' &&
     value !== null &&
-    value.hasOwnProperty('type') &&
+    'type' in value &&
     value.type === 'circle' &&
-    value.hasOwnProperty('radius') &&
+    'radius' in value &&
     typeof value.radius === 'number'
   );
 }
@@ -215,9 +213,9 @@ export function isSquareInterface(value: any): value is SquareInterface {
   return (
     typeof value === 'object' &&
     value !== null &&
-    value.hasOwnProperty('type') &&
+    'type' in value &&
     value.type === 'square' &&
-    value.hasOwnProperty('sideLength') &&
+    'sideLength' in value &&
     typeof value.sideLength === 'number'
   );
 }
@@ -225,11 +223,11 @@ export function isTriangleInterface(value: any): value is TriangleInterface {
   return (
     typeof value === 'object' &&
     value !== null &&
-    value.hasOwnProperty('type') &&
+    'type' in value &&
     value.type === 'triangle' &&
-    value.hasOwnProperty('base') &&
+    'base' in value &&
     typeof value.base === 'number' &&
-    value.hasOwnProperty('height') &&
+    'height' in value &&
     typeof value.height === 'number'
   );
 }
@@ -237,9 +235,9 @@ export function isCarInterface(value: any): value is CarInterface {
   return (
     typeof value === 'object' &&
     value !== null &&
-    value.hasOwnProperty('brand') &&
+    'brand' in value &&
     typeof value.brand === 'string' &&
-    value.hasOwnProperty('model') &&
+    'model' in value &&
     typeof value.model === 'string'
   );
 }
@@ -249,11 +247,11 @@ export function isElectricCarInterface(
   return (
     typeof value === 'object' &&
     value !== null &&
-    value.hasOwnProperty('batteryCapacity') &&
+    'batteryCapacity' in value &&
     typeof value.batteryCapacity === 'number' &&
-    value.hasOwnProperty('brand') &&
+    'brand' in value &&
     typeof value.brand === 'string' &&
-    value.hasOwnProperty('model') &&
+    'model' in value &&
     typeof value.model === 'string'
   );
 }
@@ -261,11 +259,11 @@ export function isSportsCarInterface(value: any): value is SportsCarInterface {
   return (
     typeof value === 'object' &&
     value !== null &&
-    value.hasOwnProperty('topSpeed') &&
+    'topSpeed' in value &&
     typeof value.topSpeed === 'number' &&
-    value.hasOwnProperty('brand') &&
+    'brand' in value &&
     typeof value.brand === 'string' &&
-    value.hasOwnProperty('model') &&
+    'model' in value &&
     typeof value.model === 'string'
   );
 }
@@ -273,7 +271,7 @@ export function isAnimalInterface(value: any): value is AnimalInterface {
   return (
     typeof value === 'object' &&
     value !== null &&
-    value.hasOwnProperty('name') &&
+    'name' in value &&
     typeof value.name === 'string'
   );
 }
@@ -281,9 +279,9 @@ export function isDogInterface(value: any): value is DogInterface {
   return (
     typeof value === 'object' &&
     value !== null &&
-    value.hasOwnProperty('breed') &&
+    'breed' in value &&
     typeof value.breed === 'string' &&
-    value.hasOwnProperty('name') &&
+    'name' in value &&
     typeof value.name === 'string'
   );
 }
@@ -291,9 +289,9 @@ export function isCatInterface(value: any): value is CatInterface {
   return (
     typeof value === 'object' &&
     value !== null &&
-    value.hasOwnProperty('color') &&
+    'color' in value &&
     typeof value.color === 'string' &&
-    value.hasOwnProperty('name') &&
+    'name' in value &&
     typeof value.name === 'string'
   );
 }
@@ -313,22 +311,21 @@ export function isPersonWithOptionalAddressInterface(
   return (
     typeof value === 'object' &&
     value !== null &&
-    value.hasOwnProperty('name') &&
+    'name' in value &&
     typeof value.name === 'string' &&
-    value.hasOwnProperty('age') &&
+    'age' in value &&
     typeof value.age === 'number' &&
     (typeof value.address === 'undefined' ||
-      value.hasOwnProperty('address') ||
-      typeof value.address === 'string')
+      ('address' in value && typeof value.address === 'string'))
   );
 }
 export function isImageInterface(value: any): value is ImageInterface {
   return (
     typeof value === 'object' &&
     value !== null &&
-    value.hasOwnProperty('type') &&
+    'type' in value &&
     value.type === MediaTypeInterface.Image &&
-    value.hasOwnProperty('url') &&
+    'url' in value &&
     typeof value.url === 'string'
   );
 }
@@ -336,9 +333,9 @@ export function isVideoInterface(value: any): value is VideoInterface {
   return (
     typeof value === 'object' &&
     value !== null &&
-    value.hasOwnProperty('type') &&
+    'type' in value &&
     value.type === MediaTypeInterface.Video &&
-    value.hasOwnProperty('source') &&
+    'source' in value &&
     typeof value.source === 'string'
   );
 }
@@ -346,25 +343,24 @@ export function isAddressOptional(value: any): value is AddressOptional {
   return (
     typeof value === 'object' &&
     value !== null &&
-    value.hasOwnProperty('street') &&
-    value.hasOwnProperty('city') &&
+    'street' in value &&
+    'city' in value &&
     typeof value.city === 'string' &&
     (typeof value.postalCodeOptional === 'undefined' ||
-      value.hasOwnProperty('postalCodeOptional') ||
-      typeof value.postalCodeOptional === 'string')
+      ('postalCodeOptional' in value &&
+        typeof value.postalCodeOptional === 'string'))
   );
 }
 export function isContactOptional(value: any): value is ContactOptional {
   return (
     typeof value === 'object' &&
     value !== null &&
-    value.hasOwnProperty('email') &&
+    'email' in value &&
     typeof value.email === 'string' &&
-    value.hasOwnProperty('phone') &&
+    'phone' in value &&
     typeof value.phone === 'string' &&
     (typeof value.faxOptional === 'undefined' ||
-      value.hasOwnProperty('faxOptional') ||
-      typeof value.faxOptional === 'string')
+      ('faxOptional' in value && typeof value.faxOptional === 'string'))
   );
 }
 export function isLogLevelUnionEnum(value: any): value is LogLevelUnionEnum {
@@ -381,7 +377,7 @@ export function isLogLevelIntersectionEnum(
   return (
     value !== null &&
     isLogLevelEnum(value) &&
-    value.hasOwnProperty('Warning') &&
+    'Warning' in value &&
     value.Warning === 3 &&
     isLogLevelEnum(value)
   );
@@ -493,7 +489,7 @@ export function isShapeWithProperty<T extends ShapeGeneric>(
     typeof value === 'object' &&
     value !== null &&
     isT(value) &&
-    value.hasOwnProperty('color') &&
+    'color' in value &&
     isColorEnumGeneric(value.color)
   );
 }
@@ -525,11 +521,11 @@ export function isVehicleWithType<T extends VehicleTypeGeneric>(
   return (
     typeof value === 'object' &&
     value !== null &&
-    value.hasOwnProperty('type') &&
+    'type' in value &&
     isT(value.type) &&
-    value.hasOwnProperty('brand') &&
+    'brand' in value &&
     typeof value.brand === 'string' &&
-    value.hasOwnProperty('model') &&
+    'model' in value &&
     typeof value.model === 'string'
   );
 }
@@ -549,6 +545,33 @@ export function isBikeWithInfo(
   return (
     value !== null &&
     isVehicleWithType<VehicleTypeGeneric.Bike>(value, isVehicleTypeGeneric)
+  );
+}
+export function isOptionalUser<T>(
+  value: any,
+  isT: (val: any) => val is T,
+): value is OptionalUser<T> {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    (typeof value.k === 'undefined' ||
+      ('k' in value && isShapeGeneric(value.k))) &&
+    (typeof value.name === 'undefined' ||
+      ('name' in value && typeof value.name === 'string')) &&
+    (typeof value.nested === 'undefined' ||
+      ('nested' in value &&
+        'nestedName' in value.nested &&
+        isContainer<T>(value.nested.nestedName, isT))) &&
+    (typeof value.nestedArray === 'undefined' ||
+      ('nestedArray' in value &&
+        Array.isArray(value.nestedArray) &&
+        value.nestedArray.every((item: any) => isShapeGeneric(item)))) &&
+    (typeof value.nestedArrayKeyword === 'undefined' ||
+      ('nestedArrayKeyword' in value &&
+        Array.isArray(value.nestedArrayKeyword) &&
+        value.nestedArrayKeyword.every(
+          (item: any) => typeof item === 'string',
+        )))
   );
 }
 export function isCustomShapeInterface(
@@ -666,56 +689,55 @@ export function isAnyUnknownIntersectionWithOthersType(
 export function isPersonOptional(value: any): value is PersonOptional {
   return (
     value !== null &&
-    value.hasOwnProperty('name') &&
+    'name' in value &&
     typeof value.name === 'string' &&
-    value.hasOwnProperty('age') &&
+    'age' in value &&
     typeof value.age === 'number' &&
-    value.hasOwnProperty('address') &&
+    'address' in value &&
     isAddressOptional(value.address) &&
-    value.hasOwnProperty('contact') &&
+    'contact' in value &&
     isContactOptional(value.contact)
   );
 }
 export function isEmployeeOptional(value: any): value is EmployeeOptional {
   return (
     value !== null &&
-    value.hasOwnProperty('jobTitle') &&
+    'jobTitle' in value &&
     typeof value.jobTitle === 'string' &&
-    value.hasOwnProperty('department') &&
+    'department' in value &&
     typeof value.department === 'string' &&
     (typeof value.supervisorOptional === 'undefined' ||
-      value.hasOwnProperty('supervisorOptional') ||
-      isEmployeeOptional(value.supervisorOptional)) &&
+      ('supervisorOptional' in value &&
+        isEmployeeOptional(value.supervisorOptional))) &&
     isPersonOptional(value)
   );
 }
 export function isProjectOptional(value: any): value is ProjectOptional {
   return (
     value !== null &&
-    value.hasOwnProperty('projectTitle') &&
+    'projectTitle' in value &&
     typeof value.projectTitle === 'string' &&
-    value.hasOwnProperty('startDate') &&
+    'startDate' in value &&
     typeof value.startDate === 'string' &&
     (typeof value.endDateOptional === 'undefined' ||
-      value.hasOwnProperty('endDateOptional') ||
-      typeof value.endDateOptional === 'string')
+      ('endDateOptional' in value && typeof value.endDateOptional === 'string'))
   );
 }
 export function isCompanyOptional(value: any): value is CompanyOptional {
   return (
     value !== null &&
-    value.hasOwnProperty('companyName') &&
+    'companyName' in value &&
     (typeof value.companyUnknown === 'undefined' ||
-      value.hasOwnProperty('companyUnknown')) &&
-    value.hasOwnProperty('address') &&
+      'companyUnknown' in value) &&
+    'address' in value &&
     isAddressOptional(value.address) &&
-    value.hasOwnProperty('contact') &&
+    'contact' in value &&
     isContactOptional(value.contact) &&
     (typeof value.employees === 'undefined' ||
-      value.hasOwnProperty('employees') ||
-      (Array.isArray(value.employees) &&
+      ('employees' in value &&
+        Array.isArray(value.employees) &&
         value.employees.every((item: any) => isEmployeeOptional(item)))) &&
-    value.hasOwnProperty('projects') &&
+    'projects' in value &&
     Array.isArray(value.projects) &&
     value.projects.every((item: any) => isProjectOptional(item))
   );
@@ -723,28 +745,27 @@ export function isCompanyOptional(value: any): value is CompanyOptional {
 export function isAddressType(value: any): value is AddressType {
   return (
     value !== null &&
-    value.hasOwnProperty('street') &&
+    'street' in value &&
     typeof value.street === 'string' &&
-    value.hasOwnProperty('city') &&
+    'city' in value &&
     typeof value.city === 'string'
   );
 }
 export function isPersonType(value: any): value is PersonType {
   return (
     value !== null &&
-    value.hasOwnProperty('name') &&
+    'name' in value &&
     typeof value.name === 'string' &&
-    value.hasOwnProperty('age') &&
+    'age' in value &&
     typeof value.age === 'number' &&
     (typeof value.address === 'undefined' ||
-      value.hasOwnProperty('address') ||
-      isAddressType(value.address))
+      ('address' in value && isAddressType(value.address)))
   );
 }
 export function isEmployeeType(value: any): value is EmployeeType {
   return (
     value !== null &&
-    value.hasOwnProperty('jobTitle') &&
+    'jobTitle' in value &&
     typeof value.jobTitle === 'string' &&
     isPersonType(value)
   );
@@ -769,16 +790,16 @@ export function isPaymentMethodType(value: any): value is PaymentMethodType {
 export function isCarType(value: any): value is CarType {
   return (
     value !== null &&
-    value.hasOwnProperty('brand') &&
+    'brand' in value &&
     typeof value.brand === 'string' &&
-    value.hasOwnProperty('model') &&
+    'model' in value &&
     typeof value.model === 'string'
   );
 }
 export function isElectricCarType(value: any): value is ElectricCarType {
   return (
     value !== null &&
-    value.hasOwnProperty('batteryCapacity') &&
+    'batteryCapacity' in value &&
     typeof value.batteryCapacity === 'number' &&
     isCarType(value)
   );
@@ -786,7 +807,7 @@ export function isElectricCarType(value: any): value is ElectricCarType {
 export function isSportsCar(value: any): value is SportsCar {
   return (
     value !== null &&
-    value.hasOwnProperty('topSpeed') &&
+    'topSpeed' in value &&
     typeof value.topSpeed === 'number' &&
     isCarType(value)
   );
@@ -794,9 +815,9 @@ export function isSportsCar(value: any): value is SportsCar {
 export function isPaymentType(value: any): value is PaymentType {
   return (
     value !== null &&
-    value.hasOwnProperty('method') &&
+    'method' in value &&
     isPaymentMethodType(value.method) &&
-    value.hasOwnProperty('amount') &&
+    'amount' in value &&
     typeof value.amount === 'number'
   );
 }
@@ -806,11 +827,11 @@ export function isTransactionStatus(value: any): value is TransactionStatus {
 export function isProductType(value: any): value is ProductType {
   return (
     value !== null &&
-    value.hasOwnProperty('name') &&
+    'name' in value &&
     typeof value.name === 'string' &&
-    value.hasOwnProperty('price') &&
+    'price' in value &&
     typeof value.price === 'number' &&
-    value.hasOwnProperty('color') &&
+    'color' in value &&
     isColorTypeAliasType(value.color)
   );
 }
@@ -818,18 +839,18 @@ export function isCarDetailsType(value: any): value is CarDetailsType {
   return (
     value !== null &&
     isCarType(value) &&
-    value.hasOwnProperty('color') &&
+    'color' in value &&
     isColorTypeAliasType(value.color)
   );
 }
 export function isDataType(value: any): value is DataType {
   return (
     value !== null &&
-    value.hasOwnProperty('kind') &&
+    'kind' in value &&
     (value.kind === 'number' ||
       value.kind === 'string' ||
       value.kind === 'object') &&
-    value.hasOwnProperty('value') &&
+    'value' in value &&
     (typeof value.value === 'number' ||
       typeof value.value === 'string' ||
       typeof value.value === 'object')
@@ -844,7 +865,7 @@ export function isVehicleType(value: any): value is VehicleType {
 export function isActionType(value: any): value is ActionType {
   return (
     value !== null &&
-    value.hasOwnProperty('type') &&
+    'type' in value &&
     (value.type === 'add' || value.type === 'remove')
   );
 }
@@ -858,9 +879,9 @@ export function isAddAction(value: any): value is AddAction {
   return (
     value !== null &&
     isActionType(value) &&
-    value.hasOwnProperty('type') &&
+    'type' in value &&
     value.type === 'add' &&
-    value.hasOwnProperty('target') &&
+    'target' in value &&
     isTargetType(value.target)
   );
 }
@@ -868,16 +889,16 @@ export function isRemoveAction(value: any): value is RemoveAction {
   return (
     value !== null &&
     isActionType(value) &&
-    value.hasOwnProperty('type') &&
+    'type' in value &&
     value.type === 'remove' &&
-    value.hasOwnProperty('target') &&
+    'target' in value &&
     isTargetType(value.target)
   );
 }
 export function isShapeType(value: any): value is ShapeType {
   return (
     value !== null &&
-    value.hasOwnProperty('type') &&
+    'type' in value &&
     (value.type === 'circle' ||
       value.type === 'square' ||
       value.type === 'triangle')
@@ -887,7 +908,7 @@ export function isCircleType(value: any): value is CircleType {
   return (
     value !== null &&
     isShapeType(value) &&
-    value.hasOwnProperty('radius') &&
+    'radius' in value &&
     typeof value.radius === 'number'
   );
 }
@@ -895,7 +916,7 @@ export function isSquareType(value: any): value is SquareType {
   return (
     value !== null &&
     isShapeType(value) &&
-    value.hasOwnProperty('sideLength') &&
+    'sideLength' in value &&
     typeof value.sideLength === 'number'
   );
 }
@@ -903,9 +924,9 @@ export function isTriangleType(value: any): value is TriangleType {
   return (
     value !== null &&
     isShapeType(value) &&
-    value.hasOwnProperty('base') &&
+    'base' in value &&
     typeof value.base === 'number' &&
-    value.hasOwnProperty('height') &&
+    'height' in value &&
     typeof value.height === 'number'
   );
 }
