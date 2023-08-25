@@ -1,4 +1,5 @@
 import { KeywordSyntaxKind, SyntaxKind } from 'typescript';
+
 import { getLiteralType } from './isLiteral';
 
 /**
