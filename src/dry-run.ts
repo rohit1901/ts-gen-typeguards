@@ -55,4 +55,4 @@ export type Intersection = A & B & C;
 // tsGenTypeguards(undefined, 'inputNew');
 // tsGenTypeguards(undefined, undefined, 'outputNew');
 // tsGenTypeguards(QualifiedNameGeneric);
- tsGenTypeguards(IntersectionType);
+tsGenTypeguards(IntersectionType);

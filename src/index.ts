@@ -3,7 +3,8 @@ import {
   EnumDeclaration,
   InterfaceDeclaration,
   isEnumDeclaration,
-  isInterfaceDeclaration, isIntersectionTypeNode,
+  isInterfaceDeclaration,
+  isIntersectionTypeNode,
   isTypeAliasDeclaration,
   ScriptTarget,
   TypeAliasDeclaration,
@@ -14,7 +15,7 @@ import {
   generateInterfaceTypeGuard,
   generateTypeTypeGuard,
 } from './api';
-import {inferIntersectionType} from "./checker";
+import { inferIntersectionType } from './checker';
 import {
   createPath,
   defaultInputDir,
@@ -149,8 +150,9 @@ export function tsGenTypeguards(
     outputFilePath,
   );
   types.forEach(t => {
-    if(isIntersectionTypeNode(t.type)) inferIntersectionType(t.type, [...interfaces, ...types, ...enums] )
-  })
+    if (isIntersectionTypeNode(t.type))
+      inferIntersectionType(t.type, [...interfaces, ...types, ...enums]);
+  });
 }
 
 // Usage Examples
