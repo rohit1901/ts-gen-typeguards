@@ -1,4 +1,5 @@
-import { isLiteralTypeNode, SyntaxKind, TypeNode } from 'typescript';
+import {getEscapedCapitalizedStringLiteral} from 'ts-raw-utils';
+import {isLiteralTypeNode, SyntaxKind, TypeNode} from 'typescript';
 
 import {
   getLiteralType,
@@ -142,4 +143,15 @@ export function generateKeywordTypeGuard(
     //return generateAnyUnknownNeverKeywordGuard(type);
   }
   return `typeof value.${propertyName} === '${syntaxKindToType(keywordKind)}'`;
+}
+
+/**
+ * Generates a type guard condition for a type alias with a keyword type.
+ * @param typeArgument - The type argument of the type alias.
+ */
+export function getTypeArgumentStringForKeyword(typeArgument: TypeNode) {
+  if(!isKeyword(typeArgument.kind)) return;
+  return `is${getEscapedCapitalizedStringLiteral(
+      typeArgument.getText(),
+  )}: (v: any) => v is ${typeArgument.getText()}`;
 }

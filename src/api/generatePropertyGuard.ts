@@ -1,6 +1,8 @@
-import { isArrayTypeNode, isPropertySignature, TypeElement } from 'typescript';
+import {isArrayTypeNode, isPropertySignature, TypeElement, TypeReferenceNode} from 'typescript';
+import {getEscapedCapitalizedStringLiteral} from 'ts-raw-utils';
 
 import {
+  buildGenericParameterList, buildTypeArgumentsForTypeReference,
   generateArrayTypeGuard,
   generateGenericPropertyGuard,
   generateIntersectionTypeGuard,
@@ -57,4 +59,18 @@ export function generatePropertyGuard(
     ...generateUnionTypeGuard(property.type, propertyName, true),
   );
   return typeGuard;
+}
+
+/**
+ * Function to get the type guard function string for a property of a TypeReferenceNode.
+ * @param typeName - The name of the type.
+ * @param type - A TypeReferenceNode with a property.
+ */
+export function getTypeReferencePropertyFunctionSignature(typeName: string, type: TypeReferenceNode) {
+  const functionParams = [`value.${typeName}`, buildGenericParameterList(type)].filter(p => typeof p === 'string').join(',');
+  return `is${getEscapedCapitalizedStringLiteral(
+      type.typeName.getText(),
+  )}${buildTypeArgumentsForTypeReference(
+      type,
+  )}(${functionParams})`
 }

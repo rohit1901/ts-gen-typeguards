@@ -1,27 +1,20 @@
 import { getEscapedCapitalizedStringLiteral } from 'ts-raw-utils';
 import {
   EnumDeclaration,
-  isIntersectionTypeNode,
-  isPropertySignature,
-  isQualifiedName,
   isTypeLiteralNode,
   isTypeReferenceNode,
-  isUnionTypeNode,
   TypeAliasDeclaration,
 } from 'typescript';
 
 import {
-  buildGenericFunctionSignature,
+  buildGenericFunctionSignature, buildTypeReferenceFuntionSignature,
   generateIntersectionTypeGuard,
-  generateKeywordGuard,
-  generateOptionalPropertyTypeGuard,
-  generatePropertyGuard,
+  generateKeywordGuard, generateTypeLiteralTypeGuard,
   generateTypeReferenceGuard,
   generateUnionTypeGuard,
-  getQualifiedNameText,
   handleEnumIntersection,
 } from '../api';
-import { getName, getTypeNameFromTypeParameter, isKeyword } from '../utils';
+import { getName, getTypeNameFromTypeParameter } from '../utils';
 
 /**
  * Generate a set of type guard functions based on provided TypeAliasDeclarations.
@@ -68,23 +61,7 @@ export function generateTypeWithinTypeLiteralTypeGuard(
   if (!isTypeLiteralNode(type)) {
     return [];
   }
-  //NOTE: Return empty string if the definition is not a TypeLiteralNode
-  for (const property of type.members) {
-    // handle optional properties separately
-    if (property.questionToken && isPropertySignature(property))
-      typeGuardStrings.push(
-        ...generateOptionalPropertyTypeGuard(
-          property,
-          undefined,
-          typeParameterName,
-        ),
-      );
-    else {
-      typeGuardStrings.push(
-        ...generatePropertyGuard(property, undefined, typeParameterName),
-      );
-    }
-  }
+  typeGuardStrings.push(...generateTypeLiteralTypeGuard(type, typeParameterName));
   return typeGuardStrings;
 }
 
@@ -102,42 +79,7 @@ function buildTypeTypeGuardSignature(definition: TypeAliasDeclaration): string {
     return buildGenericFunctionSignature(typeName, definition.typeParameters);
   }
   if (isTypeReferenceNode(definition.type)) {
-    if (
-      definition.type.typeArguments &&
-      definition.type.typeArguments.length > 0
-    ) {
-      const functionParams = ['value: any'];
-      definition.type.typeArguments.forEach(typeArgument => {
-        if (isTypeReferenceNode(typeArgument)) {
-          if (isQualifiedName(typeArgument.typeName)) {
-            const qualifiedNameFunctionAsParam = `is${getEscapedCapitalizedStringLiteral(
-              typeArgument.typeName.left.getText(),
-            )}: (v: any) => v is ${getQualifiedNameText(
-              typeArgument.typeName,
-            )}`;
-            functionParams.push(qualifiedNameFunctionAsParam);
-          }
-        } else if (isKeyword(typeArgument.kind)) {
-          const keywordFunctionAsParam = `is${getEscapedCapitalizedStringLiteral(
-            typeArgument.getText(),
-          )}: (v: any) => v is ${typeArgument.getText()}`;
-          functionParams.push(keywordFunctionAsParam);
-        } else if (
-          isTypeLiteralNode(typeArgument) ||
-          isIntersectionTypeNode(typeArgument) ||
-          isUnionTypeNode(typeArgument)
-        ) {
-          functionParams.push(
-            `isCustomType: (val: any) =>  val is ${typeArgument.getText()}`,
-          );
-        }
-      });
-      return `export function is${getEscapedCapitalizedStringLiteral(
-        typeName,
-      )}(${functionParams.join(
-        ',',
-      )}): value is ${typeName} {return(value !== null`;
-    }
+    return buildTypeReferenceFuntionSignature(definition);
   }
   return `export function is${getEscapedCapitalizedStringLiteral(
     typeName,

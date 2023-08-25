@@ -12,7 +12,7 @@ import {
 } from 'typescript';
 
 import {
-  generateIntersectionTypeGuardForProperty,
+  generateIntersectionTypeGuardForProperty, generateOptionalPropertyTypeGuard, generatePropertyGuard,
   generateUnionTypeGuardForProperty,
 } from '../api';
 import { isPrimitiveSyntaxKind, syntaxKindToType } from '../utils';
@@ -69,18 +69,26 @@ export function generatePropertyTypeGuard(
  * and generating type guards for property signatures.
  *
  * @param {TypeLiteralNode} typeLiteral - The TypeLiteralNode representing the type to generate type guards for.
- * @param {TypeAliasDeclaration[]} typeAliases - An array of TypeAliasDeclaration objects to reference type aliases.
- * @param {string} [parentName] - Optional parent name to use in the type guard names.
+ * @param typeParameterName - The name of the type parameter to use for the type guard.
  * @returns {string[]} An array of strings containing the generated type guard code for the property signatures.
  */
 export function generateTypeLiteralTypeGuard(
   typeLiteral: TypeLiteralNode,
-  typeAliases: TypeAliasDeclaration[],
-): string[] {
+  typeParameterName: string): string[] {
   const typeGuardCode: string[] = [];
   typeLiteral.members.forEach(member => {
-    if (isPropertySignature(member)) {
-      typeGuardCode.push(generatePropertyTypeGuard(member, typeAliases));
+    if (member.questionToken && isPropertySignature(member))
+      typeGuardCode.push(
+          ...generateOptionalPropertyTypeGuard(
+              member,
+              undefined,
+              typeParameterName,
+          ),
+      );
+    else {
+      typeGuardCode.push(
+          ...generatePropertyGuard(member, undefined, typeParameterName),
+      );
     }
   });
   return typeGuardCode;
