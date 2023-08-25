@@ -49,7 +49,8 @@ export function buildHasOwnPropertyString(
   parentName?: string,
 ): string {
   const hasOwnPropertyString = parentName ? `value.${parentName}` : `value`;
-  return `${hasOwnPropertyString}.hasOwnProperty('${property.name.getText()}')`;
+  return `'${property.name.getText()}' in ${hasOwnPropertyString}`
+  //return `${hasOwnPropertyString}.hasOwnProperty('${property.name.getText()}')`;
 }
 
 /**
@@ -65,4 +66,9 @@ export function getName(name: Identifier): string {
     return name.escapedText.toString();
   }
   return name.getText();
+}
+
+export function wrapInParentheses(text?: string) {
+    if (!text) return '';
+    return `(${text})`;
 }

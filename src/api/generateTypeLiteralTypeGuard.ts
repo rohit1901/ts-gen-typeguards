@@ -32,20 +32,33 @@ export function generatePropertyTypeGuard(
   const typeGuardCode: string[] = [];
   if (isTypeReferenceNode(type) && !questionToken) {
     typeGuardCode.push(
+        `if (!('${getEscapedStringLiteral(
+            name.getText(),
+        )}' in value) || !is${getEscapedCapitalizedStringLiteral(
+            type.typeName.getText(),
+        )}(value.${getEscapedStringLiteral(name.getText())})) {`,
+    );
+    /*typeGuardCode.push(
       `if (!value.hasOwnProperty('${getEscapedStringLiteral(
         name.getText(),
       )}') || !is${getEscapedCapitalizedStringLiteral(
         type.typeName.getText(),
       )}(value.${getEscapedStringLiteral(name.getText())})) {`,
-    );
+    );*/
     typeGuardCode.push(`    return false;\n`);
 
     typeGuardCode.push(`}\n`);
   } else if (isPrimitiveSyntaxKind(type.kind) && !questionToken) {
-    typeGuardCode.push(
+    /*typeGuardCode.push(
       `if (!value.hasOwnProperty('${getEscapedStringLiteral(
         name.getText(),
       )}') || typeof value.${getEscapedStringLiteral(
+        name.getText(),
+      )} !== '${propType}') {`,
+    );*/typeGuardCode.push(
+      `if (!('${getEscapedStringLiteral(
+          name.getText(),
+      )} in value) || typeof value.${getEscapedStringLiteral(
         name.getText(),
       )} !== '${propType}') {`,
     );

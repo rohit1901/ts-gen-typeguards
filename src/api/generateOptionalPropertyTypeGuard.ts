@@ -2,22 +2,7 @@
 import { PropertySignature } from 'typescript';
 
 import { generatePropertyGuard } from './index';
-
-/**
- * TODO: Add support for the following:
- * export type OptionalUser<T> = {
- *     k?: simple;
- *     name?: string;
- *     nested?: {
- *         nestedName?: KeywordUser<T>;
- *     }
- *     nestedArray?: simple[];
- *     nestedArrayKeyword?: string[];
- * }
- * Here the typeguard for the property nestedName should be:
- * ```
- * (typeof value.nested.nestedName === 'undefined' || isKeywordUser<T>(value.nested.nestedName, isT))
- */
+import {wrapInParentheses} from "../utils";
 /**
  * Generates Typeguards for an Optional property which could be of the following types:
  * - LiteralType
@@ -47,12 +32,11 @@ export function generateOptionalPropertyTypeGuard(
   const { questionToken, name } = property;
   if (!questionToken) return [];
   const typeGuardCode: string[] = [];
+  const guards = wrapInParentheses(generatePropertyGuard(property, parentName, typeParameterName).join('&&'));
   typeGuardCode.push(
     createTypeguardString(
       parentName ?? name.getText(),
-      generatePropertyGuard(property, parentName, typeParameterName)
-        .filter(value => typeof value === 'string')
-        .join('||'),
+      guards,
     ),
   );
   return typeGuardCode.filter(value => value !== '');

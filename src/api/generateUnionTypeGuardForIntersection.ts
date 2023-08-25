@@ -168,7 +168,8 @@ export function generateUnionTypeGuardForProperty(
     return '';
   }
   if (name) {
-    typeGuardCode.push(`!value.hasOwnProperty('${name}')`);
+    //typeGuardCode.push(`!value.hasOwnProperty('${name}')`);
+    typeGuardCode.push(`!('${name}' in value)`);
   }
   for (const unionType of type.types) {
     if (isIntersectionTypeNode(unionType)) {

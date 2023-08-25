@@ -1,9 +1,6 @@
 import * as guards from '../../out/typeGuards';
 import * as types from '../../input/combinedTypeGuards';
-import {
-  LogLevelEnum,
-  PropertyContainer,
-} from '../../input/combinedTypeGuards';
+import {ColorEnumGeneric, LogLevelEnum, PropertyContainer} from '../../input/combinedTypeGuards';
 
 describe('Generated Guards', () => {
   // Test for DirectionEnum
@@ -268,10 +265,11 @@ describe('Generated Guards', () => {
     const withFax = {
       email: 'test@email.com',
       phone: '123-456-7890',
-      faxOptional: '987-654-3210',
+      faxOptional: 24,
     };
     expect(guards.isContactOptional(contactOptional)).toBe(true);
-    expect(guards.isContactOptional(withFax)).toBe(true);
+    expect(guards.isContactOptional(withFax)).toBe(false);
+    expect(guards.isContactOptional({...withFax, faxOptional: '123-456-7890'})).toBe(true);
   });
   // Test for LogLevelUnion
   it('should test LogLevelUnionEnum correctly', () => {
@@ -559,7 +557,21 @@ describe('Generated Guards', () => {
   });
   // EmployeeOptional
   it('should test EmployeeOptional correctly', () => {
-    const employeeOptional = {
+    const wrongSuperOptional = {
+      name: 'Jane Doe',
+      jobTitle: 'Software Engineer',
+      department: 'Engineering',
+      age: '30',
+      address: {
+        street: '123 Main St',
+        city: 'Townsville',
+      },
+      contact: {
+        email: 'some@email.com',
+        phone: '123-456-7890',
+      }
+    };
+    const employeeOptional: types.EmployeeOptional = {
       name: 'John Doe',
       age: 30,
       address: {
@@ -574,9 +586,21 @@ describe('Generated Guards', () => {
       department: 'Engineering',
       supervisorOptional: {
         name: 'Jane Doe',
+        jobTitle: 'Software Engineer',
+        department: 'Engineering',
+        age: 30,
+        address: {
+          street: '123 Main St',
+          city: 'Townsville',
+        },
+        contact: {
+          email: 'some@email.com',
+          phone: '123-456-7890',
+        }
       },
     };
     expect(guards.isEmployeeOptional(employeeOptional)).toBe(true);
+    expect(guards.isEmployeeOptional({...employeeOptional, supervisorOptional: wrongSuperOptional})).toBe(false);
   });
   // ProjectOptional
   it('should test ProjectOptional correctly', () => {
@@ -875,4 +899,16 @@ describe('Generated Guards', () => {
     const videoType: types.VideoType = types.VideoType.MP4;
     expect(guards.isVideoType(videoType)).toBe(true);
   });
+  // ShapeWithProperty
+    it('should test ShapeWithProperty correctly', () => {
+    const shapeWithProperty: types.ShapeWithProperty<{ type: 'circle'; radius: number }> = {
+      color: ColorEnumGeneric.Red,
+      type: 'circle',
+      radius: 4
+    };
+    const isCustom = (value: any): value is { type: 'circle'; radius: number } => {
+        return value.type === 'circle' && typeof value.radius === 'number';
+    };
+    expect(guards.isShapeWithProperty(shapeWithProperty, isCustom)).toBe(true);
+    })
 });

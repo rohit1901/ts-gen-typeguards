@@ -103,7 +103,8 @@ export function generateIntersectionTypeGuardForProperty(
     return '';
   }
   if (name) {
-    typeGuardCode.push(`!value.hasOwnProperty('${name}')`);
+    //typeGuardCode.push(`!value.hasOwnProperty('${name}')`);
+    typeGuardCode.push(`!('${name}' in value)`);
   }
   for (const intersectionType of type.types) {
     if (isIntersectionTypeNode(intersectionType)) {

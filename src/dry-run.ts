@@ -1,5 +1,6 @@
 import { tsGenTypeguards } from './';
 
+
 const QualifiedNameGeneric = `
 export interface Container<T, K> {
     value: T;

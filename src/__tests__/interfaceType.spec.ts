@@ -81,8 +81,8 @@ describe('Generator', () => {
       return (
         typeof value === "object" &&
         value !== null &&
-        (typeof value.x === 'undefined' ||value.hasOwnProperty('x') || typeof value.x === 'number') &&
-        value.hasOwnProperty('y') &&
+        (typeof value.x === 'undefined' ||('x' in value && typeof value.x === 'number')) &&
+        'y' in value &&
         typeof value.y === 'number'
       )
     }`;
@@ -94,8 +94,8 @@ describe('Generator', () => {
       return (
         typeof value === "object" &&
         value !== null &&
-        (typeof value.name === 'undefined' ||value.hasOwnProperty('name') || typeof value.name === 'string') &&
-        value.hasOwnProperty('gender') &&
+        (typeof value.name === 'undefined' ||('name' in value && typeof value.name === 'string')) &&
+        'gender' in value &&
         ( value.gender === 'male' ||  value.gender === 'female')
       )
     }`;
@@ -110,10 +110,10 @@ describe('Generator', () => {
       return (
         typeof value === "object" &&
         value !== null &&
-        value.hasOwnProperty('employeeId') &&
+        'employeeId' in value &&
         typeof value.employeeId === 'number' &&
-        (typeof value.name === 'undefined' ||value.hasOwnProperty('name') || typeof value.name === 'string') &&
-        value.hasOwnProperty('gender') &&
+        (typeof value.name === 'undefined' ||('name' in value && typeof value.name === 'string')) &&
+        'gender' in value &&
         ( value.gender === 'male' ||  value.gender === 'female')
       )
     }`;
@@ -121,8 +121,8 @@ describe('Generator', () => {
       return (
         typeof value === "object" &&
         value !== null &&
-        (typeof value.name === 'undefined' ||value.hasOwnProperty('name') || typeof value.name === 'string') &&
-        value.hasOwnProperty('gender') &&
+        (typeof value.name === 'undefined' ||('name' in value && typeof value.name === 'string')) &&
+        'gender' in value &&
         ( value.gender === 'male' ||  value.gender === 'female')
       )
     }`;
@@ -136,9 +136,9 @@ describe('Generator', () => {
       return (
         typeof value === "object" &&
         value !== null &&
-        value.hasOwnProperty('id') &&
+        'id' in value &&
         typeof value.id === 'number' &&
-        value.hasOwnProperty('name') &&
+        'name' in value &&
         typeof value.name === 'string'
       )
     }`;
@@ -150,9 +150,9 @@ describe('Generator', () => {
       return (
         typeof value === "object" &&
         value !== null &&
-        value.hasOwnProperty('brand') &&
+        'brand' in value &&
         ( value.brand === 'Toyota' ||  value.brand === 'Honda' ||  value.brand === 'Ford') &&
-        value.hasOwnProperty('color') &&
+        'color' in value &&
         ( value.color === 'red' ||  value.color === 'blue' ||  value.color === 'black')
       )
     }`;
@@ -164,11 +164,11 @@ describe('Generator', () => {
           return (
             typeof value === "object" &&
             value !== null &&
-            (typeof value.name === 'undefined' ||value.hasOwnProperty('name') || typeof value.name === 'string') &&
-            (typeof value.literalType === 'undefined' ||value.hasOwnProperty('literalType') || value.literalType === '2') &&
-            value.hasOwnProperty('typeLiteralType') &&
+            (typeof value.name === 'undefined' ||('name' in value && typeof value.name === 'string')) &&
+            (typeof value.literalType === 'undefined' ||('literalType' in value && value.literalType === '2')) &&
+            'typeLiteralType' in value &&
             isMediumCity(value.typeLiteralType) &&
-            value.hasOwnProperty('population') &&
+            'population' in value &&
             typeof value.population === 'number'
           )
         }`;
@@ -180,9 +180,9 @@ describe('Generator', () => {
           return (
             typeof value === "object" &&
             value !== null &&
-            value.hasOwnProperty('x') &&
+            'x' in value &&
             typeof value.x === 'number' &&
-            value.hasOwnProperty('y') &&
+            'y' in value &&
             typeof value.y === 'number'
           )
         }`;
@@ -194,11 +194,11 @@ describe('Generator', () => {
           return (
             typeof value === "object" &&
             value !== null &&
-            value.hasOwnProperty('direction') &&
+            'direction' in value &&
             isDay(value.direction) &&
-            value.hasOwnProperty('distance') &&
+            'distance' in value &&
             typeof value.distance === 'number' &&
-            value.hasOwnProperty('position') &&
+            'position' in value &&
             isCoordinates(value.position)
           )
         }`;
@@ -210,9 +210,9 @@ describe('Generator', () => {
           return (
             typeof value === "object" &&
             value !== null &&
-            value.hasOwnProperty('name') &&
+            'name' in value &&
             typeof value.name === 'string' &&
-            value.hasOwnProperty('price') &&
+            'price' in value &&
             typeof value.price === 'number'
           )
         }`;
@@ -224,11 +224,11 @@ describe('Generator', () => {
           return (
             typeof value === "object" &&
             value !== null &&
-            value.hasOwnProperty('type') &&
+            'type' in value &&
             ( value.type === 'car' ||
                value.type === 'bike' ||
                value.type === 'bus') &&
-            value.hasOwnProperty('wheels') &&
+            'wheels' in value &&
             typeof value.wheels === 'number'
           )
         }`;

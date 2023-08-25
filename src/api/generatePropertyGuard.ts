@@ -58,7 +58,7 @@ export function generatePropertyGuard(
     ...generateIntersectionTypeGuard(property.type, propertyName, true),
     ...generateUnionTypeGuard(property.type, propertyName, true),
   );
-  return typeGuard;
+  return typeGuard.filter(v => typeof v === 'string');
 }
 
 /**
