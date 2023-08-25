@@ -34,11 +34,11 @@ export function generatePropertyTypeGuard(
   const typeGuardCode: string[] = [];
   if (isTypeReferenceNode(type) && !questionToken) {
     typeGuardCode.push(
-        `if (!('${getEscapedStringLiteral(
-            name.getText(),
-        )}' in value) || !is${getEscapedCapitalizedStringLiteral(
-            type.typeName.getText(),
-        )}(value.${getEscapedStringLiteral(name.getText())})) {`,
+      `if (!('${getEscapedStringLiteral(
+        name.getText(),
+      )}' in value) || !is${getEscapedCapitalizedStringLiteral(
+        type.typeName.getText(),
+      )}(value.${getEscapedStringLiteral(name.getText())})) {`,
     );
     /*typeGuardCode.push(
       `if (!value.hasOwnProperty('${getEscapedStringLiteral(
@@ -57,9 +57,9 @@ export function generatePropertyTypeGuard(
       )}') || typeof value.${getEscapedStringLiteral(
         name.getText(),
       )} !== '${propType}') {`,
-    );*/typeGuardCode.push(
+    );*/ typeGuardCode.push(
       `if (!('${getEscapedStringLiteral(
-          name.getText(),
+        name.getText(),
       )} in value) || typeof value.${getEscapedStringLiteral(
         name.getText(),
       )} !== '${propType}') {`,

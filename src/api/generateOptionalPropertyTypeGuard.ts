@@ -2,7 +2,7 @@
 import { PropertySignature } from 'typescript';
 
 import { generatePropertyGuard } from './index';
-import {wrapInParentheses} from "../utils";
+import { wrapInParentheses } from '../utils';
 /**
  * Generates Typeguards for an Optional property which could be of the following types:
  * - LiteralType
@@ -32,12 +32,11 @@ export function generateOptionalPropertyTypeGuard(
   const { questionToken, name } = property;
   if (!questionToken) return [];
   const typeGuardCode: string[] = [];
-  const guards = wrapInParentheses(generatePropertyGuard(property, parentName, typeParameterName).join('&&'));
+  const guards = wrapInParentheses(
+    generatePropertyGuard(property, parentName, typeParameterName).join('&&'),
+  );
   typeGuardCode.push(
-    createTypeguardString(
-      parentName ?? name.getText(),
-      guards,
-    ),
+    createTypeguardString(parentName ?? name.getText(), guards),
   );
   return typeGuardCode.filter(value => value !== '');
 }
