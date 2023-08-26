@@ -43,6 +43,7 @@ export interface A {
 }
 export interface B {
     b: string;
+    a: string;
 }
 export interface C {
     c: string;

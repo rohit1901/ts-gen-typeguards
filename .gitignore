@@ -2,7 +2,6 @@
 dist/
 node_modules/
 .idea/
-.run/
 coverage/
 lib/
 lib-esm/
