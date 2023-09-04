@@ -4,7 +4,6 @@ import {
   InterfaceDeclaration,
   isEnumDeclaration,
   isInterfaceDeclaration,
-  isIntersectionTypeNode,
   isTypeAliasDeclaration,
   ScriptTarget,
   TypeAliasDeclaration,
@@ -15,7 +14,6 @@ import {
   generateInterfaceTypeGuard,
   generateTypeTypeGuard,
 } from './api';
-import { inferIntersectionType } from './checker';
 import {
   createPath,
   defaultInputDir,
@@ -27,6 +25,7 @@ import {
   generateTypeGuardsFile,
   readFilesWithExtension,
 } from './utils';
+import {transformer} from "ts-raw-utils";
 
 type ObjectsType = {
   interfaces: InterfaceDeclaration[];
@@ -42,7 +41,7 @@ type ObjectsType = {
 function readObjects(path: string, content?: string): ObjectsType {
   try {
     const sourceText =
-      path === '' ? content : readFilesWithExtension(undefined, path).join('');
+      path === '' ? transformer(content) : transformer(readFilesWithExtension(undefined, path).join(''));
     // Parse the file
     const parsedFile = createSourceFile(
       path,
@@ -149,10 +148,6 @@ export function tsGenTypeguards(
     inputFilePath,
     outputFilePath,
   );
-  types.forEach(t => {
-    if (isIntersectionTypeNode(t.type))
-      inferIntersectionType(t.type, [...interfaces, ...types, ...enums]);
-  });
 }
 
 // Usage Examples

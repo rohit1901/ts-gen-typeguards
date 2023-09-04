@@ -1,5 +1,4 @@
 // Generated using ts-gen-typeguards
- // @ts-nocheck
 import {
   CarEnum,
   VehicleEnum,
@@ -26,8 +25,6 @@ import {
   AddressOptional,
   ContactOptional,
   LogLevelUnionEnum,
-  LogLevelIntersectionEnum,
-  ExtendedDirectionEnum,
   ContainerOfString,
   ContainerOfNumber,
   ColorContainer,
@@ -40,7 +37,6 @@ import {
   DirectionContainer,
   UpDirectionContainer,
   DownDirectionContainer,
-  ShapeWithProperty,
   ColoredCircle,
   ColoredSquare,
   VehicleWithType,
@@ -61,37 +57,41 @@ import {
   AnyType,
   UnknownType,
   AnyUnknownUnionType,
-  AnyUnknownIntersectionType,
   AnyUnknownUnionWithOthersType,
-  AnyUnknownIntersectionWithOthersType,
   PersonOptional,
-  EmployeeOptional,
   ProjectOptional,
   CompanyOptional,
   AddressType,
   PersonType,
-  EmployeeType,
   NumberOrStringType,
   ResultType,
   PaymentMethodType,
   CarType,
-  ElectricCarType,
-  SportsCar,
   PaymentType,
   TransactionStatus,
   ProductType,
-  CarDetailsType,
   DataType,
   VehicleType,
   ActionType,
   TargetType,
+  ShapeType,
+  CustomShapeType,
+  LogLevelIntersectionEnum,
+  ExtendedDirectionEnum,
+  ShapeWithProperty,
+  AnyUnknownIntersectionType,
+  AnyUnknownIntersectionWithOthersType,
+  IntersectionTest,
+  EmployeeOptional,
+  EmployeeType,
+  ElectricCarType,
+  SportsCar,
+  CarDetailsType,
   AddAction,
   RemoveAction,
-  ShapeType,
   CircleType,
   SquareType,
   TriangleType,
-  CustomShapeType,
   DirectionEnum,
   ColorEnum,
   MixedValuesEnum,
@@ -371,28 +371,6 @@ export function isLogLevelUnionEnum(value: any): value is LogLevelUnionEnum {
       value === LogLevelEnum.Error)
   );
 }
-export function isLogLevelIntersectionEnum(
-  value: any,
-): value is LogLevelIntersectionEnum {
-  return (
-    value !== null &&
-    isLogLevelEnum(value) &&
-    'Warning' in value &&
-    value.Warning === 3 &&
-    isLogLevelEnum(value)
-  );
-}
-export function isExtendedDirectionEnum(
-  value: any,
-): value is ExtendedDirectionEnum {
-  return (
-    value !== null &&
-    isDirectionEnum(value) &&
-    value === 'FORWARD' &&
-    value === 'BACKWARD' &&
-    isDirectionEnum(value)
-  );
-}
 export function isContainerOfString(
   value: any,
   isString: (v: any) => v is string,
@@ -480,18 +458,6 @@ export function isDownDirectionContainer(
   isDown: (v: any) => v is 'down',
 ): value is DownDirectionContainer {
   return value !== null && isDirectionContainer<'down'>(value, isDown);
-}
-export function isShapeWithProperty<T extends ShapeGeneric>(
-  value: any,
-  isT: (val: any) => val is T,
-): value is ShapeWithProperty<T> {
-  return (
-    typeof value === 'object' &&
-    value !== null &&
-    isT(value) &&
-    'color' in value &&
-    isColorEnumGeneric(value.color)
-  );
 }
 export function isColoredCircle(
   value: any,
@@ -661,11 +627,6 @@ export function isAnyUnknownUnionType(
 ): value is AnyUnknownUnionType {
   return value !== null;
 }
-export function isAnyUnknownIntersectionType(
-  value: any,
-): value is AnyUnknownIntersectionType {
-  return value !== null;
-}
 export function isAnyUnknownUnionWithOthersType(
   value: any,
 ): value is AnyUnknownUnionWithOthersType {
@@ -674,16 +635,6 @@ export function isAnyUnknownUnionWithOthersType(
     (typeof value === 'string' ||
       typeof value === 'number' ||
       typeof value === 'boolean')
-  );
-}
-export function isAnyUnknownIntersectionWithOthersType(
-  value: any,
-): value is AnyUnknownIntersectionWithOthersType {
-  return (
-    value !== null &&
-    typeof value === 'string' &&
-    typeof value === 'number' &&
-    typeof value === 'boolean'
   );
 }
 export function isPersonOptional(value: any): value is PersonOptional {
@@ -697,19 +648,6 @@ export function isPersonOptional(value: any): value is PersonOptional {
     isAddressOptional(value.address) &&
     'contact' in value &&
     isContactOptional(value.contact)
-  );
-}
-export function isEmployeeOptional(value: any): value is EmployeeOptional {
-  return (
-    value !== null &&
-    'jobTitle' in value &&
-    typeof value.jobTitle === 'string' &&
-    'department' in value &&
-    typeof value.department === 'string' &&
-    (typeof value.supervisorOptional === 'undefined' ||
-      ('supervisorOptional' in value &&
-        isEmployeeOptional(value.supervisorOptional))) &&
-    isPersonOptional(value)
   );
 }
 export function isProjectOptional(value: any): value is ProjectOptional {
@@ -762,14 +700,6 @@ export function isPersonType(value: any): value is PersonType {
       ('address' in value && isAddressType(value.address)))
   );
 }
-export function isEmployeeType(value: any): value is EmployeeType {
-  return (
-    value !== null &&
-    'jobTitle' in value &&
-    typeof value.jobTitle === 'string' &&
-    isPersonType(value)
-  );
-}
 export function isNumberOrStringType(value: any): value is NumberOrStringType {
   return (
     value !== null && (typeof value === 'number' || typeof value === 'string')
@@ -796,22 +726,6 @@ export function isCarType(value: any): value is CarType {
     typeof value.model === 'string'
   );
 }
-export function isElectricCarType(value: any): value is ElectricCarType {
-  return (
-    value !== null &&
-    'batteryCapacity' in value &&
-    typeof value.batteryCapacity === 'number' &&
-    isCarType(value)
-  );
-}
-export function isSportsCar(value: any): value is SportsCar {
-  return (
-    value !== null &&
-    'topSpeed' in value &&
-    typeof value.topSpeed === 'number' &&
-    isCarType(value)
-  );
-}
 export function isPaymentType(value: any): value is PaymentType {
   return (
     value !== null &&
@@ -831,14 +745,6 @@ export function isProductType(value: any): value is ProductType {
     typeof value.name === 'string' &&
     'price' in value &&
     typeof value.price === 'number' &&
-    'color' in value &&
-    isColorTypeAliasType(value.color)
-  );
-}
-export function isCarDetailsType(value: any): value is CarDetailsType {
-  return (
-    value !== null &&
-    isCarType(value) &&
     'color' in value &&
     isColorTypeAliasType(value.color)
   );
@@ -875,26 +781,6 @@ export function isTargetType(value: any): value is TargetType {
     (value === 'user' || value === 'item' || value === 'group')
   );
 }
-export function isAddAction(value: any): value is AddAction {
-  return (
-    value !== null &&
-    isActionType(value) &&
-    'type' in value &&
-    value.type === 'add' &&
-    'target' in value &&
-    isTargetType(value.target)
-  );
-}
-export function isRemoveAction(value: any): value is RemoveAction {
-  return (
-    value !== null &&
-    isActionType(value) &&
-    'type' in value &&
-    value.type === 'remove' &&
-    'target' in value &&
-    isTargetType(value.target)
-  );
-}
 export function isShapeType(value: any): value is ShapeType {
   return (
     value !== null &&
@@ -904,37 +790,70 @@ export function isShapeType(value: any): value is ShapeType {
       value.type === 'triangle')
   );
 }
-export function isCircleType(value: any): value is CircleType {
-  return (
-    value !== null &&
-    isShapeType(value) &&
-    'radius' in value &&
-    typeof value.radius === 'number'
-  );
-}
-export function isSquareType(value: any): value is SquareType {
-  return (
-    value !== null &&
-    isShapeType(value) &&
-    'sideLength' in value &&
-    typeof value.sideLength === 'number'
-  );
-}
-export function isTriangleType(value: any): value is TriangleType {
-  return (
-    value !== null &&
-    isShapeType(value) &&
-    'base' in value &&
-    typeof value.base === 'number' &&
-    'height' in value &&
-    typeof value.height === 'number'
-  );
-}
 export function isCustomShapeType(value: any): value is CustomShapeType {
   return (
     value !== null &&
     (isCircleType(value) || isSquareType(value) || isTriangleType(value))
   );
+}
+export function isLogLevelIntersectionEnum(
+  value: any,
+): value is LogLevelIntersectionEnum {
+  return value !== null;
+}
+export function isExtendedDirectionEnum(
+  value: any,
+): value is ExtendedDirectionEnum {
+  return value !== null;
+}
+export function isShapeWithProperty<T extends ShapeGeneric>(
+  value: any,
+  isT: (val: any) => val is T,
+): value is ShapeWithProperty<T> {
+  return typeof value === 'object' && value !== null;
+}
+export function isAnyUnknownIntersectionType(
+  value: any,
+): value is AnyUnknownIntersectionType {
+  return value !== null;
+}
+export function isAnyUnknownIntersectionWithOthersType(
+  value: any,
+): value is AnyUnknownIntersectionWithOthersType {
+  return value !== null;
+}
+export function isIntersectionTest(value: any): value is IntersectionTest {
+  return value !== null;
+}
+export function isEmployeeOptional(value: any): value is EmployeeOptional {
+  return value !== null;
+}
+export function isEmployeeType(value: any): value is EmployeeType {
+  return value !== null;
+}
+export function isElectricCarType(value: any): value is ElectricCarType {
+  return value !== null;
+}
+export function isSportsCar(value: any): value is SportsCar {
+  return value !== null;
+}
+export function isCarDetailsType(value: any): value is CarDetailsType {
+  return value !== null;
+}
+export function isAddAction(value: any): value is AddAction {
+  return value !== null;
+}
+export function isRemoveAction(value: any): value is RemoveAction {
+  return value !== null;
+}
+export function isCircleType(value: any): value is CircleType {
+  return value !== null;
+}
+export function isSquareType(value: any): value is SquareType {
+  return value !== null;
+}
+export function isTriangleType(value: any): value is TriangleType {
+  return value !== null;
 }
 export function isDirectionEnum(value: any): value is DirectionEnum {
   return Object.values(DirectionEnum).includes(value);

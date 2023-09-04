@@ -1,8 +1,8 @@
 import { capitalize } from 'ts-raw-utils';
 import {
-  isPropertySignature,
+  isPropertySignature, isTypeReferenceNode,
   NodeArray,
-  TypeElement,
+  TypeElement, TypeNode,
   TypeParameterDeclaration,
 } from 'typescript';
 
@@ -89,11 +89,17 @@ export function generateGenericParameterList(
 export function generateGenericParameterListWithConstraints(
   typeParameters?: NodeArray<TypeParameterDeclaration>,
 ): string {
+  const getConstraintText = (constraint: TypeNode) => {
+    if(isTypeReferenceNode(constraint)) {
+      return constraint.typeName.getText();
+    }
+    return constraint.getText();
+  };
   return typeParameters
     ?.map(
       p =>
         `${p.name.getText()} ${
-          p.constraint ? 'extends ' + p.constraint?.getText() : ''
+          p.constraint ? 'extends ' + getConstraintText(p.constraint) : ''
         }`,
     )
     .join(',');

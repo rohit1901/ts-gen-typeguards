@@ -67,6 +67,6 @@
   },
   "dependencies": {
     "prettier": "^3.0.0",
-    "ts-raw-utils": "^1.1.0"
+    "ts-raw-utils": "^1.2.1"
   }
 }

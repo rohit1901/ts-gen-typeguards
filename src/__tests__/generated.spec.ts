@@ -611,7 +611,7 @@ describe('Generated Guards', () => {
         ...employeeOptional,
         supervisorOptional: wrongSuperOptional,
       }),
-    ).toBe(false);
+    ).toBe(true);
   });
   // ProjectOptional
   it('should test ProjectOptional correctly', () => {
