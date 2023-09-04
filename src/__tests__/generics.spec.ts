@@ -1,6 +1,6 @@
-import { createSourceFile } from 'typescript';
 import * as ts from 'typescript';
-import { generateEnumTypeGuards, generateInterfaceTypeGuard } from '../api';
+import { createSourceFile } from 'typescript';
+import { generateInterfaceTypeGuard } from '../api';
 import { removeWhitespace } from 'ts-raw-utils';
 
 describe('Generator', () => {
@@ -26,10 +26,10 @@ describe('Generator', () => {
           return (
             typeof value === "object" &&
             value !== null &&
-            value.hasOwnProperty('property') &&
+            'property' in value &&
             isT(value.property) &&
-            value.hasOwnProperty('nestedProp') &&
-            (value.nestedProp.hasOwnProperty('nested') &&
+            'nestedProp' in value &&
+            ('nested' in value.nestedProp &&
             isT(value.nestedProp.nested))
           )
         }`),

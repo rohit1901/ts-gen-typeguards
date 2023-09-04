@@ -16,14 +16,15 @@ import {
   TypeElement,
   TypeNode,
 } from 'typescript';
+
+import { getQualifiedNameText } from '../api';
 import { getMembersFromTypeAlias } from './getMembersFromTypeAlias';
 import { isKeywordTypeSyntaxKind } from './isKeyword';
+import { getLiteralTypeValue } from './isLiteral';
 import {
   createFakeTypeElement,
   removeDuplicateTypeElements,
 } from './typeElementUtils';
-import { getLiteralTypeValue } from './isLiteral';
-import { getQualifiedNameText } from '../api';
 
 /**
  * Processes a given TypeAliasDeclaration to handle intersection types.
@@ -47,7 +48,7 @@ export function handleIntersectionTypesForTypeAlias(
   // It processes each type in the intersection and extracts their properties to create a new TypeAliasDeclaration
   // with a TypeLiteralNode containing all the merged properties.
 
-  const { name, type } = definition;
+  const { type } = definition;
   const members: TypeElement[] = [];
 
   // Check if the type is an intersection type.
@@ -118,6 +119,7 @@ export function handleIntersectionTypesForTypeAlias(
     factory.createTypeLiteralNode(removeDuplicateTypeElements(members)),
   );
 }
+
 //suggest a better name
 
 export function handleIntersectionTypesForTypeNode(

@@ -14,15 +14,6 @@ export type EmployeeType = {
   jobTitle: string;
 } & PersonType;
 
-const john: EmployeeType = {
-  name: 'John',
-  age: 30,
-  jobTitle: 'Developer',
-  address: {
-    street: '123 Main St',
-    city: 'Cityville',
-  },
-};
 //Union Types
 export type NumberOrStringType = number | string;
 
@@ -70,23 +61,23 @@ export type DataType = {
 
 export type VehicleType = CarType | ElectricCarType | SportsCar;
 
-enum ColorTypeAliasType {
+export enum ColorTypeAliasType {
   Red = 'RED',
   Green = 'GREEN',
   Blue = 'BLUE',
 }
 
-enum MediaTypeType {
+export enum MediaTypeType {
   Image = 'image',
   Video = 'video',
 }
 
-enum ImageTypeType {
+export enum ImageTypeType {
   JPEG = 'jpeg',
   PNG = 'png',
 }
 
-enum VideoType {
+export enum VideoType {
   MP4 = 'mp4',
   AVI = 'avi',
 }

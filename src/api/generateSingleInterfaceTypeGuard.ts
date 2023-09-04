@@ -1,8 +1,10 @@
+import { getEscapedCapitalizedStringLiteral } from 'ts-raw-utils';
 import {
   InterfaceDeclaration,
   isInterfaceDeclaration,
   isPropertySignature,
 } from 'typescript';
+
 import {
   buildGenericFunctionSignature,
   generateOptionalPropertyTypeGuard,
@@ -10,7 +12,7 @@ import {
   handleHeritageClauses,
 } from '../api';
 import { getTypeNameFromTypeParameter } from '../utils';
-import { getEscapedCapitalizedStringLiteral } from 'ts-raw-utils';
+
 /**
  * Generates a type guard for a single interface definition.
  * @param definition

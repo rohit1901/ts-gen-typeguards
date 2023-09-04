@@ -1,19 +1,16 @@
-import {
-  isLiteralTypeNode,
-  PropertySignature,
-  SyntaxKind,
-  TypeNode,
-} from 'typescript';
+import { getEscapedCapitalizedStringLiteral } from 'ts-raw-utils';
+import { isLiteralTypeNode, SyntaxKind, TypeNode } from 'typescript';
+
 import {
   getLiteralType,
   isAnyKeyword,
   isKeyword,
-  isLiteral,
   isLiteralType,
   isNeverKeyword,
   isUnknownKeyword,
   syntaxKindToType,
 } from '../utils';
+
 /**
  * Generates type guards for the given TypeScript TypeNode, which can be a keyword or a literal Type.
  * In case of any, unknown or never keyword, the type guard condition is not generated as it is already checked using the hasOwnProperty check.
@@ -40,6 +37,7 @@ export function generateKeywordGuard(
     typeGuard.push(generateKeywordGuardForType(type));
     return typeGuard;
   }
+
   if (isLiteralTypeNode(type)) {
     typeGuard.push(
       generateLiteralTypeGuard(
@@ -53,6 +51,7 @@ export function generateKeywordGuard(
   typeGuard.push(generateKeywordTypeGuard(typeName, type.kind));
   return typeGuard;
 }
+
 /**
  * Generates a type guard condition for a single keyword type.
  * The generated condition checks if a given value conforms to the specified keyword type.
@@ -113,6 +112,7 @@ export function generateLiteralTypeGuard(
     }
     return;
   }
+
   return `value.${propertyName} === ${
     getText(literalText) ?? getLiteralType(literalKind)
   }`;
@@ -143,4 +143,15 @@ export function generateKeywordTypeGuard(
     //return generateAnyUnknownNeverKeywordGuard(type);
   }
   return `typeof value.${propertyName} === '${syntaxKindToType(keywordKind)}'`;
+}
+
+/**
+ * Generates a type guard condition for a type alias with a keyword type.
+ * @param typeArgument - The type argument of the type alias.
+ */
+export function getTypeArgumentStringForKeyword(typeArgument: TypeNode) {
+  if (!isKeyword(typeArgument.kind)) return;
+  return `is${getEscapedCapitalizedStringLiteral(
+    typeArgument.getText(),
+  )}: (v: any) => v is ${typeArgument.getText()}`;
 }

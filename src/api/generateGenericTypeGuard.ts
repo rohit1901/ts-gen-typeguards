@@ -1,11 +1,15 @@
+import { capitalize } from 'ts-raw-utils';
 import {
   isPropertySignature,
+  isTypeReferenceNode,
   NodeArray,
   TypeElement,
+  TypeNode,
   TypeParameterDeclaration,
 } from 'typescript';
+
 import { buildHasOwnPropertyString, getPropertyName } from '../utils';
-import { capitalize } from 'ts-raw-utils';
+
 /**
  * Generate a generic type guard for a given property. This is used for nested properties as well.
  * @example
@@ -32,23 +36,75 @@ export function generateGenericPropertyGuard(
 }
 
 /**
- * Build the generic function signature for a generic type guard.
+ * Builds the generic function signature for a generic type guard.
+ *
+ * This function generates a TypeScript type guard function signature for a generic type. The resulting type guard function can be used to narrow down the type of a value based on the provided type guard function. The generated signature includes generic type parameters, making it suitable for type checking and inference.
+ *
  * @example
- * export function isType<T>(val: any, guard: (val: any) => val is T): value is Type<T>{return(typeof value === "object" && value !== null
- * //for a type Type<T>
+ * // For a generic type `Array<T>`
+ * const isArray = buildGenericFunctionSignature('Array', [typeParametersNode]);
+ * // Resulting signature: `export function isArray<T>(value: any, guard: (val: any) => val is T[]): value is Array<T> { ... }`
+ *
  * @param objectName - The name of the object to generate the type guard for.
  * @param typeParameters - The type parameters of the object.
- * @returns A string of the generic function signature like export function isType<T>(val: any, guard: (val: any) => val is T): value is Type<T>.
+ * @param typeArguments
+ * @returns A string representing the generic function signature for the type guard.
  */
 export function buildGenericFunctionSignature(
   objectName: string,
-  typeParameters: NodeArray<TypeParameterDeclaration>,
+  typeParameters?: NodeArray<TypeParameterDeclaration>,
+  typeArguments?: string,
 ) {
-  const genericNames = typeParameters.map(p => p.name.getText()).join(',');
-  return `export function is${objectName}<${genericNames}>(value: any, ${getGenericFunctionParameters(
+  const genericNames = generateGenericParameterList(typeParameters);
+  const genericNamesWithConstraints =
+    generateGenericParameterListWithConstraints(typeParameters);
+  if (typeArguments && typeArguments !== '') {
+    return `export function is${objectName}<${genericNamesWithConstraints}>(value: any, ${typeArguments}): value is ${objectName}<${typeArguments}>{return(typeof value === "object" &&
+      value !== null`;
+  }
+  return `export function is${objectName}<${genericNamesWithConstraints}>(value: any, ${getGenericFunctionParameters(
     typeParameters,
   )}): value is ${objectName}<${genericNames}>{return(typeof value === "object" &&
     value !== null`;
+}
+
+/**
+ * Builds the generic function signature for a generic type guard.
+ * @example
+ * // For a generic type `Array<T>`
+ * Result: T
+ * @param typeParameters - The type parameters of the object.
+ */
+export function generateGenericParameterList(
+  typeParameters?: NodeArray<TypeParameterDeclaration>,
+): string {
+  return typeParameters?.map(p => `${p.name.getText()}`).join(',');
+}
+
+/**
+ * Builds the generic function signature for a generic type guard. This is used to generate the type guard signature.
+ * @example
+ * // For a generic type `Array<T extends K>`
+ * Result: T extends K
+ * @param typeParameters
+ */
+export function generateGenericParameterListWithConstraints(
+  typeParameters?: NodeArray<TypeParameterDeclaration>,
+): string {
+  const getConstraintText = (constraint: TypeNode) => {
+    if (isTypeReferenceNode(constraint)) {
+      return constraint.typeName.getText();
+    }
+    return constraint.getText();
+  };
+  return typeParameters
+    ?.map(
+      p =>
+        `${p.name.getText()} ${
+          p.constraint ? 'extends ' + getConstraintText(p.constraint) : ''
+        }`,
+    )
+    .join(',');
 }
 
 /**
@@ -59,11 +115,11 @@ export function buildGenericFunctionSignature(
  * @param typeParameters - The type parameters of the object.
  * @returns A string of generic function parameters like isT: (val: any) => val is T.
  */
-function getGenericFunctionParameters(
-  typeParameters: NodeArray<TypeParameterDeclaration>,
+export function getGenericFunctionParameters(
+  typeParameters?: NodeArray<TypeParameterDeclaration>,
 ) {
   return typeParameters
-    .map(
+    ?.map(
       parameter =>
         `is${capitalize(
           parameter.name.getText(),

@@ -1,18 +1,23 @@
 // Generate type guards for literal types
 import {
+  getEscapedCapitalizedStringLiteral,
+  getEscapedStringLiteral,
+} from 'ts-raw-utils';
+import {
   isPropertySignature,
   isTypeReferenceNode,
   PropertySignature,
   TypeAliasDeclaration,
   TypeLiteralNode,
 } from 'typescript';
-import { isPrimitiveSyntaxKind, syntaxKindToType } from '../utils';
-import { generateUnionTypeGuardForProperty } from '../api';
-import { generateIntersectionTypeGuardForProperty } from '../api';
+
 import {
-  getEscapedCapitalizedStringLiteral,
-  getEscapedStringLiteral,
-} from 'ts-raw-utils';
+  generateIntersectionTypeGuardForProperty,
+  generateOptionalPropertyTypeGuard,
+  generatePropertyGuard,
+  generateUnionTypeGuardForProperty,
+} from '../api';
+import { isPrimitiveSyntaxKind, syntaxKindToType } from '../utils';
 
 /**
  * Generates a type guard for a property based on its TypeScript PropertySignature.
@@ -29,20 +34,33 @@ export function generatePropertyTypeGuard(
   const typeGuardCode: string[] = [];
   if (isTypeReferenceNode(type) && !questionToken) {
     typeGuardCode.push(
+      `if (!('${getEscapedStringLiteral(
+        name.getText(),
+      )}' in value) || !is${getEscapedCapitalizedStringLiteral(
+        type.typeName.getText(),
+      )}(value.${getEscapedStringLiteral(name.getText())})) {`,
+    );
+    /*typeGuardCode.push(
       `if (!value.hasOwnProperty('${getEscapedStringLiteral(
         name.getText(),
       )}') || !is${getEscapedCapitalizedStringLiteral(
         type.typeName.getText(),
       )}(value.${getEscapedStringLiteral(name.getText())})) {`,
-    );
+    );*/
     typeGuardCode.push(`    return false;\n`);
 
     typeGuardCode.push(`}\n`);
   } else if (isPrimitiveSyntaxKind(type.kind) && !questionToken) {
-    typeGuardCode.push(
+    /*typeGuardCode.push(
       `if (!value.hasOwnProperty('${getEscapedStringLiteral(
         name.getText(),
       )}') || typeof value.${getEscapedStringLiteral(
+        name.getText(),
+      )} !== '${propType}') {`,
+    );*/ typeGuardCode.push(
+      `if (!('${getEscapedStringLiteral(
+        name.getText(),
+      )} in value) || typeof value.${getEscapedStringLiteral(
         name.getText(),
       )} !== '${propType}') {`,
     );
@@ -60,24 +78,33 @@ export function generatePropertyTypeGuard(
   );
   return typeGuardCode.join('');
 }
+
 /**
  * Generates TypeScript type guards for a given TypeLiteralNode by iterating through its members
  * and generating type guards for property signatures.
  *
  * @param {TypeLiteralNode} typeLiteral - The TypeLiteralNode representing the type to generate type guards for.
- * @param {TypeAliasDeclaration[]} typeAliases - An array of TypeAliasDeclaration objects to reference type aliases.
- * @param {string} [parentName] - Optional parent name to use in the type guard names.
+ * @param typeParameterName - The name of the type parameter to use for the type guard.
  * @returns {string[]} An array of strings containing the generated type guard code for the property signatures.
  */
 export function generateTypeLiteralTypeGuard(
   typeLiteral: TypeLiteralNode,
-  typeAliases: TypeAliasDeclaration[],
-  parentName?: string,
+  typeParameterName: string,
 ): string[] {
   const typeGuardCode: string[] = [];
   typeLiteral.members.forEach(member => {
-    if (isPropertySignature(member)) {
-      typeGuardCode.push(generatePropertyTypeGuard(member, typeAliases));
+    if (member.questionToken && isPropertySignature(member))
+      typeGuardCode.push(
+        ...generateOptionalPropertyTypeGuard(
+          member,
+          undefined,
+          typeParameterName,
+        ),
+      );
+    else {
+      typeGuardCode.push(
+        ...generatePropertyGuard(member, undefined, typeParameterName),
+      );
     }
   });
   return typeGuardCode;

@@ -1,16 +1,19 @@
 # Folders
-dist/
 node_modules/
 .idea/
+.run/
 coverage/
 lib/
 lib-esm/
+src/__tests__/
+out/
+input/
 
 # Files
 *.js
-!*.config.js
 *.d.ts
-src/input/combinedTypeGuards.*
 .DS_Store
 *.map
 meta.json
+check-run.ts
+src/dry-run.ts

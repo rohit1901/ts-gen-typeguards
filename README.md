@@ -199,11 +199,19 @@ tsGenTypeguards(undefined, undefined, 'outputNew');
 tsGenTypeguards('export interface User {name: string; age: number;}');
 ```
 
-The above code generates type guards for the provided interface declaration and logs the generated code to the console.
+The above code generates type guards for the provided interface declaration and creates a file typeguards.ts with the generated code.
 
 ## Contributing
 
-Contributions are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a pull request on the [GitHub repository](https://github.com/rohit1901/ts-gen-typeguards).
+We welcome contributions from the community! If you'd like to contribute to `ts-gen-typeguards`, please take a moment to read the [Contributing Guidelines](CONTRIBUTING.md) to understand our development process and how to get started.
+
+## Code of Conduct
+
+Please review the [Code of Conduct](CODE_OF_CONDUCT.md) to understand the behavior we expect from our contributors.
+
+## Changelog
+
+For information about the latest changes and updates, refer to the [Changelog](CHANGELOG.md).
 
 ## License
 

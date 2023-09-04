@@ -1,22 +1,22 @@
+import { getEscapedCapitalizedStringLiteral } from 'ts-raw-utils';
 import {
   EnumDeclaration,
-  isPropertySignature,
   isTypeLiteralNode,
+  isTypeReferenceNode,
   TypeAliasDeclaration,
 } from 'typescript';
+
 import {
   buildGenericFunctionSignature,
+  buildTypeReferenceFuntionSignature,
   generateIntersectionTypeGuard,
   generateKeywordGuard,
-  generateOptionalPropertyTypeGuard,
-  generatePropertyGuard,
+  generateTypeLiteralTypeGuard,
+  generateTypeReferenceGuard,
   generateUnionTypeGuard,
   handleEnumIntersection,
-  isKeywordType,
 } from '../api';
-import { getEscapedCapitalizedStringLiteral } from 'ts-raw-utils';
-import { getName, getTypeNameFromTypeParameter, isLiteralType } from '../utils';
-import * as string_decoder from 'string_decoder';
+import { getName, getTypeNameFromTypeParameter } from '../utils';
 
 /**
  * Generate a set of type guard functions based on provided TypeAliasDeclarations.
@@ -40,6 +40,7 @@ export function generateTypeTypeGuard(
       ...generateUnionTypeGuard(type, typeName, undefined, definitions),
       ...generateKeywordGuard(type),
       ...handleEnumIntersection(definition, enums),
+      ...generateTypeReferenceGuard(type, typeName, false),
     );
     typeGuard.push(
       typeGuardStrings.filter(p => typeof p === 'string').join('&&') + `)}`,
@@ -60,25 +61,11 @@ export function generateTypeWithinTypeLiteralTypeGuard(
   const typeParameterName = getTypeNameFromTypeParameter(definition);
   const typeGuardStrings: string[] = [];
   if (!isTypeLiteralNode(type)) {
-    return '';
+    return [];
   }
-  //NOTE: Return empty string if the definition is not a TypeLiteralNode
-  for (const property of type.members) {
-    // handle optional properties separately
-    if (property.questionToken && isPropertySignature(property))
-      typeGuardStrings.push(
-        ...generateOptionalPropertyTypeGuard(
-          property,
-          undefined,
-          typeParameterName,
-        ),
-      );
-    else {
-      typeGuardStrings.push(
-        ...generatePropertyGuard(property, undefined, typeParameterName),
-      );
-    }
-  }
+  typeGuardStrings.push(
+    ...generateTypeLiteralTypeGuard(type, typeParameterName),
+  );
   return typeGuardStrings;
 }
 
@@ -92,10 +79,13 @@ function buildTypeTypeGuardSignature(definition: TypeAliasDeclaration): string {
   const isGeneric =
     definition.typeParameters && definition.typeParameters.length > 0;
   const typeName: string = definition.name.escapedText.toString();
-  if (isGeneric)
+  if (isGeneric) {
     return buildGenericFunctionSignature(typeName, definition.typeParameters);
+  }
+  if (isTypeReferenceNode(definition.type)) {
+    return buildTypeReferenceFuntionSignature(definition);
+  }
   return `export function is${getEscapedCapitalizedStringLiteral(
     typeName,
   )}(value: any): value is ${typeName} {return(value !== null`;
 }
-//${isLiteralType(definition.type.kind) ? 'typeof value === "object" &&': ''}

@@ -1,4 +1,5 @@
 import { KeywordSyntaxKind, SyntaxKind } from 'typescript';
+
 import { getLiteralType } from './isLiteral';
 
 /**
@@ -60,6 +61,7 @@ export function syntaxKindToType(
       return '';
   }
 }
+
 /**
  * Type guard to check if the provided value is a valid enum member of KeywordSyntaxKind.
  * @param {*} value - The value to be checked.
@@ -69,6 +71,7 @@ export function isKeywordSyntaxKind(value: any): value is KeywordSyntaxKind {
   // Check if the value is a valid enum member of KeywordSyntaxKind
   return Object.values(SyntaxKind).includes(value);
 }
+
 /**
  * Type alias for a union of SyntaxKind values representing primitive types.
  */
@@ -78,6 +81,7 @@ export type PrimitiveSyntaxKind =
   | SyntaxKind.BooleanKeyword
   | SyntaxKind.NullKeyword
   | SyntaxKind.UndefinedKeyword;
+
 /**
  * Type guard to check if the provided value is a valid primitive SyntaxKind.
  * @param {*} value - The value to be checked.

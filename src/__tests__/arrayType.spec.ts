@@ -1,5 +1,5 @@
-import { createSourceFile } from 'typescript';
 import * as ts from 'typescript';
+import { createSourceFile } from 'typescript';
 import { generateInterfaceTypeGuard, generateTypeTypeGuard } from '../api';
 import { removeWhitespace } from 'ts-raw-utils';
 
@@ -32,12 +32,12 @@ describe('Generator', () => {
           return (
             typeof value === "object" &&
             value !== null &&
-            value.hasOwnProperty('arrayProperty') &&
+            'arrayProperty' in value &&
             (Array.isArray(value.arrayProperty) &&
             value.arrayProperty.every((item: any) => typeof item === 'string')) &&
-            (typeof value.arrayOptional === 'undefined' ||value.hasOwnProperty('arrayOptional') ||
+            (typeof value.arrayOptional === 'undefined' || ('arrayOptional' in value &&
               (Array.isArray(value.arrayOptional) &&
-                value.arrayOptional.every((item: any) => typeof item === 'string')))
+                value.arrayOptional.every((item: any) => typeof item === 'string'))))
           )
         }`);
     expect(removeWhitespace(result)).toEqual(expectedResult);
@@ -48,18 +48,18 @@ describe('Generator', () => {
         export function isArrayType(value: any): value is ArrayType {
           return (
             value !== null &&
-            value.hasOwnProperty('arrayProperty') &&
+            'arrayProperty' in value &&
             (Array.isArray(value.arrayProperty) &&
             value.arrayProperty.every((elem: any) => {
               return (
-                elem.hasOwnProperty('arrayProperty') &&
+                'arrayProperty' in elem &&
                 (Array.isArray(elem.arrayProperty) &&
                 elem.arrayProperty.every((item: any) => typeof item === 'string')
               ))
             })) &&
-            value.hasOwnProperty('arrayOptional') &&
-            (value.arrayOptional.hasOwnProperty('optionalTypeLiteralArray') &&
-            (value.arrayOptional.optionalTypeLiteralArray.hasOwnProperty('x') &&
+            'arrayOptional' in value &&
+            ('optionalTypeLiteralArray' in value.arrayOptional &&
+            ('x' in value.arrayOptional.optionalTypeLiteralArray &&
             (Array.isArray(value.arrayOptional.optionalTypeLiteralArray.x) &&
             value.arrayOptional.optionalTypeLiteralArray.x.every(
               (item: any) => typeof item === 'number'

@@ -1,3 +1,4 @@
+import { capitalize } from 'ts-raw-utils';
 import {
   factory,
   isIntersectionTypeNode,
@@ -6,12 +7,12 @@ import {
   isTypeLiteralNode,
   isTypeReferenceNode,
   isUnionTypeNode,
-  PropertyName,
   TypeAliasDeclaration,
   TypeNode,
   TypeReferenceNode,
 } from 'typescript';
-import { generateLiteralTypeTypeGuard } from './generateLiteralTypeTypeGuard';
+
+import { generatePropertyGuard } from '../api';
 import {
   isAnyKeyword,
   isBigIntKeyword,
@@ -24,6 +25,7 @@ import {
   isUnknownKeyword,
   isVoidKeyword,
 } from '../utils';
+import { generateIntersectionTypeGuardForType } from './generateIntersectionTypeGuardForType';
 import {
   generateBigIntKeywordTypeGuard,
   generateBooleanKeywordTypeGuard,
@@ -34,9 +36,8 @@ import {
   generateUndefinedKeywordTypeGuard,
   generateVoidKeywordTypeGuard,
 } from './generateKeywordTypeGuardsForUnion';
-import { generateIntersectionTypeGuardForType } from './generateIntersectionTypeGuardForType';
-import { generatePropertyGuard } from '../api';
-import { capitalize } from 'ts-raw-utils';
+import { generateLiteralTypeTypeGuard } from './generateLiteralTypeTypeGuard';
+
 /**
  * Generate a union type guard for a given TypeScript type alias.
  *
@@ -48,7 +49,6 @@ import { capitalize } from 'ts-raw-utils';
 export function generateUnionTypeGuardForIntersection(
   { type }: TypeAliasDeclaration,
   typeAliases: TypeAliasDeclaration[],
-  name?: PropertyName,
 ): string {
   if (!isUnionTypeNode(type)) {
     return '';
@@ -168,7 +168,8 @@ export function generateUnionTypeGuardForProperty(
     return '';
   }
   if (name) {
-    typeGuardCode.push(`!value.hasOwnProperty('${name}')`);
+    //typeGuardCode.push(`!value.hasOwnProperty('${name}')`);
+    typeGuardCode.push(`!('${name}' in value)`);
   }
   for (const unionType of type.types) {
     if (isIntersectionTypeNode(unionType)) {

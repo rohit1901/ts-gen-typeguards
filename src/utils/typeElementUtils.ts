@@ -1,10 +1,10 @@
 import {
   KeywordTypeSyntaxKind,
   LiteralTypeNode,
-  SourceFile,
   SyntaxKind,
   TypeElement,
 } from 'typescript';
+
 /**
  * Creates a fake TypeElement with the given `brand` representing a KeywordTypeSyntaxKind property.
  * The `_typeElementBrand` property is set to 'fake' to indicate it is a KeywordTypeSyntaxKind.
@@ -36,11 +36,12 @@ export function createFakeTypeElement(
     getLeadingTriviaWidth: undefined,
     getSourceFile: undefined,
     getStart: undefined,
-    getText: (sourceFile?: SourceFile): string => literalText ?? '',
+    getText: (): string => literalText ?? '',
     getWidth: undefined,
     _typeElementBrand: 'fake',
   };
 }
+
 /**
  * Removes duplicate TypeElements from the input array and returns a new array containing unique TypeElements.
  * If a TypeElement has the property '_typeElementBrand' set to 'fake', it represents a KeywordTypeSyntaxKind property

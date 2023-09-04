@@ -1,4 +1,5 @@
 import { InterfaceDeclaration } from 'typescript';
+
 import { generateSingleInterfaceTypeGuard } from '../api';
 
 /**
