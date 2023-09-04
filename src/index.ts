@@ -25,6 +25,7 @@ import {
   generateTypeGuardsFile,
   readFilesWithExtension,
 } from './utils';
+import { transformer } from 'ts-raw-utils';
 
 type ObjectsType = {
   interfaces: InterfaceDeclaration[];
@@ -40,7 +41,9 @@ type ObjectsType = {
 function readObjects(path: string, content?: string): ObjectsType {
   try {
     const sourceText =
-      path === '' ? content : readFilesWithExtension(undefined, path).join('');
+      path === ''
+        ? transformer(content)
+        : transformer(readFilesWithExtension(undefined, path).join(''));
     // Parse the file
     const parsedFile = createSourceFile(
       path,
