@@ -41,3 +41,4 @@ export type AnyUnknownUnionWithOthersType = any | unknown | string | number | bo
 // Combinaion of any and unknown types with other types as an intersection
 export type AnyUnknownIntersectionWithOthersType = any & unknown & string & number & boolean;
 
+export type IntersectionTest = {a: string} & {a: number, b: number};
