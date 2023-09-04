@@ -171,8 +171,7 @@ function createFile(
   outputPath: string,
   isCombinedInput?: boolean,
 ) {
-  const initialContent =
-    '// Generated using ts-gen-typeguards\n';
+  const initialContent = '// Generated using ts-gen-typeguards\n';
   const filePath = isCombinedInput ? inputPath : outputPath;
   try {
     fs.writeFileSync(filePath, `${initialContent}`);

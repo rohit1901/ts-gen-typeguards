@@ -1,8 +1,10 @@
 import { capitalize } from 'ts-raw-utils';
 import {
-  isPropertySignature, isTypeReferenceNode,
+  isPropertySignature,
+  isTypeReferenceNode,
   NodeArray,
-  TypeElement, TypeNode,
+  TypeElement,
+  TypeNode,
   TypeParameterDeclaration,
 } from 'typescript';
 
@@ -90,7 +92,7 @@ export function generateGenericParameterListWithConstraints(
   typeParameters?: NodeArray<TypeParameterDeclaration>,
 ): string {
   const getConstraintText = (constraint: TypeNode) => {
-    if(isTypeReferenceNode(constraint)) {
+    if (isTypeReferenceNode(constraint)) {
       return constraint.typeName.getText();
     }
     return constraint.getText();

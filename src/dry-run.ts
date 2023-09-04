@@ -72,7 +72,7 @@ export type Intersection2<T> = A & B & C & {
     };
 `;
 // Usage Examples
- tsGenTypeguards();
+tsGenTypeguards();
 // tsGenTypeguards(undefined, 'inputNew', 'outputNew');
 // tsGenTypeguards(undefined, 'inputNew');
 // tsGenTypeguards(undefined, undefined, 'outputNew');
