@@ -2,7 +2,6 @@ import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 import * as ts from 'typescript';
-import * as vm from 'vm';
 
 import { generateTypeGuards } from '../compiler';
 

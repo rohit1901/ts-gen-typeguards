@@ -3,7 +3,6 @@ export * from './generateEnumTypeGuard';
 export * from './generateFunctionSignatureGuard';
 export * from './generateGenericTypeGuard';
 export * from './generateInterfaceTypeGuard';
-export * from './generateInterfaceTypeGuard';
 export * from './generateIntersectionTypeGuard';
 export * from './generateIntersectionTypeGuardForType';
 export * from './generateKeywordGuard';

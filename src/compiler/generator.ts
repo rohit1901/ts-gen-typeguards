@@ -45,7 +45,6 @@ class GeneratorContext {
 
   constructor(
     readonly program: ts.Program,
-    readonly checker: ts.TypeChecker,
     readonly outputPath: string,
   ) {}
 
@@ -78,8 +77,7 @@ export function generateTypeGuards(
     ...options.compilerOptions,
   };
   const program = ts.createProgram(options.entrypoints, compilerOptions);
-  const checker = program.getTypeChecker();
-  const context = new GeneratorContext(program, checker, outputPath);
+  const context = new GeneratorContext(program, outputPath);
 
   collectDeclarations(program, context);
 
