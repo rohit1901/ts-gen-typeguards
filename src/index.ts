@@ -27,6 +27,8 @@ import {
 } from './utils';
 import { transformer } from 'ts-raw-utils';
 
+export * from './compiler';
+
 type ObjectsType = {
   interfaces: InterfaceDeclaration[];
   types: TypeAliasDeclaration[];
@@ -108,7 +110,7 @@ function getImports(objects: string[], path?: string) {
 /**
  * Generates type guards for the given input file path and writes them to the output file path (defaults to ./out/typeGuards.ts)
  * @param inputString - Optional input string to generate typeguards from. If this is provided, the inputFilePath is ignored
- * @param inputFilePath - Optional input file path to generate typeguards from (defaults to the 'input/' directory.)
+ * @param inputFilePath - Optional input file path to generate type guards from (defaults to the 'input/' directory.)
  * @param outputFilePath - Optional output file path to write the generated type guards to (defaults to ./out/typeGuards.ts)
  */
 export function tsGenTypeguards(
